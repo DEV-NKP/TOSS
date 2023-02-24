@@ -145,7 +145,7 @@ viewCaseByAccused(
     @Post("/createcase")
     @UsePipes(new ValidationPipe())
     createCase(@Body() caseDto:CaseForm): any {
-    return this.caseService.insertCase(caseDto);
+    //return this.caseService.insertCase(caseDto,/*Uname*/);
     }
   
     @Put("/editcase")
