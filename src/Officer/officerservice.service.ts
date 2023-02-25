@@ -1,5 +1,5 @@
 import { Injectable } from "@nestjs/common";
-import { OfficerForm, OfficerChangePasswordForm } from './officer.dto';
+import { OfficerForm, OfficerChangePasswordForm, EditOfficerForm } from './officer.dto';
 import { OwnerForm } from "../Owner/owner.dto";
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -64,30 +64,56 @@ ViewProfileByName(Uname):any {
     return this.officerRepo.findOneBy({Uname:Uname});
 }
 
-editOfficer(officerDto:OfficerForm,Uname):any {
+editOfficer(editofficerDto:EditOfficerForm,Uname):any {
 
 
-        return this.officerRepo.update({Uname:Uname},officerDto);
+        return this.officerRepo.update({Uname:Uname},
+            {FirstName:editofficerDto.FirstName,
+                LastName:editofficerDto.LastName,
+                MobileNo:editofficerDto.MobileNo,
+                Gender:editofficerDto.Gender,
+                Designation:editofficerDto.Designation
+                });
     }
 
-editProfile(officerDto:OfficerForm,OfficerId):any {
+editProfile(editofficerDto:EditOfficerForm,Uname):any {
 
 
-        return this.officerRepo.update({OfficerId:OfficerId},officerDto);
+        return this.officerRepo.update({Uname:Uname},
+            {FirstName:editofficerDto.FirstName,
+                LastName:editofficerDto.LastName,
+                MobileNo:editofficerDto.MobileNo,
+                Gender:editofficerDto.Gender,
+                Designation:editofficerDto.Designation
+                });
     }
 
-    deleteofficerbyid(OfficerId):any {
+    async deleteofficerbyid(OfficerId):Promise<any> {
+        const getofficer=await this.officerRepo.findOneBy({OfficerId:OfficerId});
+        if(getofficer!=null)
+        {
+        this.signupRepo.delete({Uname:getofficer["Uname"]});
+        return this.officerRepo.delete({OfficerId:OfficerId});
+    }
+    else{
+        return "User not found";
+    }
+    }
+
+    async deleteProfile(OfficerId):Promise<any> {
     
+    const getofficer=await this.officerRepo.findOneBy({OfficerId:OfficerId});
+    if(getofficer!=null)
+    {
+    this.signupRepo.delete({Uname:getofficer["Uname"]});
     return this.officerRepo.delete({OfficerId:OfficerId});
-    }
-
-deleteProfile(OfficerId):any {
-    
-    return this.officerRepo.delete({OfficerId:OfficerId});
-    }
+}
+else{
+    return "User not found";
+}    }
 
     deleteofficerbyuname(Uname):any {
-    
+        this.signupRepo.delete({Uname:Uname});
     return this.officerRepo.delete({Uname:Uname});
     }
 

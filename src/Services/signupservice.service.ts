@@ -28,6 +28,10 @@ constructor(
     return this.signupRepo.delete({SignUpId:SignUpId});
         }
 
+    deletesignupbyuname(Uname):any {
+    return this.signupRepo.delete({Uname:Uname});
+        }
+
     searchSignUp(SignUpId):any {
         return this.signupRepo.findOneBy({ SignUpId:SignUpId });
     }

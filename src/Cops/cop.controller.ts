@@ -3,10 +3,10 @@ import { query } from "express";
 
 import { AdminForm } from "../Admin/admin.dto";
 import { OfficerForm } from "../Officer/officer.dto";
-import { CopsForm } from "../Cops/cops.dto";
+import { CopsForm, EditCopsForm } from "../Cops/cops.dto";
 import { OwnerForm } from "../Owner/owner.dto";
 import { BankForm } from "../DTO/bank.dto";
-import { CaseForm } from "../DTO/case.dto";
+import { CaseForm, EditCaseForm } from "../DTO/case.dto";
 import { LoginForm } from "../DTO/login.dto";
 import { LogoutForm } from "../DTO/logout.dto";
 import { ReportForm } from "../DTO/report.dto";
@@ -64,17 +64,18 @@ export class CopsController
     @Put("/editprofile")
     @UsePipes(new ValidationPipe())
     editProfile( 
-      @Body() mydto: CopsForm,
+      @Body() mydto: EditCopsForm,
     ): any {
-    return this.copsService.editProfile(mydto, mydto.CopsId);
+      return "Do after session";
+    //return this.copsService.editProfile(mydto, Uname);
     }
 
     @Delete('/deleteprofile')
     deleteProfile(
-      //@Param("OfficerId", ParseIntPipe) OfficerId:number
+      //@Param("CopsId", ParseIntPipe) CopsId:number
     ): any {
       return "Do after session"
-      //return this.officerService.deleteProfile(OfficerId);
+      //return this.copsService.deleteProfilebyid(CopsId);
     }
 
 
@@ -151,9 +152,9 @@ viewCaseByAccused(
     @Put("/editcase")
     @UsePipes(new ValidationPipe())
     editCase( 
-      @Body() caseDto: CaseForm,
+      @Body() editcaseDto: EditCaseForm,
     ): any {
-    return this.caseService.editCase(caseDto, caseDto.CaseId);
+    return this.caseService.editCase(editcaseDto, editcaseDto.CaseId);
     }
 
     @Get("/viewcasebyid/:CaseId")

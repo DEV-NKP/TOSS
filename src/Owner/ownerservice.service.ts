@@ -1,5 +1,5 @@
 import { Injectable, Module } from "@nestjs/common";
-import { OwnerForm, OwnerChangePasswordForm } from './owner.dto';
+import { OwnerForm, OwnerChangePasswordForm, EditOwnerForm } from './owner.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { OwnerEntity } from "../Entity/owner.entity";
@@ -24,8 +24,15 @@ private bankRepo: Repository<BankEntity>
  return this.ownerRepo.find();
 }
 
-editProfile(ownerDto:OwnerForm,OwnerId):any {
- return this.ownerRepo.update({OwnerId:OwnerId},ownerDto);
+editProfile(editownerDto:EditOwnerForm,Uname):any {
+ return this.ownerRepo.update({Uname:Uname},
+    {FirstName:editownerDto.FirstName,
+        LastName:editownerDto.LastName,
+        MobileNo:editownerDto.MobileNo,
+        Gender:editownerDto.Gender,
+        DLN:editownerDto.DLN
+        }
+    );
     }
 
 
@@ -67,16 +74,44 @@ viewownerbyuname(Uname):any {
     return this.ownerRepo.findOneBy({Uname:Uname});
 }
 
-deleteownerbyuname(Uname):any {
+    async deleteownerbyuname(Uname):Promise<any> {
+    const getowner=await this.ownerRepo.findOneBy({Uname:Uname});
+    if(getowner!=null)
+    {
+    this.bankRepo.delete({AccountNo:getowner["AccountNo"]});
+    
+    this.signupRepo.delete({Uname:Uname});
     return this.ownerRepo.delete({Uname:Uname});
 }
-
-deleteProfile(OwnerId):any {
-    return this.ownerRepo.delete({OwnerId:OwnerId});
+else{
+    return "User not found";
+}
+    
 }
 
-deleteownerbyid(OwnerId):any {
+async deleteProfile(OwnerId):Promise<any> {
+    const getowner=await this.ownerRepo.findOneBy({OwnerId:OwnerId});
+    if(getowner!=null)
+    {
+    this.signupRepo.delete({Uname:getowner["Uname"]});
+    this.bankRepo.delete({AccountNo:getowner["AccountNo"]});
     return this.ownerRepo.delete({OwnerId:OwnerId});
+}
+else{
+    return "User not found";
+}}
+
+async deleteownerbyid(OwnerId):Promise<any> {
+    const getowner=await this.ownerRepo.findOneBy({OwnerId:OwnerId});
+    if(getowner!=null)
+    {
+    this.signupRepo.delete({Uname:getowner["Uname"]});
+    this.bankRepo.delete({AccountNo:getowner["AccountNo"]});
+    return this.ownerRepo.delete({OwnerId:OwnerId});
+}
+else{
+    return "User not found";
+}
 }
 banowner(Uname):any {
     return this.ownerRepo.update({Uname:Uname},{Status:"BANNED"});

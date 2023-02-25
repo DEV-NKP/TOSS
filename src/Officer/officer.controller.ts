@@ -1,8 +1,8 @@
 import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put, Query, Req, Request, UsePipes, ValidationPipe } from "@nestjs/common";
 
 import { AdminForm } from "../Admin/admin.dto";
-import { OfficerForm } from "../Officer/officer.dto";
-import { CopsForm } from "../Cops/cops.dto";
+import { EditOfficerForm, OfficerForm } from "../Officer/officer.dto";
+import { CopsForm, EditCopsForm } from "../Cops/cops.dto";
 import { OwnerForm } from "../Owner/owner.dto";
 import { BankForm } from "../DTO/bank.dto";
 import { CaseForm } from "../DTO/case.dto";
@@ -11,7 +11,7 @@ import { LogoutForm } from "../DTO/logout.dto";
 import { ReportForm } from "../DTO/report.dto";
 import { SignupForm } from "../DTO/signup.dto";
 import { TransactionForm } from "../DTO/transaction.dto";
-import { VLIForm } from "../DTO/vli.dto";
+import { EditVLIForm, VLIForm } from "../DTO/vli.dto";
 
 
 import { AdminService } from "../Admin/adminservice.service";
@@ -62,9 +62,10 @@ export class OfficerController
     @Put("/editprofile")
     @UsePipes(new ValidationPipe())
     editProfile( 
-      @Body() mydto: OfficerForm,
+      @Body() mydto: EditOfficerForm,
     ): any {
-    return this.officerService.editProfile(mydto, mydto.OfficerId);
+      return "Do after session";
+    //return this.officerService.editProfile(mydto, mydto.Uname);
     }
 
     @Delete('/deleteprofile')
@@ -135,10 +136,10 @@ insertcops(@Body() mydto:CopsForm): any {
 
 @Put("/editcops/:Uname")
 editcops( 
-@Body() mydto: CopsForm,
+@Body() editcopsDto: EditCopsForm,
 @Param("Uname") Uname:string
 ): any {
-return this.copsService.editcops(mydto, Uname);
+return this.copsService.editcops(editcopsDto, Uname);
 }
 
 @Delete("/deletecopsbyuname/:Uname")
@@ -171,10 +172,10 @@ return this.copsService.deletecopsbyid(CopsId);
 
     @Put("/editvli/:VliId")
     editvli( 
-      @Body() vlidto: VLIForm,
+      @Body() editvlidto: EditVLIForm,
       @Param("VliId", ParseIntPipe) VliIdId:number
       ): any {
-    return this.vliService.updateLicenseNo(vlidto,VliIdId);
+    return this.vliService.updateLicenseNo(editvlidto,VliIdId);
     }
 
     @Delete("/deletevli/:VliId")

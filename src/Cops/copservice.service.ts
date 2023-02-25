@@ -1,5 +1,5 @@
 import { Injectable } from "@nestjs/common";
-import { CopsForm, CopsChangePasswordForm } from './cops.dto';
+import { CopsForm, CopsChangePasswordForm, EditCopsForm } from './cops.dto';
 import { CaseForm } from "../DTO/case.dto";
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -70,12 +70,31 @@ viewcopsbyuname(Uname):any {
     return this.copsRepo.findOneBy( {Uname:Uname} );
 }
 
-editProfile(copsDto:CopsForm,CopsId):any {
-    return this.copsRepo.update({CopsId:CopsId},copsDto);
+editProfile(editcopsDto:EditCopsForm,Uname):any {
+    return this.copsRepo.update({Uname:Uname},
+        {FirstName:editcopsDto.FirstName,
+            LastName:editcopsDto.LastName,
+            MobileNo:editcopsDto.MobileNo,
+            Gender:editcopsDto.Gender,
+            RankCategory:editcopsDto.RankCategory,
+            RankGroup:editcopsDto.RankGroup,
+            Station:editcopsDto.Station,
+            Country:editcopsDto.Country
+            }
+        );
 }
 
-editcops(copsDto:CopsForm,Uname):any {
-    return this.copsRepo.update({Uname:Uname},copsDto);
+editcops(editcopsDto:EditCopsForm,Uname):any {
+    return this.copsRepo.update({Uname:Uname},
+        {FirstName:editcopsDto.FirstName,
+            LastName:editcopsDto.LastName,
+            MobileNo:editcopsDto.MobileNo,
+            Gender:editcopsDto.Gender,
+            RankCategory:editcopsDto.RankCategory,
+            RankGroup:editcopsDto.RankGroup,
+            Station:editcopsDto.Station,
+            Country:editcopsDto.Country
+            });
 }
 
 
@@ -91,18 +110,35 @@ revokebancops(Uname):any {
     return this.copsRepo.update({Uname:Uname},{Status:"ACTIVE"});
        }
 
-deleteProfilebyid(CopsId):any {
+async deleteProfilebyid(CopsId):Promise<any> {
     
+const getcops=await this.copsRepo.findOneBy({CopsId:CopsId});
+    if(getcops!=null)
+    {
+    this.signupRepo.delete({Uname:getcops["Uname"]});
     return this.copsRepo.delete({CopsId:CopsId});
 }
+else{
+    return "User not found";
+}
+}
 
-deletecopsbyid(CopsId):any {
+async deletecopsbyid(CopsId):Promise<any> {
     
+    const getcops=await this.copsRepo.findOneBy({CopsId:CopsId});
+    if(getcops!=null)
+    {
+    this.signupRepo.delete({Uname:getcops["Uname"]});
     return this.copsRepo.delete({CopsId:CopsId});
+}
+else{
+    return "User not found";
+}
 }
 
 deletecopsbyuname(Uname):any {
     
+    this.signupRepo.delete({Uname:Uname});
     return this.copsRepo.delete({Uname:Uname});
 }
 

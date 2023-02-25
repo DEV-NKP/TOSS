@@ -13,7 +13,7 @@ export class TransactionForm {
     ReceiverAc: string;
 
     @IsNotEmpty({message: "Please enter amount of money"})
-    @Length(0,30)
+    @Length(0,30,{message: 'Length must be less than 30 characters'})
     @IsInt()
     Amount: number;
 

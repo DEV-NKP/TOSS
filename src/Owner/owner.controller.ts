@@ -3,7 +3,7 @@ import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put, Query, R
 
 import { OfficerForm } from "../Officer/officer.dto";
 import { CopsForm } from "../Cops/cops.dto";
-import { OwnerForm } from "../Owner/owner.dto";
+import { EditOwnerForm, OwnerForm } from "../Owner/owner.dto";
 import { BankForm, PaymentBankForm } from '../DTO/bank.dto';
 import { CaseForm } from "../DTO/case.dto";
 import { LoginForm } from "../DTO/login.dto";
@@ -70,17 +70,18 @@ viewProfile(
 @Put("/editprofile")
 @UsePipes(new ValidationPipe())
 editProfile( 
-  @Body() ownerDto: OwnerForm,
+  @Body() editownerDto: EditOwnerForm,
 ): any {
-return this.ownerService.editProfile(ownerDto, ownerDto.OwnerId);
+  return "Do after session";
+//return this.ownerService.editProfile(editownerDto, editownerDto.Uname);
 }
 
 @Delete('/deleteprofile')
 deleteProfile(
-  //@Param("OfficerId", ParseIntPipe) OfficerId:number
+  //@Param("OwnerId", ParseIntPipe) OwnerId:number
 ): any {
   return "Do after session"
-  //return this.officerService.deleteProfile(OfficerId);
+  //return this.ownerService.deleteProfile(OwnerId);
 }
 
 
@@ -152,8 +153,6 @@ payment(
   @Body() paymentBankForm: PaymentBankForm): any {
 return this.bankService.paymentbyowner(paymentBankForm);
 }
-
-
 
 @Get("/viewbank")
 viewbank(): any {

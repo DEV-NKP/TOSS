@@ -1,5 +1,5 @@
 import { Injectable } from "@nestjs/common";
-import { AdminForm, AdminChangePasswordForm } from './admin.dto';
+import { AdminForm, AdminChangePasswordForm, EditAdminForm } from './admin.dto';
 import { AdminEntity } from "../Entity/admin.entity";
 import { CopsEntity } from "../Entity/cops.entity";
 import { OwnerEntity } from "../Entity/owner.entity";
@@ -52,10 +52,16 @@ export class AdminService {
     
     }
     
-    editProfile(adminDto:AdminForm,adminId):any {
+    editProfile(editadminDto:EditAdminForm,Uname):any {
     
     
-            return this.adminRepo.update({AdminId:adminId},adminDto);
+            return this.adminRepo.update({Uname:Uname},
+              {FirstName:editadminDto.FirstName,
+              LastName:editadminDto.LastName,
+              MobileNo:editadminDto.MobileNo,
+              Gender:editadminDto.Gender
+              }
+              );
         }
     
     

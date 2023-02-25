@@ -7,7 +7,7 @@ import { CaseEntity } from "../Entity/case.entity";
 import { OfficerForm } from "../Officer/officer.dto";
 import { CopsForm } from "../Cops/cops.dto";
 import { Transform } from "stream";
-import { CaseForm } from "../DTO/case.dto";
+import { CaseForm, EditCaseForm } from "../DTO/case.dto";
 import { VLIForm } from '../DTO/vli.dto';
 import { VLIEntity } from '../Entity/vli.entity';
 
@@ -43,8 +43,18 @@ caseDto.Time=new Date().toString();
         
     }
 
-    editCase(caseDto:CaseForm,CaseId):any {
-        return this.caseRepo.update({CaseId:CaseId},caseDto);
+    editCase(editcaseDto:EditCaseForm,CaseId):any {
+        return this.caseRepo.update({CaseId:CaseId},
+            {ViolationOf:editcaseDto.ViolationOf,
+                ViolationDetails:editcaseDto.ViolationDetails,
+                Section:editcaseDto.Section,
+                SubSection:editcaseDto.SubSection,
+                PenaltyAmount:editcaseDto.PenaltyAmount,
+                City:editcaseDto.City,
+                Street:editcaseDto.Street,
+                ZIPCode:editcaseDto.ZIPCode,
+                PenaltyDetails:editcaseDto.PenaltyDetails
+                });
            }
 
 

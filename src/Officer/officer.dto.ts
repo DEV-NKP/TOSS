@@ -9,11 +9,11 @@ export class OfficerForm {
     Uname: string;
 
     @IsNotEmpty({message: "Please enter your First Name"})
-    @Length(2,50)
+    @Length(2,50,{message: "Length must be at least 2 characters and less than 50"})
     FirstName: string;
 
     @IsNotEmpty({message: "Please enter your Last Name"})
-    @Length(2,50)
+    @Length(2,50,{message: "Length must be at least 2 characters and less than 50"})
     LastName: string;
 
     @IsNotEmpty({message: "Please enter your Email Address"})
@@ -31,7 +31,7 @@ export class OfficerForm {
     ProfilePicture: string;
 
     @IsNotEmpty({message: "Please enter your Gender"})
-    @IsIn(["Male" , "Female", "Other"], {message: "Please enter a gender between male, female and other"})
+    @IsIn(["Male" , "Female", "Other"], {message: "Please enter a gender between Male, Female and Other"})
     Gender: string;
 
     @IsNotEmpty({message: "Please enter your Designation"})
@@ -49,13 +49,41 @@ export class OfficerForm {
     Status: string;
 }
 
+export class EditOfficerForm {
+ 
+
+    @IsNotEmpty({message: "Please enter your First Name"})
+    @Length(2,50,{message: "Length must be at least 2 characters and less than 50"})
+    FirstName: string;
+
+    @IsNotEmpty({message: "Please enter your Last Name"})
+    @Length(2,50,{message: "Length must be at least 2 characters and less than 50"})
+    LastName: string;
+
+
+    @IsNotEmpty({message: "Please enter your Mobile Number"})
+    @Matches(RegExp("^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$"), {message: 'Mobile number is not valid'})
+    MobileNo: string;
+
+
+    @IsNotEmpty({message: "Please enter your Gender"})
+    @IsIn(["Male" , "Female", "Other"], {message: "Please enter a gender between Male, Female and Other"})
+    Gender: string;
+
+    @IsNotEmpty({message: "Please enter your Designation"})
+    @Length(2,30)
+    Designation: string;
+
+   
+}
+
 export class OfficerChangePasswordForm {
    
-    @IsNotEmpty({message: "Please enter your OLD Password"})
+    @IsNotEmpty({message: "Please enter your Old Password"})
     @IsStrongPassword()
     OLDPassword: string;
 
- @IsNotEmpty({message: "Please enter your NEW Password"})
+ @IsNotEmpty({message: "Please enter your New Password"})
     @IsStrongPassword()
     NEWPassword: string;
 }

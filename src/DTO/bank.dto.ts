@@ -8,9 +8,8 @@ export class BankForm {
     @Matches(/^[A-Za-z0-9]{4}-[A-Za-z0-9]{4}-[A-Za-z0-9]{4}-[A-Za-z0-9]{4}-[A-Za-z0-9]{4}$/, {message: 'Please provide a valid value in the format XXXX-XXXX-XXXX-XXXX-XXXX',})
     AccountNo: string;
 
-    @IsNotEmpty({message: "Please enter amount of money"})
-    @IsInt()
-    @Length(0,30)
+    @IsInt({message: 'Amount must be an integer'})
+    @Length(0,30,{message: 'Length must be less than 30 characters'})
     Amount: number;
 
 
@@ -23,9 +22,8 @@ export class WithdrawBankForm {
     @Matches(/^[A-Za-z0-9]{4}-[A-Za-z0-9]{4}-[A-Za-z0-9]{4}-[A-Za-z0-9]{4}-[A-Za-z0-9]{4}$/, {message: 'Please provide a valid value in the format XXXX-XXXX-XXXX-XXXX-XXXX',})
     AccountNo: string;
 
-    @IsNotEmpty({message: "Please enter amount of money"})
-    @Length(0,30)
-    @IsInt()
+    @IsInt({message: 'Amount must be an integer'})
+    @Length(0,30,{message: 'Length must be less than 30 characters'})
     Amount: number;
 
 
@@ -34,17 +32,14 @@ export class WithdrawBankForm {
 export class PaymentBankForm {
     @IsNotEmpty({message: "Please enter your Account No"})
     @Matches(/^[A-Za-z0-9]{4}-[A-Za-z0-9]{4}-[A-Za-z0-9]{4}-[A-Za-z0-9]{4}-[A-Za-z0-9]{4}$/, {message: 'Please provide a valid value in the format XXXX-XXXX-XXXX-XXXX-XXXX',})
-
     SenderAccountNo: string;
 
  @IsNotEmpty({message: "Please enter your Account No"})
  @Matches(/^[A-Za-z0-9]{4}-[A-Za-z0-9]{4}-[A-Za-z0-9]{4}-[A-Za-z0-9]{4}-[A-Za-z0-9]{4}$/, {message: 'Please provide a valid value in the format XXXX-XXXX-XXXX-XXXX-XXXX',})
-
     ReceiverAccountNo: string;
 
-    @IsNotEmpty({message: "Please enter amount of money"})
-    @Length(0,30)
-    @IsInt()
+    @Length(0,30,{message: 'Length must be less than 30 characters'})
+    @IsInt({message: 'Amount must be an integer'})
     Amount: number;
 
 

@@ -1,7 +1,7 @@
 import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put, Query, Req, Request, UsePipes, ValidationPipe } from "@nestjs/common";
 
-import { AdminForm } from "./admin.dto";
-import { OfficerForm } from "../Officer/officer.dto";
+import { AdminForm, EditAdminForm } from "./admin.dto";
+import { EditOfficerForm, OfficerForm } from "../Officer/officer.dto";
 import { CopsForm } from "../Cops/cops.dto";
 import { OwnerForm } from "../Owner/owner.dto";
 import { BankForm } from "../DTO/bank.dto";
@@ -68,10 +68,11 @@ export class AdminController
     @Put("/editprofile")
     @UsePipes(new ValidationPipe())
     editProfile( 
-      @Body() mydto: AdminForm,
+      @Body() mydto: EditAdminForm,
       //@Param("AdminId", ParseIntPipe) AdminId:number
     ): any {
-    return this.adminService.editProfile(mydto, mydto.AdminId);
+      return "Do after session";
+    //return this.adminService.editProfile(mydto, mydto.Uname);
     }
 
    /* @Post("/updateprofilepicture")
@@ -128,7 +129,7 @@ insertofficer(@Body() mydto:OfficerForm): any {
 
 @Put("/editofficer/:Uname")
 editOfficer( 
-@Body() mydto: OfficerForm,
+@Body() mydto: EditOfficerForm,
 @Param("Uname") Uname:string
 ): any {
 return this.officerService.editOfficer(mydto, Uname);

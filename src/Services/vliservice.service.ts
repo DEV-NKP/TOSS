@@ -1,5 +1,5 @@
 import { Injectable } from "@nestjs/common";
-import { VLIForm, ApplyVLIForm } from '../DTO/vli.dto';
+import { VLIForm, ApplyVLIForm, EditVLIForm } from '../DTO/vli.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { OwnerForm } from "../Owner/owner.dto";
@@ -27,14 +27,14 @@ private ownerRepo: Repository<OwnerEntity>,
     ////////////////////////////////////////////
 
     async insertLicense(vliDto:VLIForm):Promise<any> {
-        const getvli=await this.vliRepo.find({
+        const getvli=await this.vliRepo.findOne({
             where: [
                 { LicenseNo: vliDto.LicenseNo },
                 { EngineNo: vliDto.EngineNo },
                 { ChesisNo: vliDto.ChesisNo }
             ]
           });
-
+    
         if(getvli==null)
         {
         return this.vliRepo.save(vliDto);
@@ -57,8 +57,12 @@ private ownerRepo: Repository<OwnerEntity>,
         return this.vliRepo.findBy({VliId:VliId});
     }
 
-    updateLicenseNo(vlidto:VLIForm,VliId):any {
-        return this.vliRepo.update({VliId:VliId},vlidto);
+    updateLicenseNo(editvlidto:EditVLIForm,VliId):any {
+        return this.vliRepo.update({VliId:VliId},
+           {Details:editvlidto.Details,
+           OwnerNid:editvlidto.OwnerNid
+           }
+            );
            }
 
     updateByLicenseNo(mydto:VLIForm,LicenseNo):any {
@@ -69,8 +73,19 @@ private ownerRepo: Repository<OwnerEntity>,
      return this.vliRepo.update({OwnerName:OwnerName},mydto);
                }
 
-    deletevlibyid(VliId):any {
-    return this.vliRepo.delete({VliId:VliId});
+    async deletevlibyid(VliId):Promise<any> {
+        const getvli=await this.vliRepo.findOneBy({VliId:VliId});
+        if(getvli!=null)
+        {
+        this.ownerRepo.update(
+            {Uname:getvli["OwnerName"]},
+            {VLN:"N/A"});
+       
+        return this.vliRepo.delete({VliId:VliId});
+    }
+    else{
+        return "Vehicle License Number not found";
+    }
         }
 
     deleteByLicenseNo(LicenseNo):any {
@@ -78,7 +93,7 @@ private ownerRepo: Repository<OwnerEntity>,
    }
 
    async applyForVli(applyVli:ApplyVLIForm, Uname):Promise<any> {
-    const checkVli= await this.vliRepo.find({
+    const checkVli= await this.vliRepo.findOne({
         where: {
              LicenseNo: applyVli.LicenseNo ,
              ChesisNo: applyVli.ChesisNo ,
