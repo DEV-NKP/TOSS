@@ -1,0 +1,75 @@
+////////////////// ADMIN ///////////////////
+
+insertadmin
+-------------------
+
+    "Uname":"Dipa",
+    "FirstName":"Dipanwita",
+    "LastName":"Saha",
+    "Email":"dipa@gmail.ddd",
+    "Password":"AN#ww1234",
+    "MobileNo":"0473380003",
+    "ProfilePicture":" ",
+    "Gender":"Female"  
+
+
+insertofficer
+------------------
+
+ "Uname":"kawa",
+    "FirstName":"Kaushik",
+    "LastName":"Biswas",
+    "Email":"kb@gmail.ddd",
+    "Password":"AN#ww1234",
+    "MobileNo":"03958695966",
+    "ProfilePicture":" ",
+    "Gender":"Male",
+    "Designation":"Cashier",
+    "EmployeeId":"2345",
+    "AccountNo":"ab12",
+    "Status":"ACTIVE"
+
+insertcops
+-------------
+"Uname":"dipa",
+    "FirstName":"dipa",
+    "LastName":"gg",
+    "Email":"d@gmail.ddd",
+    "Password":"AN#ww1234",
+    "MobileNo":"018976537480",
+    "ProfilePicture":" ",
+    "Gender":"Female",
+    "RankCategory":"Heffad",
+    "RankGroup":"Alpha",
+    "Station":"Dinajpur",
+    "PoliceId":"ab12",
+    "Country":"Bangladesh",
+    "Status":"ACTIVE"
+
+insertowner
+--------------
+
+   "Uname":"Adib",
+    "FirstName":"Adiba",
+    "LastName":"Paji",
+    "Email":"ap@gmail.ddd",
+    "Password":"AN#ww1234",
+    "MobileNo":"018976537480",
+    "ProfilePicture":" ",
+    "Gender":"Female",
+    "DLN":"abnh7889",
+    "VLN":"anbcgd65678",
+    "AccountNo":"78667SJNJJHFJ",
+    "Status":"ACTIVE"
+
+report
+-------------
+   
+    "Uname":"Kaushik",
+    "Details":"Onek vulll",
+    "Email":"kb@gmail.ddd",
+
+insert vli
+-------------
+
+

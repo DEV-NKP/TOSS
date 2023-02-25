@@ -1,0 +1,55 @@
+import { Injectable } from "@nestjs/common";
+import { TransactionForm } from "../DTO/transaction.dto";
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { OwnerForm } from "../Owner/owner.dto";
+import { LogOutEntity } from "../Entity/logout.entity";
+import { OfficerForm } from "../Officer/officer.dto";
+import { CopsForm } from "../Cops/cops.dto";
+import { Transform } from "stream";
+import { LogoutForm } from "../DTO/logout.dto";
+var ip = require('ip');
+@Injectable()
+export class LogoutService {
+
+constructor(
+@InjectRepository(LogOutEntity)
+        private logoutRepo: Repository<LogOutEntity>,
+      ) {}
+
+    ViewAll():any { 
+        return this.logoutRepo.find();
+    
+    }
+
+    ////////////////////////////////////////////
+
+    insertAccount(logoutDto:LogoutForm):any {
+    
+        return this.logoutRepo.save(logoutDto);
+    }
+
+    createlogOut(Uname):any {
+        const newlogout= new LogOutEntity()
+        newlogout.IP=ip.address();
+        newlogout.Time=new Date().toString();
+        newlogout.Uname=Uname;
+     
+            return this.logoutRepo.save(newlogout);
+        }
+    deletelogoutbyid(LogOutId):any {
+    return this.logoutRepo.delete({LogOutId:LogOutId});
+        }
+
+    searchAccount(LogOutId):any {
+        return this.logoutRepo.findOneBy({ LogOutId:LogOutId });
+    }
+    
+    logOut(logoutDto:LogoutForm):any {
+
+        return this.logoutRepo.save(logoutDto);
+    }
+   
+    
+
+}
