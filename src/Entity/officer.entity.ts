@@ -1,4 +1,5 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn } from 'typeorm';
+import { AdminEntity } from './admin.entity';
 
 @Entity("Officer")
 export class OfficerEntity{
@@ -41,5 +42,9 @@ export class OfficerEntity{
 
   @Column()
   Status: string;
+
+  @ManyToOne(() => AdminEntity, (Admin) => Admin.officers)
+  @JoinColumn({ name: "AdminId" })
+  admin: AdminEntity
 
 }

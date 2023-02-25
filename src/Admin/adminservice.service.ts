@@ -70,7 +70,13 @@ export class AdminService {
           return this.adminRepo.update({Uname:Uname},{Password:adminChangePasswordForm.NEWPassword});
         }   
 
-
-
+        getOfficerByAdminID(AdminId):any {
+          return this.adminRepo.find({ 
+                  where: {AdminId:AdminId},
+              relations: {
+                  officers: true,
+              },
+           });
+          }
 
 }
