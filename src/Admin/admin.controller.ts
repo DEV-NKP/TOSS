@@ -334,6 +334,22 @@ logout(): any {
 //return this.logoutService.createlogOut(Uname);
 return "Do after session";
 }
+
+
+
+
+@Get('/findofficerbyadmin/:id')
+findofficerbyadmin(@Param('id', ParseIntPipe) id: number): any {
+  return this.adminService.getOfficerByAdminID(id);
+}
+
+@Get('/findadminbyofficer/:id')
+findadminbyofficer(@Param('id', ParseIntPipe) id: number): any {
+  return this.officerService.getAdminByOfficerID(id);
+}
+
+
+
 }
 
 

@@ -142,4 +142,16 @@ else{
             return result;
         }
 
+
+        getAdminByOfficerID(OfficerId):any {
+            return this.officerRepo.find({ 
+                    where: {OfficerId:OfficerId},
+                relations: {
+                    admin: true,
+                },
+             });
+        }
+
+
+
 }

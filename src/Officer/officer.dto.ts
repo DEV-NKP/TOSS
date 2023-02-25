@@ -42,11 +42,11 @@ export class OfficerForm {
     @Matches(/^E-\d{6}$/, {message: 'Please provide a valid employee ID E-000000'})
     EmployeeId: string;
 
-    @IsNotEmpty({message: "Please enter your Account Number"})
-    @Matches(/^[A-Za-z0-9]{4}-[A-Za-z0-9]{4}-[A-Za-z0-9]{4}-[A-Za-z0-9]{4}-[A-Za-z0-9]{4}$/, {message: 'Please provide a valid value in the format XXXX-XXXX-XXXX-XXXX-XXXX',})
     AccountNo: string;
 
     Status: string;
+
+    AdminId:number;
 }
 
 export class EditOfficerForm {
