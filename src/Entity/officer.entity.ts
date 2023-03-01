@@ -1,5 +1,7 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn, OneToMany, OneToOne } from 'typeorm';
 import { AdminEntity } from './admin.entity';
+import { CopsEntity } from './cops.entity';
+import { SignUpEntity } from './signup.entity';
 
 @Entity("Officer")
 export class OfficerEntity{
@@ -45,6 +47,11 @@ export class OfficerEntity{
 
   @ManyToOne(() => AdminEntity, (Admin) => Admin.officers)
   @JoinColumn({ name: "AdminId" })
-  admin: AdminEntity
+  admin: AdminEntity;
 
+  @OneToMany(() => CopsEntity, (cops) => cops.officer)
+  cops: CopsEntity[];
+
+  @OneToOne(() => SignUpEntity, (signup) => signup.officer, {cascade:true})
+  signup: SignUpEntity;
 }

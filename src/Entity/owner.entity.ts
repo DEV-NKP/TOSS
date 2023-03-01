@@ -1,4 +1,5 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, OneToOne } from 'typeorm';
+import { SignUpEntity } from './signup.entity';
 
 @Entity("Owner")
 export class OwnerEntity{
@@ -42,4 +43,6 @@ export class OwnerEntity{
   @Column()
   Status: string;
 
+  @OneToOne(() => SignUpEntity, (signup) => signup.owner, {cascade:true})
+  signup: SignUpEntity;
 }

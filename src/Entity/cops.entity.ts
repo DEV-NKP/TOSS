@@ -1,4 +1,7 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn, OneToMany, OneToOne } from 'typeorm';
+import { CaseEntity } from './case.entity';
+import { OfficerEntity } from './officer.entity';
+import { SignUpEntity } from './signup.entity';
 
 @Entity("Cops")
 export class CopsEntity{
@@ -47,4 +50,17 @@ export class CopsEntity{
 
   @Column()
   Status: string;
+
+
+  @ManyToOne(() => OfficerEntity, (officer) => officer.cops)
+  @JoinColumn({ name: "CopsId" })
+  officer: OfficerEntity;
+
+
+
+  @OneToMany(() => CaseEntity, (cases) => cases.cops)
+  cases: CaseEntity[];
+
+  @OneToOne(() => SignUpEntity, (signup) => signup.cops, {cascade:true})
+  signup: SignUpEntity;
 }

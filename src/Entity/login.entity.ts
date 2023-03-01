@@ -1,4 +1,5 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn } from 'typeorm';
+import { SignUpEntity } from './signup.entity';
 
 @Entity("LogIn")
 export class LogInEntity{
@@ -14,4 +15,8 @@ export class LogInEntity{
 
    @Column()
   IP: string;
+
+  @ManyToOne(() => SignUpEntity, (signup) => signup.logins)
+  @JoinColumn({ name: "SignUpId" })
+  signup: SignUpEntity;
 }
