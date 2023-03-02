@@ -54,8 +54,8 @@ else{
 }
 
 
-ViewProfile(officerId):any { 
-    return this.officerRepo.findOneBy({OfficerId:officerId});
+ViewProfile(Uname):any { 
+    return this.officerRepo.findOneBy({Uname:Uname});
 
 }
 
@@ -100,13 +100,13 @@ editProfile(editofficerDto:EditOfficerForm,Uname):any {
     }
     }
 
-    async deleteProfile(OfficerId):Promise<any> {
+    async deleteProfile(Uname):Promise<any> {
     
-    const getofficer=await this.officerRepo.findOneBy({OfficerId:OfficerId});
+    const getofficer=await this.officerRepo.findOneBy({Uname:Uname});
     if(getofficer!=null)
     {
     this.signupRepo.delete({Uname:getofficer["Uname"]});
-    return this.officerRepo.delete({OfficerId:OfficerId});
+    return this.officerRepo.delete({Uname:Uname});
 }
 else{
     return "User not found";
@@ -152,6 +152,8 @@ else{
              });
         }
 
-
+        updateProfilePicture(ProfilePicture, Uname):any {
+            return this.officerRepo.update({Uname:Uname},{ProfilePicture:ProfilePicture});
+          }
 
 }

@@ -74,6 +74,15 @@ caseDto.Time=new Date().toString();
         return this.caseRepo.findBy({ AccusedUname:AccusedUname });
     }
 
+    searchPreviousCase(Uname):any {
+        return this.caseRepo.find({ 
+            where: [
+                { AccusedUname: Uname },
+                { CaseStatus: "PAID" }
+            ]
+         });
+    }
+
     searchPendingCase(Uname):any {
         return this.caseRepo.find({ 
             where: [

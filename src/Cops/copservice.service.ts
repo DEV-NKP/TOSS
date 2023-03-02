@@ -54,8 +54,8 @@ else{
 }
 }
 
-viewProfile(CopsId):any{
-    return this.copsRepo.findOneBy({CopsId:CopsId});
+viewProfile(Uname):any{
+    return this.copsRepo.findOneBy({Uname:Uname});
 }
 
 
@@ -97,7 +97,9 @@ editcops(editcopsDto:EditCopsForm,Uname):any {
             });
 }
 
-
+updateProfilePicture(ProfilePicture, Uname):any {
+    return this.copsRepo.update({Uname:Uname},{ProfilePicture:ProfilePicture});
+  }
 editProfilebyid(copsDto:CopsForm,CopsId):any {
     return this.copsRepo.update({CopsId:CopsId},copsDto);
        }
@@ -110,13 +112,13 @@ revokebancops(Uname):any {
     return this.copsRepo.update({Uname:Uname},{Status:"ACTIVE"});
        }
 
-async deleteProfilebyid(CopsId):Promise<any> {
+async deleteProfilebyuname(Uname):Promise<any> {
     
-const getcops=await this.copsRepo.findOneBy({CopsId:CopsId});
+const getcops=await this.copsRepo.findOneBy({Uname:Uname});
     if(getcops!=null)
     {
     this.signupRepo.delete({Uname:getcops["Uname"]});
-    return this.copsRepo.delete({CopsId:CopsId});
+    return this.copsRepo.delete({Uname:Uname});
 }
 else{
     return "User not found";

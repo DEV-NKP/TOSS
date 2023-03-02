@@ -10,7 +10,7 @@ import { OfficerForm } from "../Officer/officer.dto";
 import { CopsForm } from "../Cops/cops.dto";
 import { OwnerForm } from "../Owner/owner.dto";
 import { SignUpEntity } from '../Entity/signup.entity';
-
+import * as bcrypt from 'bcrypt';
 
 var ip = require('ip');
 
@@ -31,10 +31,14 @@ export class AdminService {
                 newsignup.IP=ip.address();
                 newsignup.Time=new Date().toString();
                 newsignup.Uname=adminForm.Uname;
+                newsignup.Email=adminForm.Email;
                 newsignup.Post="Admin";
                 
                 
                 this.signupRepo.save(newsignup);
+                const salt = await bcrypt.genSalt();
+                const hassedpassed = await bcrypt.hash(adminForm.Password, salt);
+                adminForm.Password= hassedpassed;
                 return this.adminRepo.save(adminForm);
             }
             else{
@@ -47,8 +51,8 @@ export class AdminService {
 
       }
 
-    viewProfile(adminId):any { 
-        return this.adminRepo.findOneBy({AdminId:adminId});
+    viewProfile(uname):any { 
+        return this.adminRepo.findOneBy({Uname:uname});
     
     }
     
@@ -64,7 +68,9 @@ export class AdminService {
               );
         }
     
-    
+        updateProfilePicture(ProfilePicture, Uname):any {
+          return this.adminRepo.update({Uname:Uname},{ProfilePicture:ProfilePicture});
+        }  
         
         chnagepassword(adminChangePasswordForm:AdminChangePasswordForm,Uname):any {
           return this.adminRepo.update({Uname:Uname},{Password:adminChangePasswordForm.NEWPassword});

@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put, Query, Req, Request, UsePipes, ValidationPipe } from "@nestjs/common";
+import { Body, Controller, Delete, FileTypeValidator, Get, MaxFileSizeValidator, Param, ParseFilePipe, ParseIntPipe, Post, Put, Query, Req, Request, Session, UploadedFile, UseGuards, UseInterceptors, UsePipes, ValidationPipe } from "@nestjs/common";
 
 import { AdminForm, EditAdminForm } from "./admin.dto";
 import { EditOfficerForm, OfficerForm } from "../Officer/officer.dto";
@@ -29,9 +29,13 @@ import { VLIService } from "../Services/vliservice.service";
 
 
 import { AdminChangePasswordForm } from "./admin.dto";
-
+import { UnauthorizedException } from '@nestjs/common/exceptions';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { AdminGuard } from '../toss.guard';
+import { diskStorage } from 'multer';
 
 @Controller("/admin")
+@UseGuards(AdminGuard)
 export class AdminController
 { 
   constructor(
@@ -50,48 +54,56 @@ export class AdminController
               ){}
 
 
-              @Post("/insertadmin")
-              @UsePipes(new ValidationPipe())
-              insertadmin(@Body() mydto:AdminForm): any {
-                return this.adminService.insertadmin(mydto);
-              }
 
     @Get("/viewprofile")
-    viewProfile(     
-       //@Param("AdminId") AdminId:number
-       //search by session
-    ): any { 
-        //return this.adminService.viewProfile(AdminId);
-        return "Do after session"
+    viewProfile(@Session() session): any { 
+        return this.adminService.viewProfile(session.uname);
     }
 
     @Put("/editprofile")
     @UsePipes(new ValidationPipe())
-    editProfile( 
+    editProfile( @Session() session,
       @Body() mydto: EditAdminForm,
-      //@Param("AdminId", ParseIntPipe) AdminId:number
+     
     ): any {
-      return "Do after session";
-    //return this.adminService.editProfile(mydto, mydto.Uname);
+     
+    return this.adminService.editProfile(mydto, session.uname);
     }
 
-   /* @Post("/updateprofilepicture")
-    @UsePipes(new ValidationPipe())
-    updateProfilePicture( 
-      @Body() mydto: AdminForm,
-      //@Param("AdminId", ParseIntPipe) AdminId:number
-    ): any {
- return this.copsService.postSignUp(mydto);
-    }
-*/
+
+@Post('/updateprofilepicture')
+@UseInterceptors(FileInterceptor('image',
+{storage:diskStorage({
+  destination: './../ProfilePicture',
+  filename: function (req, file, cb) {
+    cb(null,"Admin_"+file.originalname+Date.now())
+  }
+})
+
+}))
+updateProfilePicture(@Session() session,@UploadedFile(new ParseFilePipe({
+  validators: [
+    //new MaxFileSizeValidator({ maxSize: 16000 }),
+    new FileTypeValidator({ fileType: 'png|jpg|jpeg|' }),
+  ],
+}),) file: Express.Multer.File){
+
+ const ProfilePicture = file.filename;  
+return this.adminService.updateProfilePicture(ProfilePicture,session.uname);
+
+}
+
+
+
+
 
 @Put("/changepassword")
 @UsePipes(new ValidationPipe())
-changepassword( 
+changepassword( @Session() session,
   @Body() passdto: AdminChangePasswordForm,
-  //@Param("AdminId", ParseIntPipe) AdminId:number
+ 
 ): any {
-//return this.adminService.chnagepassword(passdto, /*sesson*/ );
+return this.adminService.chnagepassword(passdto, session.uname );
 }
 
 @Get('/checkuname/:Uname')
@@ -322,18 +334,7 @@ return this.vliService.deletevlibyid(VliId);
 }
 
 
-@Get("/login")
-login(): any {
-  //session work
-//return this.loginService.createlogIn(Uname);
-return "Do after session";
-}
-@Get("/logout")
-logout(): any {
-  //session work
-//return this.logoutService.createlogOut(Uname);
-return "Do after session";
-}
+
 
 
 

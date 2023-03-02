@@ -69,7 +69,9 @@ getProfileByName(Uname:string):any {
         {Uname:Uname}
     );
 }
-
+updateProfilePicture(ProfilePicture, Uname):any {
+    return this.ownerRepo.update({Uname:Uname},{ProfilePicture:ProfilePicture});
+  }
 viewownerbyuname(Uname):any {
     return this.ownerRepo.findOneBy({Uname:Uname});
 }
@@ -89,13 +91,13 @@ else{
     
 }
 
-async deleteProfile(OwnerId):Promise<any> {
-    const getowner=await this.ownerRepo.findOneBy({OwnerId:OwnerId});
+async deleteProfile(Uname):Promise<any> {
+    const getowner=await this.ownerRepo.findOneBy({Uname:Uname});
     if(getowner!=null)
     {
     this.signupRepo.delete({Uname:getowner["Uname"]});
     this.bankRepo.delete({AccountNo:getowner["AccountNo"]});
-    return this.ownerRepo.delete({OwnerId:OwnerId});
+    return this.ownerRepo.delete({Uname:Uname});
 }
 else{
     return "User not found";

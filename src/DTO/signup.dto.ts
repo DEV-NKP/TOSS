@@ -5,7 +5,20 @@ export class SignupForm {
     
     SignUpId: number;
     Uname: string;
+    Email:string;
     Time: string;
     IP: string;
     Post: string;
+}
+export class ForgotPasswordForm {
+    @IsEmail()
+    Email:string;
+}
+export class ChangeForgotPasswordForm {
+    @IsNotEmpty()
+    OTP:string;
+
+    @IsStrongPassword()
+    Password:string;
+
 }

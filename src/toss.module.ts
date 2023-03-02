@@ -23,6 +23,10 @@ import { LogoutService } from './Services/logoutservice.service';
 import { ReportService } from './Services/reportservice.service';
 import { TransactionService } from './Services/transactionservice.service';
 import { VLIService } from './Services/vliservice.service';
+import { MailerModule } from '@nestjs-modules/mailer';
+import { TossService } from './toss.service';
+import { TossController } from './toss.controller';
+import { SignupService } from './Services/signupservice.service';
 
 @Module({
   imports: [OfficerModule, OwnerModule, CopsModule, AdminModule , TypeOrmModule.forRoot(
@@ -47,10 +51,22 @@ import { VLIService } from './Services/vliservice.service';
    TypeOrmModule.forFeature([ReportEntity]),
    TypeOrmModule.forFeature([SignUpEntity]),
    TypeOrmModule.forFeature([TransactionEntity]),
-   TypeOrmModule.forFeature([VLIEntity])
+   TypeOrmModule.forFeature([VLIEntity]),
+   MailerModule.forRoot({
+    transport: {
+      host: 'smtp.gmail.com',
+               port: 465,
+               ignoreTLS: true,
+               secure: true,
+               auth: {
+                   user: 'raw.system.confirmation@gmail.com',
+                   pass: 'nhdzzoorwakobtfo'
+               },
+              }
+  }),
   ],
  
-  controllers: [],
-  providers: [BankService,CaseService,LoginService,LogoutService,ReportService,TransactionService,VLIService],
+  controllers: [TossController],
+  providers: [ TossService, SignupService, LoginService, LogoutService, BankService,CaseService,LoginService,LogoutService,ReportService,TransactionService,VLIService],
 })
-export class AppModule {}
+export class TossModule {}

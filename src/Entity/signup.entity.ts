@@ -15,6 +15,9 @@ export class SignUpEntity{
   @Column()
   Uname: string;
 
+ @Column()
+  Email: string;
+
   @Column()
   Time: string;
 

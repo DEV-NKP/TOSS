@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put, Query, Req, Request, UsePipes, ValidationPipe } from "@nestjs/common";
+import { Body, Controller, Delete, FileTypeValidator, Get, Param, ParseFilePipe, ParseIntPipe, Post, Put, Query, Req, Request, Session, UploadedFile, UseGuards, UseInterceptors, UsePipes, ValidationPipe } from "@nestjs/common";
 
 
 import { OfficerForm } from "../Officer/officer.dto";
@@ -31,8 +31,12 @@ import { VLIService } from "../Services/vliservice.service";
 import { OwnerChangePasswordForm } from "./owner.dto";
 import { WithdrawBankForm } from "../DTO/bank.dto";
 import { ApplyVLIForm } from "../DTO/vli.dto";
+import { OwnerGuard } from "../toss.guard";
+import { FileInterceptor } from "@nestjs/platform-express";
+import { diskStorage } from "multer";
 
 @Controller("/owner")
+@UseGuards(OwnerGuard)
 export class OwnerController
 {
   
@@ -51,57 +55,64 @@ export class OwnerController
               private vliService: VLIService  
 ){}
 
-@Post("/insertowner")
-@UsePipes(new ValidationPipe())
-insertowner(@Body() mydto:OwnerForm): any {
-  return this.ownerService.postSignUp(mydto);
-}
+
 
 
 
 @Get("/viewprofile")
 viewProfile(     
-   //search by session
+  @Session() session
 ): any { 
-    //return this.officerService.viewProfile();
-    return "Do after session"
+    return this.ownerService.getProfileByName(session.uname);
 }
 
 @Put("/editprofile")
 @UsePipes(new ValidationPipe())
 editProfile( 
+  @Session() session,
   @Body() editownerDto: EditOwnerForm,
 ): any {
-  return "Do after session";
-//return this.ownerService.editProfile(editownerDto, editownerDto.Uname);
+return this.ownerService.editProfile(editownerDto, session.uname);
 }
 
 @Delete('/deleteprofile')
 deleteProfile(
-  //@Param("OwnerId", ParseIntPipe) OwnerId:number
+  @Session() session
 ): any {
-  return "Do after session"
-  //return this.ownerService.deleteProfile(OwnerId);
+return this.ownerService.deleteProfile(session.uname);
 }
 
 
-/* @Post("/updateprofilepicture")
-@UsePipes(new ValidationPipe())
-updateProfilePicture( 
-  @Body() mydto: AdminForm,
-  //@Param("AdminId", ParseIntPipe) AdminId:number
-): any {
-return this.copsService.postSignUp(mydto);
+
+@Post('/updateprofilepicture')
+@UseInterceptors(FileInterceptor('image',
+{storage:diskStorage({
+  destination: './../ProfilePicture',
+  filename: function (req, file, cb) {
+    cb(null,"Owner_"+file.originalname+Date.now())
+  }
+})
+
+}))
+updateProfilePicture(@Session() session,@UploadedFile(new ParseFilePipe({
+  validators: [
+    //new MaxFileSizeValidator({ maxSize: 16000 }),
+    new FileTypeValidator({ fileType: 'png|jpg|jpeg|' }),
+  ],
+}),) file: Express.Multer.File){
+
+ const ProfilePicture = file.filename;  
+return this.ownerService.updateProfilePicture(ProfilePicture,session.uname);
+
 }
-*/
 
 @Put("/changepassword")
 @UsePipes(new ValidationPipe())
 changepassword( 
+  @Session() session,
 @Body() passdto: OwnerChangePasswordForm,
-//@Param("AdminId", ParseIntPipe) AdminId:number
 ): any {
-//return this.officerService.chnagepassword(passdto, /*sesson*/ );
+return this.officerService.chnagepassword(passdto, session.uname );
 }
 
 
@@ -135,16 +146,16 @@ return this.copsService.viewcopsbyuname(Uname);
 
 @Put("/withdraw")
 @UsePipes(new ValidationPipe())
-withdraw( 
+withdraw( @Session() session,
   @Body() withdrawBankForm: WithdrawBankForm): any {
-return this.bankService.withdrawbyowner(withdrawBankForm,withdrawBankForm.AccountNo);
+return this.bankService.withdrawbyowner(withdrawBankForm,session.accno);
 }
 
 @Put("/deposit")
 @UsePipes(new ValidationPipe())
-deposit( 
+deposit( @Session() session,
   @Body() depositBankForm: WithdrawBankForm): any {
-return this.bankService.depositbyowner(depositBankForm,depositBankForm.AccountNo);
+return this.bankService.depositbyowner(depositBankForm,session.accno);
 }
 
 @Put("/payment")
@@ -155,38 +166,35 @@ return this.bankService.paymentbyowner(paymentBankForm);
 }
 
 @Get("/viewbank")
-viewbank(): any {
-  //session work
-//return this.bankService.searchByAccountNo(AccountNo);
+viewbank(@Session() session): any {
+return this.bankService.searchByAccountNo(session.accno);
 }
 
 @Get('/applyforvli')
 @UsePipes(new ValidationPipe())
 applyForVli(
+  @Session() session,
   @Body() applyVli: ApplyVLIForm): any {
-    //return this.vliService.applyForVli(applyVli,/*uname*/);
+    return this.vliService.applyForVli(applyVli,session.uname);
     }
 
 @Get("/viewtransaction")
-viewalltransaction(): any {
-  //session work
-
-//return this.transactionService.ViewAll();
-return "Do after session"
+viewalltransaction(@Session() session): any {
+return this.transactionService.searchtransactionbyaccount(session.accno);
 }
 
 @Get("/viewpreviouscase")
    viewPreviousCase(
-   
+    @Session() session
    ): any {
-   return "Do after session"
+    return this.caseService.searchPreviousCase(session.uname);
    }
 
    @Get("/viewpendingcase")
    viewPendingCase(
-
+    @Session() session
    ): any {
-   return "Do after session"
+    return this.caseService.searchPendingCase(session.uname);
    }
 
    @Post("/report")
@@ -195,18 +203,6 @@ return "Do after session"
    @Body() reportForm:ReportForm
    ): any {
      return this.reportService.reportProblem(reportForm);
-   }
-   @Get("/login")
-   login(): any {
-     //session work
-   //return this.loginService.createlogIn(Uname);
-   return "Do after session";
-   }
-   @Get("/logout")
-   logout(): any {
-     //session work
-   //return this.logoutService.createlogOut(Uname);
-   return "Do after session";
    }
 
 }

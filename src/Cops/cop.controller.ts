@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put, Query, Req,  UsePipes, ValidationPipe ,MiddlewareConsumer } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put, Query, Req,  UsePipes, ValidationPipe ,MiddlewareConsumer, UseGuards, Session, UseInterceptors, UploadedFile, FileTypeValidator, ParseFilePipe } from "@nestjs/common";
 import { query } from "express";
 
 import { AdminForm } from "../Admin/admin.dto";
@@ -30,11 +30,15 @@ import { VLIService } from "../Services/vliservice.service";
 
 
 import { CopsChangePasswordForm } from "./cops.dto";
+import { CopsGuard } from "../toss.guard";
+import { FileInterceptor } from "@nestjs/platform-express";
+import { diskStorage } from "multer";
 
 
 
 
 @Controller("/cops")
+@UseGuards(CopsGuard)
 export class CopsController
 { 
   constructor(
@@ -55,47 +59,62 @@ export class CopsController
 
     @Get("/viewprofile")
     viewProfile(     
-       //search by session
+      @Session() session
     ): any { 
-        //return this.officerService.viewProfile();
-        return "Do after session"
+        return this.copsService.viewProfile(session.uname);
+        
     }
 
     @Put("/editprofile")
     @UsePipes(new ValidationPipe())
     editProfile( 
+      @Session() session,
       @Body() mydto: EditCopsForm,
     ): any {
-      return "Do after session";
-    //return this.copsService.editProfile(mydto, Uname);
+    
+  return this.copsService.editProfile(mydto, session.uname);
     }
 
     @Delete('/deleteprofile')
     deleteProfile(
-      //@Param("CopsId", ParseIntPipe) CopsId:number
+      @Session() session
     ): any {
-      return "Do after session"
-      //return this.copsService.deleteProfilebyid(CopsId);
+   
+      return this.copsService.deleteProfilebyuname(session.uname);
     }
 
 
-   /* @Post("/updateprofilepicture")
-    @UsePipes(new ValidationPipe())
-    updateProfilePicture( 
-      @Body() mydto: AdminForm,
-      //@Param("AdminId", ParseIntPipe) AdminId:number
-    ): any {
- return this.copsService.postSignUp(mydto);
+    @Post('/updateprofilepicture')
+    @UseInterceptors(FileInterceptor('image',
+    {storage:diskStorage({
+      destination: './../ProfilePicture',
+      filename: function (req, file, cb) {
+        cb(null,"Cops_"+file.originalname+Date.now())
+      }
+    })
+    
+    }))
+    updateProfilePicture(@Session() session,@UploadedFile(new ParseFilePipe({
+      validators: [
+        //new MaxFileSizeValidator({ maxSize: 16000 }),
+        new FileTypeValidator({ fileType: 'png|jpg|jpeg|' }),
+      ],
+    }),) file: Express.Multer.File){
+    
+     const ProfilePicture = file.filename;  
+    return this.copsService.updateProfilePicture(ProfilePicture,session.uname);
+    
     }
-*/
+    
+
 
 @Put("/changepassword")
 @UsePipes(new ValidationPipe())
 changepassword( 
+  @Session() session,
   @Body() passdto: CopsChangePasswordForm,
-  //@Param("AdminId", ParseIntPipe) AdminId:number
 ): any {
-//return this.officerService.chnagepassword(passdto, /*sesson*/ );
+return this.officerService.chnagepassword(passdto, session.uname );
 }
 
 
@@ -145,8 +164,8 @@ viewCaseByAccused(
 
     @Post("/createcase")
     @UsePipes(new ValidationPipe())
-    createCase(@Body() caseDto:CaseForm): any {
-    //return this.caseService.insertCase(caseDto,/*Uname*/);
+    createCase(@Session() session,@Body() caseDto:CaseForm): any {
+    return this.caseService.insertCase(caseDto,session.uname);
     }
   
     @Put("/editcase")
@@ -204,26 +223,6 @@ return this.caseService.ViewAll();
     ): any {
       return this.reportService.reportProblem(reportForm);
     }
-
-
-
-   
-
-
-    @Get("/login")
-    login(): any {
-      //session work
-    //return this.loginService.createlogIn(Uname);
-    return "Do after session";
-    }
-    @Get("/logout")
-    logout(): any {
-      //session work
-    //return this.logoutService.createlogOut(Uname);
-    return "Do after session";
-    }
-
-
 
 }
 
