@@ -25,7 +25,8 @@ export class AdminService {
 
               async insertadmin(adminForm:AdminForm):Promise<any> {
                 const getuname=await this.signupRepo.findOneBy({Uname:adminForm.Uname});
-                if(getuname==null)
+                const getemail=await this.signupRepo.findOneBy({Email:adminForm.Email});
+                if(getuname==null && getemail==null)
                 {
                 const newsignup= new SignUpEntity()
                 newsignup.IP=ip.address();
@@ -41,9 +42,20 @@ export class AdminService {
                 adminForm.Password= hassedpassed;
                 return this.adminRepo.save(adminForm);
             }
-            else{
+            else if(getuname!=null && getemail==null)
+            {
               return "User-Name is already taken"
             }
+            else if(getuname==null && getemail!=null)
+            {
+              return "Email is already taken"
+            }
+            else 
+            {
+              return "Both User-Name and Email are already taken"
+            }
+
+            
             }
     ViewAll():any
       {
@@ -72,8 +84,22 @@ export class AdminService {
           return this.adminRepo.update({Uname:Uname},{ProfilePicture:ProfilePicture});
         }  
         
-        chnagepassword(adminChangePasswordForm:AdminChangePasswordForm,Uname):any {
-          return this.adminRepo.update({Uname:Uname},{Password:adminChangePasswordForm.NEWPassword});
+        async chnagepassword(adminChangePasswordForm:AdminChangePasswordForm,Uname):Promise<any> {
+                
+              const findoldpass=await this.adminRepo.findOneBy({Uname:Uname});
+
+                const isMatch= await bcrypt.compare(adminChangePasswordForm.OLDPassword, findoldpass.Password);
+                if(isMatch) {
+                 const salt = await bcrypt.genSalt();
+                const hassedpassed = await bcrypt.hash(adminChangePasswordForm.NEWPassword, salt);
+                const newPassword= hassedpassed;   
+                return this.adminRepo.update({Uname:Uname},{Password:newPassword});
+                }
+                else {
+                    return "OLD Password is incorrect";
+                }
+
+                
         }   
 
         getOfficerByAdminID(AdminId):any {

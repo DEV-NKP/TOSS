@@ -6,6 +6,7 @@ import { Repository } from 'typeorm';
 import { OfficerEntity } from "../Entity/officer.entity";
 import { SignUpEntity } from '../Entity/signup.entity';
 import { BankEntity } from '../Entity/bank.entity';
+import * as bcrypt from 'bcrypt';
 var ip = require('ip');
 @Injectable()
 export class OfficerService {
@@ -27,12 +28,15 @@ return this.officerRepo.find();
 
     async insertofficer(officerDto:OfficerForm):Promise<any> {
     const getuname=await this.signupRepo.findOneBy({Uname:officerDto.Uname});
-    if(getuname==null)
+    const getemail=await this.signupRepo.findOneBy({Email:officerDto.Email});
+
+    if(getuname==null && getemail==null)
     {
-    const newsignup= new SignUpEntity()
+                const newsignup= new SignUpEntity()
                 newsignup.IP=ip.address();
                 newsignup.Time=new Date().toString();
                 newsignup.Uname=officerDto.Uname;
+                newsignup.Email=officerDto.Email;
                 newsignup.Post="Officer";
             
 officerDto.AccountNo="9999-9999-9999-9999-9999";
@@ -44,12 +48,24 @@ newaccount.Amount=0;
 this.bankRepo.save(newaccount);
 }
 
+const salt = await bcrypt.genSalt();
+const hassedpassed = await bcrypt.hash(officerDto.Password, salt);
+officerDto.Password= hassedpassed;
 this.signupRepo.save(newsignup);
                      
 return this.officerRepo.save(officerDto);
 }
-else{
+else if(getuname!=null && getemail==null)
+{
   return "User-Name is already taken"
+}
+else if(getuname==null && getemail!=null)
+{
+  return "Email is already taken"
+}
+else 
+{
+  return "Both User-Name and Email are already taken"
 }
 }
 
@@ -126,8 +142,19 @@ else{
         return this.officerRepo.update({Uname:Uname},{Status:"ACTIVE"});
            }
 
-           chnagepassword(officerChangePasswordForm:OfficerChangePasswordForm,Uname):any {
-            return this.officerRepo.update({Uname:Uname},{Password:officerChangePasswordForm.NEWPassword});
+           async chnagepassword(officerChangePasswordForm:OfficerChangePasswordForm,Uname):Promise<any> {
+            const findoldpass=await this.officerRepo.findOneBy({Uname:Uname});
+
+            const isMatch= await bcrypt.compare(officerChangePasswordForm.OLDPassword, findoldpass.Password);
+            if(isMatch) {
+             const salt = await bcrypt.genSalt();
+            const hassedpassed = await bcrypt.hash(officerChangePasswordForm.NEWPassword, salt);
+            const newPassword= hassedpassed;   
+            return this.officerRepo.update({Uname:Uname},{Password:newPassword});
+            }
+            else {
+                return "OLD Password is incorrect";
+            }
           }   
 
            makeid(length) {

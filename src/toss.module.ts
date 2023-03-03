@@ -27,6 +27,8 @@ import { MailerModule } from '@nestjs-modules/mailer';
 import { TossService } from './toss.service';
 import { TossController } from './toss.controller';
 import { SignupService } from './Services/signupservice.service';
+import { AdminService } from './Admin/adminservice.service';
+import { OwnerService } from './Owner/ownerservice.service';
 
 @Module({
   imports: [OfficerModule, OwnerModule, CopsModule, AdminModule , TypeOrmModule.forRoot(
@@ -67,6 +69,6 @@ import { SignupService } from './Services/signupservice.service';
   ],
  
   controllers: [TossController],
-  providers: [ TossService, SignupService, LoginService, LogoutService, BankService,CaseService,LoginService,LogoutService,ReportService,TransactionService,VLIService],
+  providers: [ TossService, SignupService, LoginService,AdminService,OwnerService, LogoutService, BankService,CaseService,LoginService,LogoutService,ReportService,TransactionService,VLIService],
 })
 export class TossModule {}

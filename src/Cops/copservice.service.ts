@@ -7,6 +7,7 @@ import { CopsEntity } from "../Entity/cops.entity";
 import { CaseEntity } from "../Entity/case.entity";
 import { OwnerEntity } from "../Entity/owner.entity";
 import { SignUpEntity } from '../Entity/signup.entity';
+import * as bcrypt from 'bcrypt';
 
 var ip = require('ip');
 @Injectable()
@@ -37,20 +38,34 @@ ViewAll():any {
 
     async insertcops(copsDto:CopsForm):Promise<any> {
     const getuname=await this.signupRepo.findOneBy({Uname:copsDto.Uname});
-    if(getuname==null)
+    const getemail=await this.signupRepo.findOneBy({Email:copsDto.Email});
+
+    if(getuname==null && getemail==null)
     {
-    const newsignup= new SignUpEntity()
+                const newsignup= new SignUpEntity()
                 newsignup.IP=ip.address();
                 newsignup.Time=new Date().toString();
                 newsignup.Uname=copsDto.Uname;
+                newsignup.Email=copsDto.Email;
                 newsignup.Post="Cops";
                 
-                
+                const salt = await bcrypt.genSalt();
+                const hassedpassed = await bcrypt.hash(copsDto.Password, salt);
+                copsDto.Password= hassedpassed;
                 this.signupRepo.save(newsignup);
     return this.copsRepo.save(copsDto);
 }
-else{
+else if(getuname!=null && getemail==null)
+{
   return "User-Name is already taken"
+}
+else if(getuname==null && getemail!=null)
+{
+  return "Email is already taken"
+}
+else 
+{
+  return "Both User-Name and Email are already taken"
 }
 }
 
@@ -144,7 +159,18 @@ deletecopsbyuname(Uname):any {
     return this.copsRepo.delete({Uname:Uname});
 }
 
-chnagepassword(copsChangePasswordForm:CopsChangePasswordForm,Uname):any {
-    return this.copsRepo.update({Uname:Uname},{Password:copsChangePasswordForm.NEWPassword});
+    async chnagepassword(copsChangePasswordForm:CopsChangePasswordForm,Uname):Promise<any> {
+        const findoldpass=await this.copsRepo.findOneBy({Uname:Uname});
+
+        const isMatch= await bcrypt.compare(copsChangePasswordForm.OLDPassword, findoldpass.Password);
+        if(isMatch) {
+         const salt = await bcrypt.genSalt();
+        const hassedpassed = await bcrypt.hash(copsChangePasswordForm.NEWPassword, salt);
+        const newPassword= hassedpassed;   
+        return this.copsRepo.update({Uname:Uname},{Password:newPassword});
+        }
+        else {
+            return "OLD Password is incorrect";
+        }
   }   
 }

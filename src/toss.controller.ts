@@ -30,6 +30,9 @@ import { AdminForm } from './Admin/admin.dto';
 import { OwnerService } from './Owner/ownerservice.service';
 import { OwnerForm } from './Owner/owner.dto';
   
+import { ForgotPasswordForm } from "./DTO/signup.dto";
+import { ChangeForgotPasswordForm } from "./DTO/signup.dto";
+
   @Controller('/toss')
   export class TossController {
     
@@ -67,6 +70,7 @@ insertowner(@Body() mydto:OwnerForm): any {
         {
           session.uname = finduser["Uname"];
           session.post = findpost["Post"];
+          session.email = finduser["Email"];
             if(findpost["Post"]==="Owner")
             { const findaccno= await this.ownerService.viewownerbyuname(finduser["Uname"]);
             session.accno = findaccno["AccountNo"];
@@ -85,7 +89,7 @@ this.loginService.createlogIn(session.uname);
       logout(@Session() session): any {
          this.logoutService.createlogOut(session.uname);
         if(session.destroy())
-        {
+       {
           return {message:"you are logged out"};
         }
         else
@@ -96,13 +100,21 @@ this.loginService.createlogIn(session.uname);
      
       }
 
-/*
-  @Post('/sendemail')
-  sendEmail(@Body() mydata){
-  return this.adminService.sendEmail(mydata);
+
+  @Post('/forgotpassword')
+  sendEmail(@Body() mydto:ForgotPasswordForm){
+  return this.tossService.sendEmail(mydto);
   }
-  */
   
+  @Put("/changeforgotpassword")
+@UsePipes(new ValidationPipe())
+changeforgotpassword( 
+ 
+@Body() passdto: ChangeForgotPasswordForm,
+): any {
+return this.tossService.chnageforgotpassword(passdto );
+}
+
   
   
   

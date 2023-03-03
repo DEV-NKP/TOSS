@@ -18,10 +18,6 @@ export class BankForm {
 export class WithdrawBankForm {
    
 
-    @IsNotEmpty({message: "Please enter your Account No"})
-    @Matches(/^[A-Za-z0-9]{4}-[A-Za-z0-9]{4}-[A-Za-z0-9]{4}-[A-Za-z0-9]{4}-[A-Za-z0-9]{4}$/, {message: 'Please provide a valid value in the format XXXX-XXXX-XXXX-XXXX-XXXX',})
-    AccountNo: string;
-
     @IsInt({message: 'Amount must be an integer'})
     @Length(0,30,{message: 'Length must be less than 30 characters'})
     Amount: number;
@@ -30,8 +26,7 @@ export class WithdrawBankForm {
 }
 
 export class PaymentBankForm {
-    @IsNotEmpty({message: "Please enter your Account No"})
-    @Matches(/^[A-Za-z0-9]{4}-[A-Za-z0-9]{4}-[A-Za-z0-9]{4}-[A-Za-z0-9]{4}-[A-Za-z0-9]{4}$/, {message: 'Please provide a valid value in the format XXXX-XXXX-XXXX-XXXX-XXXX',})
+
     SenderAccountNo: string;
 
  @IsNotEmpty({message: "Please enter your Account No"})

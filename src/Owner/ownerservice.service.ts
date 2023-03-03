@@ -6,6 +6,7 @@ import { OwnerEntity } from "../Entity/owner.entity";
 import { ReportForm } from "../DTO/report.dto";
 import { SignUpEntity } from '../Entity/signup.entity';
 import { BankEntity } from '../Entity/bank.entity';
+import * as bcrypt from 'bcrypt';
 var ip = require('ip');
 @Injectable()
 export class OwnerService {
@@ -38,12 +39,15 @@ editProfile(editownerDto:EditOwnerForm,Uname):any {
 
     async postSignUp(ownerDto:OwnerForm):Promise<any> {
     const getuname=await this.signupRepo.findOneBy({Uname:ownerDto.Uname});
-    if(getuname==null)
+    const getemail=await this.signupRepo.findOneBy({Email:ownerDto.Email});
+
+    if(getuname==null && getemail==null)
     {
     const newsignup= new SignUpEntity()
                 newsignup.IP=ip.address();
                 newsignup.Time=new Date().toString();
                 newsignup.Uname=ownerDto.Uname;
+                newsignup.Email=ownerDto.Email;
                 newsignup.Post="Owner";
                 ownerDto.AccountNo=this.makeid(4)+"-"+this.makeid(4)+"-"+this.makeid(4)+"-"+this.makeid(4)+"-"+this.makeid(4);
 
@@ -52,11 +56,25 @@ editProfile(editownerDto:EditOwnerForm,Uname):any {
                 newaccount.Amount=0;
                 this.bankRepo.save(newaccount);           
                 
+
+                const salt = await bcrypt.genSalt();
+                const hassedpassed = await bcrypt.hash(ownerDto.Password, salt);
+                ownerDto.Password= hassedpassed;
+
                 this.signupRepo.save(newsignup);
     return this.ownerRepo.save(ownerDto);
 }
-else{
+else if(getuname!=null && getemail==null)
+{
   return "User-Name is already taken"
+}
+else if(getuname==null && getemail!=null)
+{
+  return "Email is already taken"
+}
+else 
+{
+  return "Both User-Name and Email are already taken"
 }
 }
 
@@ -123,8 +141,19 @@ revokebanowner(Uname):any {
     return this.ownerRepo.update({Uname:Uname},{Status:"ACTIVE"});
        }
 
-       chnagepassword(ownerChangePasswordForm:OwnerChangePasswordForm,Uname):any {
-        return this.ownerRepo.update({Uname:Uname},{Password:ownerChangePasswordForm.NEWPassword});
+       async chnagepassword(ownerChangePasswordForm:OwnerChangePasswordForm,Uname):Promise<any> {
+        const findoldpass=await this.ownerRepo.findOneBy({Uname:Uname});
+
+        const isMatch= await bcrypt.compare(ownerChangePasswordForm.OLDPassword, findoldpass.Password);
+        if(isMatch) {
+         const salt = await bcrypt.genSalt();
+        const hassedpassed = await bcrypt.hash(ownerChangePasswordForm.NEWPassword, salt);
+        const newPassword= hassedpassed;   
+        return this.ownerRepo.update({Uname:Uname},{Password:newPassword});
+        }
+        else {
+            return "OLD Password is incorrect";
+        }
       }   
 
       makeid(length) {

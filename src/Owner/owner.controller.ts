@@ -160,8 +160,9 @@ return this.bankService.depositbyowner(depositBankForm,session.accno);
 
 @Put("/payment")
 @UsePipes(new ValidationPipe())
-payment( 
+payment( @Session() session,
   @Body() paymentBankForm: PaymentBankForm): any {
+    paymentBankForm.SenderAccountNo=session.accno;
 return this.bankService.paymentbyowner(paymentBankForm);
 }
 
@@ -199,9 +200,11 @@ return this.transactionService.searchtransactionbyaccount(session.accno);
 
    @Post("/report")
    @UsePipes(new ValidationPipe())
-   report(
+   report(@Session() session,
    @Body() reportForm:ReportForm
    ): any {
+    reportForm.Email=session.email;
+    reportForm.Uname=session.uname;
      return this.reportService.reportProblem(reportForm);
    }
 

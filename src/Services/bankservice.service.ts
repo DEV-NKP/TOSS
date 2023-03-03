@@ -56,8 +56,8 @@ constructor(
     }
 
     async withdrawbyofficer(withdrawBankForm:WithdrawBankForm):Promise<any> {
-
-        const getaccount= await this.bankRepo.findOneBy({ AccountNo:withdrawBankForm.AccountNo });
+        const AccountNo="9999-9999-9999-9999-9999";
+        const getaccount= await this.bankRepo.findOneBy({ AccountNo:AccountNo });
         if(getaccount!=null){
         getaccount["Amount"] = (getaccount["Amount"]-withdrawBankForm.Amount);
 
@@ -66,19 +66,19 @@ constructor(
         newTransaction.Time=new Date().toString();
         newTransaction.Amount=withdrawBankForm.Amount;
         newTransaction.ReceiverAc="N/A";
-        newTransaction.SenderAc=withdrawBankForm.AccountNo;
+        newTransaction.SenderAc=AccountNo;
         this.transactionRepo.save(newTransaction);
 
         // return withdrawBankForm.Amount;
 
-        return await this.bankRepo.update({ AccountNo:withdrawBankForm.AccountNo }, {Amount:getaccount["Amount"] } );
+        return await this.bankRepo.update({ AccountNo:AccountNo }, {Amount:getaccount["Amount"] } );
     }
     return "INVALID"
     }
 
     async withdrawbyowner(withdrawBankForm:WithdrawBankForm, AccountNo):Promise<any> {
 
-        const getaccount= await this.bankRepo.findOneBy({ AccountNo:withdrawBankForm.AccountNo });
+        const getaccount= await this.bankRepo.findOneBy({ AccountNo:AccountNo });
         if(getaccount!=null){
             getaccount["Amount"] = (getaccount["Amount"]-withdrawBankForm.Amount);
 
@@ -91,7 +91,7 @@ constructor(
         newTransaction.SenderAc=AccountNo;
         this.transactionRepo.save(newTransaction);
 
-        return await this.bankRepo.update({ AccountNo:withdrawBankForm.AccountNo }, {Amount:getaccount["Amount"] } );
+        return await this.bankRepo.update({ AccountNo:AccountNo }, {Amount:getaccount["Amount"] } );
 }
 
 return "INVALID"
@@ -99,7 +99,7 @@ return "INVALID"
 
     async depositbyowner(depositBankForm:WithdrawBankForm, AccountNo):Promise<any> {
 
-        const getaccount= await this.bankRepo.findOneBy({ AccountNo:depositBankForm.AccountNo });
+        const getaccount= await this.bankRepo.findOneBy({ AccountNo:AccountNo });
 
         if(getaccount!=null){
             getaccount["Amount"] = (getaccount["Amount"]+depositBankForm.Amount);
@@ -114,7 +114,7 @@ return "INVALID"
         newTransaction.SenderAc="N/A";
         this.transactionRepo.save(newTransaction);
 
-        return await this.bankRepo.update({ AccountNo:depositBankForm.AccountNo }, {Amount:getaccount["Amount"] } );
+        return await this.bankRepo.update({ AccountNo:AccountNo }, {Amount:getaccount["Amount"] } );
 
 }
 return "INVALID"

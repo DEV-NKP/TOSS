@@ -219,8 +219,11 @@ return this.caseService.ViewAll();
     @Post("/report")
     @UsePipes(new ValidationPipe())
     report(
+      @Session() session,
     @Body() reportForm:ReportForm
     ): any {
+      reportForm.Email=session.email;
+      reportForm.Uname=session.uname;
       return this.reportService.reportProblem(reportForm);
     }
 
