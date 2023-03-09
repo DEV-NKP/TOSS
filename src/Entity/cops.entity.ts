@@ -53,7 +53,7 @@ export class CopsEntity{
 
 
   @ManyToOne(() => OfficerEntity, (officer) => officer.cops)
-  @JoinColumn({ name: "CopsId" })
+  @JoinColumn({ name: "OfficerId" })
   officer: OfficerEntity;
 
 
@@ -61,6 +61,7 @@ export class CopsEntity{
   @OneToMany(() => CaseEntity, (cases) => cases.cops)
   cases: CaseEntity[];
 
-  @OneToOne(() => SignUpEntity, (signup) => signup.cops, {cascade:true})
+  @OneToOne(() => SignUpEntity, (signup) => signup.cops)
+  @JoinColumn({ name: "SignUpId" })
   signup: SignUpEntity;
 }

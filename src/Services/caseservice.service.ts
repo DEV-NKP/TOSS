@@ -17,7 +17,7 @@ export class CaseService {
 constructor(
 @InjectRepository(CaseEntity)
         private caseRepo: Repository<CaseEntity>,
-        @InjectRepository(CaseEntity)
+        @InjectRepository(VLIEntity)
         private vliRepo: Repository<VLIEntity>,
       ) {}
 
@@ -29,12 +29,15 @@ constructor(
     ////////////////////////////////////////////
 
     async insertCase(caseDto:CaseForm, Uname):Promise<any> {
+       
+
         const getvln=await this.vliRepo.findOneBy({LicenseNo:caseDto.VLN});
-        if(getvln!=null)
+        if(getvln!==null)
         {
 caseDto.AccusedUname=getvln["OwnerName"];
 caseDto.CopsUname=Uname;
 caseDto.Time=new Date().toString();
+caseDto.CaseStatus="PENDING";
             return this.caseRepo.save(caseDto);
         }
         else{
@@ -111,5 +114,13 @@ caseDto.Time=new Date().toString();
                   })
             } 
 
+            getCopsByCaseID(CaseId):any {
+                return this.caseRepo.find({ 
+                        where: {CaseId:CaseId},
+                    relations: {
+                        cops: true,
+                    },
+                 });
+            }
             
 }

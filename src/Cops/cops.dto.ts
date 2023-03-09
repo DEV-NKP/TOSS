@@ -1,4 +1,6 @@
 import { IsEmail, IsMobilePhone, IsNotEmpty, IsStrongPassword,Matches,MaxLength, Length, IsIn } from "class-validator";
+import { OfficerEntity } from "../Entity/officer.entity";
+import { SignUpEntity } from "../Entity/signup.entity";
 
 export class CopsForm {
    
@@ -38,7 +40,6 @@ export class CopsForm {
     
     RankGroup: string;
 
-    @Matches(RegExp("/^[a-zA-Z]+$/"),{message: 'Station name must be valid'})
     @Length(2,30,{message: "Length must be at least 2 characters and less than 30"})
     Station: string;
 
@@ -46,12 +47,14 @@ export class CopsForm {
     @Matches(/^\d{2}-\d{6}-\d{1}$/, {message: 'Please provide a valid police ID in the format 00-000000-0'})
     PoliceId: string;
 
-    @Matches(RegExp("/^[a-zA-Z]+$/"),{message: 'Country name must be valid'})
     @Length(2,30,{message: "Length must be at least 2 characters and less than 30"})
     Country: string;
 
     Status: string;
 
+    officer:OfficerEntity;
+
+    signup:SignUpEntity;
 }
 
 export class EditCopsForm {

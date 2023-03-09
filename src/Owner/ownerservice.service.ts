@@ -55,13 +55,16 @@ editProfile(editownerDto:EditOwnerForm,Uname):any {
                 newaccount.AccountNo=ownerDto.AccountNo;
                 newaccount.Amount=0;
                 this.bankRepo.save(newaccount);           
-                
+                this.signupRepo.save(newsignup);
 
                 const salt = await bcrypt.genSalt();
                 const hassedpassed = await bcrypt.hash(ownerDto.Password, salt);
                 ownerDto.Password= hassedpassed;
+                ownerDto.Status= "ACTIVE";
 
-                this.signupRepo.save(newsignup);
+                const getsignid=await this.signupRepo.findOneBy({Uname:ownerDto.Uname});
+                // return getsignid.SignUpId;
+                ownerDto.signup=getsignid; 
     return this.ownerRepo.save(ownerDto);
 }
 else if(getuname!=null && getemail==null)
@@ -166,5 +169,17 @@ revokebanowner(Uname):any {
           counter += 1;
         }
         return result;
+    }
+
+    
+    async getSignUpByOwnerID(session):Promise<any> {
+    const findowner=await this.ownerRepo.findOneBy({Uname:session.uname});
+
+    return this.ownerRepo.find({ 
+            where: {OwnerId:findowner.OwnerId},
+        relations: {
+            signup: true,
+        },
+     });
     }
 }

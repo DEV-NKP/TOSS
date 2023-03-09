@@ -32,6 +32,8 @@ import { OwnerForm } from './Owner/owner.dto';
   
 import { ForgotPasswordForm } from "./DTO/signup.dto";
 import { ChangeForgotPasswordForm } from "./DTO/signup.dto";
+import { LoginForm } from './DTO/login.dto';
+import { LogoutForm } from './DTO/logout.dto';
 
   @Controller('/toss')
   export class TossController {
@@ -48,12 +50,15 @@ import { ChangeForgotPasswordForm } from "./DTO/signup.dto";
       @Post("/insertadmin")
       @UsePipes(new ValidationPipe())
       insertadmin(@Body() mydto:AdminForm): any {
+        mydto.ProfilePicture="default.png";
         return this.adminService.insertadmin(mydto);
       }
 
 @Post("/signup")
 @UsePipes(new ValidationPipe())
 insertowner(@Body() mydto:OwnerForm): any {
+  mydto.ProfilePicture="default.png";
+
   return this.ownerService.postSignUp(mydto);
 }
 
@@ -62,20 +67,28 @@ insertowner(@Body() mydto:OwnerForm): any {
       async login(@Session() session, @Body() user)
        {
         const finduser= await this.tossService.login(user);
-        const findpost= await this.signupService.searchSignUpByUname(user.uname);
+        
+        const findpost= await this.signupService.searchSignUpByUname(finduser["Uname"]);
      
        
 
         if (finduser!==undefined)
         {
           session.uname = finduser["Uname"];
+          
           session.post = findpost["Post"];
+
           session.email = finduser["Email"];
+          
             if(findpost["Post"]==="Owner")
             { const findaccno= await this.ownerService.viewownerbyuname(finduser["Uname"]);
             session.accno = findaccno["AccountNo"];
             }
-this.loginService.createlogIn(session.uname);
+            const newlogin= new LoginForm()
+            
+            newlogin.Uname=finduser["Uname"];
+         newlogin.signup=findpost;
+            this.loginService.createlogIn(newlogin);
           return {message:"success"};
         }
         else{
@@ -86,8 +99,14 @@ this.loginService.createlogIn(session.uname);
 
 
       @Get("/logout")
-      logout(@Session() session): any {
-         this.logoutService.createlogOut(session.uname);
+      async logout(@Session() session): Promise<any> {
+        const findpost= await this.signupService.searchSignUpByUname(session.uname);
+
+        const newlogout= new LogoutForm()
+            
+        newlogout.Uname=findpost.Uname;
+        newlogout.signup=findpost;
+         this.logoutService.createlogOut(newlogout);
         if(session.destroy())
        {
           return {message:"you are logged out"};

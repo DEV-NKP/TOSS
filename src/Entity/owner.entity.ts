@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToOne } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, OneToOne, JoinColumn } from 'typeorm';
 import { SignUpEntity } from './signup.entity';
 
 @Entity("Owner")
@@ -43,6 +43,7 @@ export class OwnerEntity{
   @Column()
   Status: string;
 
-  @OneToOne(() => SignUpEntity, (signup) => signup.owner, {cascade:true})
+  @OneToOne(() => SignUpEntity, (signup) => signup.owner)
+  @JoinColumn({ name: "SignUpId" })
   signup: SignUpEntity;
 }

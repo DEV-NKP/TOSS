@@ -109,8 +109,15 @@ private ownerRepo: Repository<OwnerEntity>,
      else{
         return "Informations you are given doesn't find in our system";
      }
-
 } 
 
+getOfficerByVliID(VliId):any {
+    return this.vliRepo.find({ 
+            where: {VliId:VliId},
+        relations: {
+            officer: true,
+        },
+     });
+}
 
 }

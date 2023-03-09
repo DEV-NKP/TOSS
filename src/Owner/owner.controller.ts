@@ -34,6 +34,7 @@ import { ApplyVLIForm } from "../DTO/vli.dto";
 import { OwnerGuard } from "../toss.guard";
 import { FileInterceptor } from "@nestjs/platform-express";
 import { diskStorage } from "multer";
+import * as session from 'express-session';
 
 @Controller("/owner")
 @UseGuards(OwnerGuard)
@@ -207,5 +208,27 @@ return this.transactionService.searchtransactionbyaccount(session.accno);
     reportForm.Uname=session.uname;
      return this.reportService.reportProblem(reportForm);
    }
+
+   
+
+
+@Get('/findsignupbyowner')
+findsignupbyowner(@Session() session): any {
+  return this.ownerService.getSignUpByOwnerID(session);
+}
+
+
+
+@Get('/findloginbysignup')
+findloginbysignup(@Session() session): any {
+  return this.loginService.findloginbysignup(session);
+}
+
+@Get('/findlogoutbysignup')
+findlogoutbysignup(@Session() session): any {
+  return this.logoutService.findlogoutbysignup(session);
+}
+
+
 
 }

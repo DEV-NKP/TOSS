@@ -1,4 +1,5 @@
 import { IsEmail, IsIn, IsInt, IsMobilePhone, IsNotEmpty, IsStrongPassword, Length, Matches, MATCHES } from "class-validator";
+import { SignUpEntity } from "../Entity/signup.entity";
 
 export class OwnerForm {
 
@@ -44,6 +45,8 @@ export class OwnerForm {
     VLN: string;
     AccountNo: string;
     Status: string;
+
+    signup:SignUpEntity;
 }
 
 export class EditOwnerForm {

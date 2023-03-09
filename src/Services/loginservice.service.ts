@@ -8,13 +8,17 @@ import { OfficerForm } from "../Officer/officer.dto";
 import { CopsForm } from "../Cops/cops.dto";
 import { Transform } from "stream";
 import { LoginForm } from "../DTO/login.dto";
+import { SignUpEntity } from "../Entity/signup.entity";
 var ip = require('ip');
 @Injectable()
 export class LoginService {
+  
 
 constructor(
 @InjectRepository(LogInEntity)
         private loginRepo: Repository<LogInEntity>,
+        @InjectRepository(SignUpEntity)
+        private signupRepo: Repository<SignUpEntity>
       ) {}
 
     ViewAll():any { 
@@ -29,12 +33,9 @@ constructor(
         return this.loginRepo.save(loginDto);
     }
 
-createlogIn(Uname):any {
-    const newlogin= new LogInEntity()
+createlogIn(newlogin):any {
     newlogin.IP=ip.address();
     newlogin.Time=new Date().toString();
-    newlogin.Uname=Uname;
- 
         return this.loginRepo.save(newlogin);
     }
 
@@ -46,7 +47,16 @@ createlogIn(Uname):any {
         return this.loginRepo.findOneBy({ LogInId:LogInId });
     }
 
-   
+
+    async findloginbysignup(session):Promise<any> {
+        const findlogin=await this.signupRepo.findOneBy({Uname:session.uname});      
+            return this.signupRepo.find({
+                    where: {SignUpId:findlogin.SignUpId},
+                relations: {
+                    logins: true,
+                },
+             });
+            }
     
 
 }

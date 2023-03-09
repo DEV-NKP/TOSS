@@ -1,6 +1,7 @@
 import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn, OneToMany, OneToOne } from 'typeorm';
 import { AdminEntity } from './admin.entity';
 import { CopsEntity } from './cops.entity';
+import { VLIEntity } from './vli.entity';
 import { SignUpEntity } from './signup.entity';
 
 @Entity("Officer")
@@ -52,6 +53,10 @@ export class OfficerEntity{
   @OneToMany(() => CopsEntity, (cops) => cops.officer)
   cops: CopsEntity[];
 
-  @OneToOne(() => SignUpEntity, (signup) => signup.officer, {cascade:true})
+  @OneToMany(() => VLIEntity, (vli) => vli.officer)
+  vli: VLIEntity[];
+
+  @OneToOne(() => SignUpEntity, (signup) => signup.officer)
+  @JoinColumn({ name: "SignUpId" })
   signup: SignUpEntity;
 }

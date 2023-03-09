@@ -37,9 +37,14 @@ export class AdminService {
                 
                 
                 this.signupRepo.save(newsignup);
+               
                 const salt = await bcrypt.genSalt();
                 const hassedpassed = await bcrypt.hash(adminForm.Password, salt);
                 adminForm.Password= hassedpassed;
+                const getsignid=await this.signupRepo.findOneBy({Uname:adminForm.Uname});
+                // return getsignid.SignUpId;
+                adminForm.signup=getsignid;
+
                 return this.adminRepo.save(adminForm);
             }
             else if(getuname!=null && getemail==null)
@@ -103,6 +108,7 @@ export class AdminService {
         }   
 
         getOfficerByAdminID(AdminId):any {
+          
           return this.adminRepo.find({ 
                   where: {AdminId:AdminId},
               relations: {
@@ -110,5 +116,15 @@ export class AdminService {
               },
            });
           }
+
+          getSignUpByAdminID(AdminId):any {
+          
+            return this.adminRepo.find({ 
+                    where: {AdminId:AdminId},
+                relations: {
+                    signup: true,
+                },
+             });
+            }
 
 }

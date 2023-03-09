@@ -148,7 +148,10 @@ viewcopsbyuname(@Param('Uname') Uname: string): any {
 
 @Post("/insertcops")
 @UsePipes(new ValidationPipe())
-insertcops(@Body() mydto:CopsForm): any {
+  async insertcops(@Session() session,@Body() mydto:CopsForm): Promise<any> {
+  const findofficer = await this.officerService.ViewProfile(session.uname);
+  mydto.ProfilePicture="default.png";
+   mydto.officer = findofficer["OfficerId"]
   return this.copsService.insertcops(mydto);
 }
 
@@ -182,9 +185,12 @@ return this.copsService.deletecopsbyid(CopsId);
 
 @Post("/insertvli")
     @UsePipes(new ValidationPipe())
-    insertvli(
+    async insertvli(
+      @Session() session,
     @Body() vliDto:VLIForm
-    ): any {
+    ): Promise<any> {
+      const findofficer = await this.officerService.ViewProfile(session.uname);
+      vliDto.officer = findofficer["OfficerId"]
       return this.vliService.insertLicense(vliDto);
     }
 
@@ -279,5 +285,55 @@ viewcasebyuname(@Param('Uname') Uname: string): any {
       reportForm.Uname=session.uname;
       return this.reportService.reportProblem(reportForm);
     }
+
+
+    
+@Get('/findofficerbyadmin/:id')
+findofficerbyadmin(@Param('id', ParseIntPipe) id: number): any {
+  return this.adminService.getOfficerByAdminID(id);
+}
+
+@Get('/findadminbyofficer/:id')
+findadminbyofficer(@Param('id', ParseIntPipe) id: number): any {
+  return this.officerService.getAdminByOfficerID(id);
+}
+
+@Get('/findcopsbyofficer/:id')
+findcopsbyofficer(@Param('id', ParseIntPipe) id: number): any {
+  return this.officerService.getCopsByOfficerID(id);
+}
+
+@Get('/findofficerbycops/:id')
+findofficerbycops(@Param('id', ParseIntPipe) id: number): any {
+  return this.copsService.getOfficerByCopsID(id);
+}
+
+
+@Get('/findvlibyofficer/:id')
+findvlibyofficer(@Param('id', ParseIntPipe) id: number): any {
+  return this.officerService.getVliByOfficerID(id);
+}
+
+@Get('/findofficerbyvli/:id')
+findofficerbyvli(@Param('id', ParseIntPipe) id: number): any {
+  return this.vliService.getOfficerByVliID(id);
+}
+@Get('/findsignupbyofficer')
+findsignupbyofficer(@Session() session): any {
+  return this.officerService.getSignUpByOfficerID(session);
+}
+
+@Get('/findloginbysignup')
+findloginbysignup(@Session() session): any {
+  return this.loginService.findloginbysignup(session);
+}
+
+@Get('/findlogoutbysignup')
+findlogoutbysignup(@Session() session): any {
+  return this.logoutService.findlogoutbysignup(session);
+}
+
+
+
 
 }

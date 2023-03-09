@@ -8,6 +8,7 @@ import { OfficerForm } from "../Officer/officer.dto";
 import { CopsForm } from "../Cops/cops.dto";
 import { Transform } from "stream";
 import { LogoutForm } from "../DTO/logout.dto";
+import { SignUpEntity } from "../Entity/signup.entity";
 var ip = require('ip');
 @Injectable()
 export class LogoutService {
@@ -15,6 +16,9 @@ export class LogoutService {
 constructor(
 @InjectRepository(LogOutEntity)
         private logoutRepo: Repository<LogOutEntity>,
+
+        @InjectRepository(SignUpEntity)
+        private signupRepo: Repository<SignUpEntity>
       ) {}
 
     ViewAll():any { 
@@ -29,11 +33,11 @@ constructor(
         return this.logoutRepo.save(logoutDto);
     }
 
-    createlogOut(Uname):any {
-        const newlogout= new LogOutEntity()
+    createlogOut(newlogout):any {
+        
         newlogout.IP=ip.address();
         newlogout.Time=new Date().toString();
-        newlogout.Uname=Uname;
+       
      
             return this.logoutRepo.save(newlogout);
         }
@@ -50,6 +54,14 @@ constructor(
         return this.logoutRepo.save(logoutDto);
     }
    
-    
+    async findlogoutbysignup(session):Promise<any> {
+        const findlgout=await this.signupRepo.findOneBy({Uname:session.uname});      
+            return this.signupRepo.find({
+                    where: {SignUpId:findlgout.SignUpId},
+                relations: {
+                    logouts: true,
+                },
+             });
+            }
 
 }

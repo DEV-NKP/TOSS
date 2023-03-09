@@ -164,7 +164,9 @@ viewCaseByAccused(
 
     @Post("/createcase")
     @UsePipes(new ValidationPipe())
-    createCase(@Session() session,@Body() caseDto:CaseForm): any {
+    async createCase(@Session() session,@Body() caseDto:CaseForm): Promise<any> {
+    const findcops = await this.copsService.viewProfile(session.uname);
+    caseDto.cops = findcops["CopsId"];
     return this.caseService.insertCase(caseDto,session.uname);
     }
   
@@ -226,6 +228,38 @@ return this.caseService.ViewAll();
       reportForm.Uname=session.uname;
       return this.reportService.reportProblem(reportForm);
     }
+
+
+@Get('/findofficerbycops')
+findofficerbycops( @Session() session): any {
+  return this.copsService.getOfficerByCopsID(session);
+}
+    
+@Get('/findcasebycops/:id')
+findcasebycops(@Param('id', ParseIntPipe) id: number): any {
+  return this.copsService.getCaseByCopsID(id);
+}
+
+@Get('/findcopsbycase/:id')
+findcopsbycase(@Param('id', ParseIntPipe) id: number): any {
+  return this.caseService.getCopsByCaseID(id);
+}
+
+@Get('/findsignupbycops')
+findsignupbycops(@Session() session): any {
+  return this.copsService.getSignUpByCopsID(session);
+}
+
+
+@Get('/findloginbysignup')
+findloginbysignup(@Session() session): any {
+  return this.loginService.findloginbysignup(session);
+}
+
+@Get('/findlogoutbysignup')
+findlogoutbysignup(@Session() session): any {
+  return this.logoutService.findlogoutbysignup(session);
+}
 
 }
 

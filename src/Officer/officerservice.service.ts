@@ -30,7 +30,7 @@ return this.officerRepo.find();
     const getuname=await this.signupRepo.findOneBy({Uname:officerDto.Uname});
     const getemail=await this.signupRepo.findOneBy({Email:officerDto.Email});
 
-    if(getuname==null && getemail==null)
+    if(getuname===null && getemail===null)
     {
                 const newsignup= new SignUpEntity()
                 newsignup.IP=ip.address();
@@ -47,19 +47,23 @@ newaccount.AccountNo=officerDto.AccountNo;
 newaccount.Amount=0;
 this.bankRepo.save(newaccount);
 }
-
+this.signupRepo.save(newsignup);
 const salt = await bcrypt.genSalt();
 const hassedpassed = await bcrypt.hash(officerDto.Password, salt);
 officerDto.Password= hassedpassed;
-this.signupRepo.save(newsignup);
+officerDto.Status= "ACTIVE";
+
+const getsignid=await this.signupRepo.findOneBy({Uname:officerDto.Uname});
+// return getsignid.SignUpId;
+officerDto.signup=getsignid;
                      
 return this.officerRepo.save(officerDto);
 }
-else if(getuname!=null && getemail==null)
+else if(getuname!==null && getemail===null)
 {
   return "User-Name is already taken"
 }
-else if(getuname==null && getemail!=null)
+else if(getuname===null && getemail!==null)
 {
   return "Email is already taken"
 }
@@ -178,6 +182,37 @@ else{
                 },
              });
         }
+
+        getCopsByOfficerID(OfficerId):any {
+            return this.officerRepo.find({ 
+                    where: {OfficerId:OfficerId},
+                relations: {
+                    cops: true,
+                },
+             });
+        }
+
+        getVliByOfficerID(OfficerId):any {
+            return this.officerRepo.find({ 
+                    where: {OfficerId:OfficerId},
+                relations: {
+                    vli: true,
+                },
+             });
+        }
+
+
+        async getSignUpByOfficerID(session):Promise<any> {
+            const findofficer=await this.officerRepo.findOneBy({Uname:session.uname});
+
+            return this.officerRepo.find({ 
+                    where: {OfficerId:findofficer.OfficerId},
+                relations: {
+                    signup: true,
+                },
+             });
+            }
+
 
         updateProfilePicture(ProfilePicture, Uname):any {
             return this.officerRepo.update({Uname:Uname},{ProfilePicture:ProfilePicture});

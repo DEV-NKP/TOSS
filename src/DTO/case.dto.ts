@@ -1,4 +1,5 @@
 import { IsInt, IsNotEmpty, Length, IsDateString, IsIn, Matches } from "class-validator";
+import { CopsEntity } from '../Entity/cops.entity';
 
 export class CaseForm {   
 
@@ -19,14 +20,12 @@ export class CaseForm {
     ViolationOf: string;
   
 
-    @Length(10, 300,{message: "Length must be at least 10 characters and less than 300"})
     ViolationDetails: string;
   
     @IsNotEmpty({message: "Please enter Case Section"})
     @Length(1,10,{message: "Length must be at least 1 characters and less than 10"})
     Section: string;
   
-    @Length(1,10)
     SubSection: string;
   
     @IsNotEmpty({message: "Please enter Vehicle License Number"}) 
@@ -39,11 +38,9 @@ export class CaseForm {
   
     @IsNotEmpty({message: "Please enter City Name"})
     @Length(3, 50,{message: "Length must be at least 2 characters and less than 50"})
-    @Matches(RegExp("/^[a-zA-Z]+$/"),{message: 'City name must be valid'})
     City: string;
   
  
-    @Length(2, 30,{message: "Length must be at least 2 characters and less than 30"})
     Street: string;
   
     @IsNotEmpty({message: "Please enter Zip Code"})
@@ -59,7 +56,7 @@ export class CaseForm {
     
     PenaltyDetails: string;
 
-
+    cops:CopsEntity;
 
 }
 export class EditCaseForm {   
@@ -89,7 +86,6 @@ export class EditCaseForm {
   
     @IsNotEmpty({message: "Please enter City Name"})
     @Length(3, 50,{message: "Length must be at least 2 characters and less than 50"})
-    @Matches(RegExp("/^[a-zA-Z]+$/"),{message: 'City name must be valid'})
     City: string;
   
  
@@ -97,7 +93,7 @@ export class EditCaseForm {
     Street: string;
   
     @IsNotEmpty({message: "Please enter Zip Code"})
-    @Length(4, 10,{message: "Length must be at least 4 characters and less than 10"})
+    @Length(4, 10)
     ZIPCode: string;
 
     

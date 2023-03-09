@@ -1,4 +1,5 @@
 import { IsEmail, IsMobilePhone, IsNotEmpty, IsStrongPassword, Length, Matches, MaxLength, IsIn } from 'class-validator';
+import { SignUpEntity } from '../Entity/signup.entity';
 
 export class AdminForm {
    
@@ -34,7 +35,7 @@ export class AdminForm {
     @IsIn(["Male" , "Female", "Other"], {message: "Please enter a gender between Male, Female and Other"})
     Gender: string;
 
-   
+   signup:SignUpEntity;
 
 
 }

@@ -1,4 +1,5 @@
 import { IsEmail, IsMobilePhone, IsNotEmpty, IsStrongPassword, Length, Matches } from "class-validator";
+import { OfficerEntity } from '../Entity/officer.entity';
 
 export class VLIForm {
    
@@ -27,10 +28,10 @@ export class VLIForm {
 
     @IsNotEmpty({message: "Please enter Owner NID"})
     @Length(13)
-    @Matches(/^[0-9]+$/, {message: 'Please provide a valid NID of 13 characters'})
+    @Matches(/^[0-9]+$/, {message: 'Please provide a valid NID of 13 integers'})
     OwnerNid: string;
 
-
+   officer:OfficerEntity;
 
 }
 

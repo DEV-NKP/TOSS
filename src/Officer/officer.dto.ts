@@ -1,4 +1,6 @@
 import { IsEmail, IsInt, IsMobilePhone, IsNotEmpty, IsStrongPassword,Matches,MaxLength, length, Length, IsIn } from "class-validator";
+import { AdminEntity } from '../Entity/admin.entity';
+import { SignUpEntity } from "../Entity/signup.entity";
 
 export class OfficerForm {
  
@@ -46,7 +48,9 @@ export class OfficerForm {
 
     Status: string;
 
-    AdminId:number;
+    admin:AdminEntity;
+
+    signup:SignUpEntity;
 }
 
 export class EditOfficerForm {

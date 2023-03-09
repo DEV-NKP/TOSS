@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToMany, OneToOne } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany, OneToOne, JoinColumn } from 'typeorm';
 import { OfficerEntity } from './officer.entity';
 import { SignUpEntity } from './signup.entity';
 
@@ -37,6 +37,7 @@ export class AdminEntity{
   @OneToMany(() => OfficerEntity, (Officer) => Officer.admin)
   officers: OfficerEntity[];
 
-  @OneToOne(() => SignUpEntity, (signup) => signup.admin, {cascade:true})
+  @OneToOne(() => SignUpEntity, (signup) => signup.admin)
+  @JoinColumn({ name: "SignUpId" })
   signup: SignUpEntity; 
 }

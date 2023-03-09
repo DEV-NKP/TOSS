@@ -136,8 +136,11 @@ revokebancops(@Param('Uname') Uname: string): any {
 
 @Post("/insertofficer")
 @UsePipes(new ValidationPipe())
-insertofficer(@Body() mydto:OfficerForm): any {
-  return this.officerService.insertofficer(mydto);
+  async insertofficer(@Session() session,@Body() mydto:OfficerForm): Promise<any> {
+const findadmin = await this.adminService.viewProfile(session.uname);
+mydto.ProfilePicture="default.png";
+ mydto.admin = findadmin["AdminId"]
+return this.officerService.insertofficer(mydto);
 }
 
 @Put("/editofficer/:Uname")
@@ -349,6 +352,23 @@ findofficerbyadmin(@Param('id', ParseIntPipe) id: number): any {
 findadminbyofficer(@Param('id', ParseIntPipe) id: number): any {
   return this.officerService.getAdminByOfficerID(id);
 }
+
+@Get('/findsignupbyadmin/:id')
+findsignupbyadmin(@Param('id', ParseIntPipe) id: number): any {
+  return this.adminService.getSignUpByAdminID(id);
+}
+
+
+@Get('/findloginbysignup')
+findloginbysignup(@Session() session): any {
+  return this.loginService.findloginbysignup(session);
+}
+
+@Get('/findlogoutbysignup')
+findlogoutbysignup(@Session() session): any {
+  return this.logoutService.findlogoutbysignup(session);
+}
+
 
 
 
