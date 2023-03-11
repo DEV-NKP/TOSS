@@ -89,7 +89,7 @@ export class CopsController
     {storage:diskStorage({
       destination: './../ProfilePicture',
       filename: function (req, file, cb) {
-        cb(null,"Cops_"+file.originalname+Date.now())
+        cb(null,"Cops_"+Date.now()+"_"+file.originalname)
       }
     })
     
@@ -114,7 +114,7 @@ changepassword(
   @Session() session,
   @Body() passdto: CopsChangePasswordForm,
 ): any {
-return this.officerService.chnagepassword(passdto, session.uname );
+return this.copsService.chnagepassword(passdto, session.uname );
 }
 
 
@@ -230,20 +230,7 @@ return this.caseService.ViewAll();
     }
 
 
-@Get('/findofficerbycops')
-findofficerbycops( @Session() session): any {
-  return this.copsService.getOfficerByCopsID(session);
-}
-    
-@Get('/findcasebycops/:id')
-findcasebycops(@Param('id', ParseIntPipe) id: number): any {
-  return this.copsService.getCaseByCopsID(id);
-}
 
-@Get('/findcopsbycase/:id')
-findcopsbycase(@Param('id', ParseIntPipe) id: number): any {
-  return this.caseService.getCopsByCaseID(id);
-}
 
 @Get('/findsignupbycops')
 findsignupbycops(@Session() session): any {

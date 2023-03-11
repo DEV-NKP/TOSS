@@ -68,12 +68,13 @@ insertowner(@Body() mydto:OwnerForm): any {
        {
         const finduser= await this.tossService.login(user);
         
-        const findpost= await this.signupService.searchSignUpByUname(finduser["Uname"]);
+       
      
        
 
         if (finduser!==undefined)
         {
+           const findpost= await this.signupService.searchSignUpByUname(finduser["Uname"]);
           session.uname = finduser["Uname"];
           
           session.post = findpost["Post"];
@@ -84,7 +85,7 @@ insertowner(@Body() mydto:OwnerForm): any {
             { const findaccno= await this.ownerService.viewownerbyuname(finduser["Uname"]);
             session.accno = findaccno["AccountNo"];
             }
-            const newlogin= new LoginForm()
+            const newlogin= new LoginForm();
             
             newlogin.Uname=finduser["Uname"];
          newlogin.signup=findpost;
@@ -102,7 +103,7 @@ insertowner(@Body() mydto:OwnerForm): any {
       async logout(@Session() session): Promise<any> {
         const findpost= await this.signupService.searchSignUpByUname(session.uname);
 
-        const newlogout= new LogoutForm()
+        const newlogout= new LogoutForm();
             
         newlogout.Uname=findpost.Uname;
         newlogout.signup=findpost;

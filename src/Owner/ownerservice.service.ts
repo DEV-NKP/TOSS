@@ -7,6 +7,8 @@ import { ReportForm } from "../DTO/report.dto";
 import { SignUpEntity } from '../Entity/signup.entity';
 import { BankEntity } from '../Entity/bank.entity';
 import * as bcrypt from 'bcrypt';
+import { LogInEntity } from "../Entity/login.entity";
+import { LogOutEntity } from "../Entity/logout.entity";
 var ip = require('ip');
 @Injectable()
 export class OwnerService {
@@ -17,7 +19,11 @@ private ownerRepo: Repository<OwnerEntity>,
 @InjectRepository(SignUpEntity)
 private signupRepo: Repository<SignUpEntity>,
 @InjectRepository(BankEntity)
-private bankRepo: Repository<BankEntity>
+private bankRepo: Repository<BankEntity>,
+@InjectRepository(LogInEntity)
+       private loginRepo: Repository<LogInEntity>,
+        @InjectRepository(LogOutEntity)
+       private logoutRepo: Repository<LogOutEntity>
   ) {}
 
  ViewAll():any
@@ -51,33 +57,42 @@ editProfile(editownerDto:EditOwnerForm,Uname):any {
                 newsignup.Post="Owner";
                 ownerDto.AccountNo=this.makeid(4)+"-"+this.makeid(4)+"-"+this.makeid(4)+"-"+this.makeid(4)+"-"+this.makeid(4);
 
-                const newaccount= new BankEntity()
+                const newaccount= new BankEntity();
                 newaccount.AccountNo=ownerDto.AccountNo;
                 newaccount.Amount=0;
                 this.bankRepo.save(newaccount);           
                 this.signupRepo.save(newsignup);
 
-                const salt = await bcrypt.genSalt();
-                const hassedpassed = await bcrypt.hash(ownerDto.Password, salt);
-                ownerDto.Password= hassedpassed;
-                ownerDto.Status= "ACTIVE";
+          
 
-                const getsignid=await this.signupRepo.findOneBy({Uname:ownerDto.Uname});
+                const salt = await bcrypt.genSalt();
+                
+                const hassedpassed = await bcrypt.hash(ownerDto.Password, salt);
+                 
+                var getsignid;
+                do{
+                  getsignid=await this.signupRepo.findOneBy({Uname:ownerDto.Uname});
+                }while(!getsignid);
+                
+                 ownerDto.Password= hassedpassed;
+                ownerDto.Status= "ACTIVE";
+                ownerDto.VLN= "";
+                
                 // return getsignid.SignUpId;
                 ownerDto.signup=getsignid; 
     return this.ownerRepo.save(ownerDto);
 }
 else if(getuname!=null && getemail==null)
 {
-  return "User-Name is already taken"
+  return "User-Name is already taken";
 }
 else if(getuname==null && getemail!=null)
 {
-  return "Email is already taken"
+  return "Email is already taken";
 }
 else 
 {
-  return "Both User-Name and Email are already taken"
+  return "Both User-Name and Email are already taken";
 }
 }
 
@@ -102,9 +117,11 @@ viewownerbyuname(Uname):any {
     if(getowner!=null)
     {
     this.bankRepo.delete({AccountNo:getowner["AccountNo"]});
+    this.ownerRepo.delete({Uname:Uname}); 
+    this.loginRepo.delete({Uname:Uname});
+     this.logoutRepo.delete({Uname:Uname});
+   return this.signupRepo.delete({Uname:Uname});
     
-    this.signupRepo.delete({Uname:Uname});
-    return this.ownerRepo.delete({Uname:Uname});
 }
 else{
     return "User not found";
@@ -116,9 +133,14 @@ async deleteProfile(Uname):Promise<any> {
     const getowner=await this.ownerRepo.findOneBy({Uname:Uname});
     if(getowner!=null)
     {
-    this.signupRepo.delete({Uname:getowner["Uname"]});
-    this.bankRepo.delete({AccountNo:getowner["AccountNo"]});
-    return this.ownerRepo.delete({Uname:Uname});
+  
+        this.bankRepo.delete({AccountNo:getowner["AccountNo"]});
+      this.ownerRepo.delete({Uname:Uname});
+      this.loginRepo.delete({Uname:Uname});
+     this.logoutRepo.delete({Uname:Uname});
+        return this.signupRepo.delete({Uname:getowner["Uname"]});
+    
+     
 }
 else{
     return "User not found";
@@ -128,9 +150,12 @@ async deleteownerbyid(OwnerId):Promise<any> {
     const getowner=await this.ownerRepo.findOneBy({OwnerId:OwnerId});
     if(getowner!=null)
     {
-    this.signupRepo.delete({Uname:getowner["Uname"]});
+    
     this.bankRepo.delete({AccountNo:getowner["AccountNo"]});
-    return this.ownerRepo.delete({OwnerId:OwnerId});
+    this.ownerRepo.delete({OwnerId:OwnerId});
+    this.loginRepo.delete({Uname:getowner["Uname"]});
+     this.logoutRepo.delete({Uname:getowner["Uname"]});
+    return this.signupRepo.delete({Uname:getowner["Uname"]});
 }
 else{
     return "User not found";

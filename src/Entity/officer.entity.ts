@@ -46,16 +46,6 @@ export class OfficerEntity{
   @Column()
   Status: string;
 
-  @ManyToOne(() => AdminEntity, (Admin) => Admin.officers)
-  @JoinColumn({ name: "AdminId" })
-  admin: AdminEntity;
-
-  @OneToMany(() => CopsEntity, (cops) => cops.officer)
-  cops: CopsEntity[];
-
-  @OneToMany(() => VLIEntity, (vli) => vli.officer)
-  vli: VLIEntity[];
-
   @OneToOne(() => SignUpEntity, (signup) => signup.officer)
   @JoinColumn({ name: "SignUpId" })
   signup: SignUpEntity;

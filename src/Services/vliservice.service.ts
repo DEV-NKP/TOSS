@@ -7,6 +7,7 @@ import { VLIEntity } from "../Entity/vli.entity";
 import { OfficerForm } from "../Officer/officer.dto";
 import { CopsForm } from "../Cops/cops.dto";
 import { OwnerEntity } from "../Entity/owner.entity";
+import { CaseEntity } from '../Entity/case.entity';
 
 @Injectable()
 export class VLIService {
@@ -17,6 +18,8 @@ constructor(
         private vliRepo: Repository<VLIEntity>,
         @InjectRepository(OwnerEntity)
 private ownerRepo: Repository<OwnerEntity>,
+ @InjectRepository(CaseEntity)
+private caseRepo: Repository<CaseEntity>,
       ) {}
 
       ViewAll():any { 
@@ -40,7 +43,7 @@ private ownerRepo: Repository<OwnerEntity>,
         return this.vliRepo.save(vliDto);
     }
     else{
-      return "This information was already stored in our database"
+      return "This information was already stored in our database";
     }
     }
 
@@ -101,23 +104,22 @@ private ownerRepo: Repository<OwnerEntity>,
         }
       });
 
-     if(checkVli!=null)
+     if(checkVli)
      {
-        this.ownerRepo.update({Uname:Uname},{VLN:applyVli.LicenseNo});
-        return this.vliRepo.update({LicenseNo:applyVli.LicenseNo},{OwnerName:Uname});
+
+this.ownerRepo.update({VLN:applyVli.LicenseNo},{VLN:""});
+
+
+this.vliRepo.update({LicenseNo:applyVli.LicenseNo},{OwnerName:Uname});
+this.ownerRepo.update({Uname:Uname},{VLN:applyVli.LicenseNo});
+this.caseRepo.update({VLN:applyVli.LicenseNo},{AccusedUname:Uname});
+     return "Accepted";   
      } 
      else{
         return "Informations you are given doesn't find in our system";
      }
 } 
 
-getOfficerByVliID(VliId):any {
-    return this.vliRepo.find({ 
-            where: {VliId:VliId},
-        relations: {
-            officer: true,
-        },
-     });
-}
+
 
 }

@@ -90,7 +90,7 @@ return this.ownerService.deleteProfile(session.uname);
 {storage:diskStorage({
   destination: './../ProfilePicture',
   filename: function (req, file, cb) {
-    cb(null,"Owner_"+file.originalname+Date.now())
+    cb(null,"Owner_"+Date.now()+"_"+file.originalname)
   }
 })
 
@@ -113,7 +113,7 @@ changepassword(
   @Session() session,
 @Body() passdto: OwnerChangePasswordForm,
 ): any {
-return this.officerService.chnagepassword(passdto, session.uname );
+return this.ownerService.chnagepassword(passdto, session.uname );
 }
 
 
@@ -166,6 +166,14 @@ payment( @Session() session,
     paymentBankForm.SenderAccountNo=session.accno;
 return this.bankService.paymentbyowner(paymentBankForm);
 }
+
+
+@Put("/paymentpenalty")
+@UsePipes(new ValidationPipe())
+paymentpenalty( @Session() session, @Body() recentcase): any {
+return this.bankService.paymentpenalty(recentcase, session.uname, session.accno);
+}
+
 
 @Get("/viewbank")
 viewbank(@Session() session): any {

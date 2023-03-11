@@ -25,7 +25,4 @@ export class VLIEntity{
   OwnerNid: string;
 
 
-  @ManyToOne(() => OfficerEntity, (Officer) => Officer.vli)
-  @JoinColumn({ name: "OfficerId" })
-  officer: OfficerEntity;
 }

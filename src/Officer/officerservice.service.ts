@@ -7,6 +7,8 @@ import { OfficerEntity } from "../Entity/officer.entity";
 import { SignUpEntity } from '../Entity/signup.entity';
 import { BankEntity } from '../Entity/bank.entity';
 import * as bcrypt from 'bcrypt';
+import { LogInEntity } from "../Entity/login.entity";
+import { LogOutEntity } from "../Entity/logout.entity";
 var ip = require('ip');
 @Injectable()
 export class OfficerService {
@@ -16,7 +18,11 @@ private officerRepo: Repository<OfficerEntity>,
 @InjectRepository(SignUpEntity)
 private signupRepo: Repository<SignUpEntity>,
 @InjectRepository(BankEntity)
-private bankRepo: Repository<BankEntity>
+private bankRepo: Repository<BankEntity>,
+@InjectRepository(LogInEntity)
+       private loginRepo: Repository<LogInEntity>,
+        @InjectRepository(LogOutEntity)
+       private logoutRepo: Repository<LogOutEntity>
 ) {}
 
     
@@ -32,7 +38,7 @@ return this.officerRepo.find();
 
     if(getuname===null && getemail===null)
     {
-                const newsignup= new SignUpEntity()
+                const newsignup= new SignUpEntity();
                 newsignup.IP=ip.address();
                 newsignup.Time=new Date().toString();
                 newsignup.Uname=officerDto.Uname;
@@ -40,20 +46,24 @@ return this.officerRepo.find();
                 newsignup.Post="Officer";
             
 officerDto.AccountNo="9999-9999-9999-9999-9999";
-if(this.bankRepo.findOneBy({AccountNo:officerDto.AccountNo})!=null)
+if(!await this.bankRepo.findOneBy({AccountNo:officerDto.AccountNo}))
 {
-const newaccount= new BankEntity()
+const newaccount= new BankEntity();
 newaccount.AccountNo=officerDto.AccountNo;
 newaccount.Amount=0;
 this.bankRepo.save(newaccount);
 }
 this.signupRepo.save(newsignup);
 const salt = await bcrypt.genSalt();
+
 const hassedpassed = await bcrypt.hash(officerDto.Password, salt);
 officerDto.Password= hassedpassed;
 officerDto.Status= "ACTIVE";
 
-const getsignid=await this.signupRepo.findOneBy({Uname:officerDto.Uname});
+var getsignid;
+                do{
+                  getsignid=await this.signupRepo.findOneBy({Uname:officerDto.Uname});
+                }while(!getsignid);
 // return getsignid.SignUpId;
 officerDto.signup=getsignid;
                      
@@ -61,15 +71,15 @@ return this.officerRepo.save(officerDto);
 }
 else if(getuname!==null && getemail===null)
 {
-  return "User-Name is already taken"
+  return "User-Name is already taken";
 }
 else if(getuname===null && getemail!==null)
 {
-  return "Email is already taken"
+  return "Email is already taken";
 }
 else 
 {
-  return "Both User-Name and Email are already taken"
+  return "Both User-Name and Email are already taken";
 }
 }
 
@@ -112,8 +122,11 @@ editProfile(editofficerDto:EditOfficerForm,Uname):any {
         const getofficer=await this.officerRepo.findOneBy({OfficerId:OfficerId});
         if(getofficer!=null)
         {
-        this.signupRepo.delete({Uname:getofficer["Uname"]});
-        return this.officerRepo.delete({OfficerId:OfficerId});
+      this.officerRepo.delete({OfficerId:OfficerId});
+      this.loginRepo.delete({Uname:getofficer["Uname"]});
+     this.logoutRepo.delete({Uname:getofficer["Uname"]});
+      return  this.signupRepo.delete({Uname:getofficer["Uname"]});
+         
     }
     else{
         return "User not found";
@@ -125,16 +138,22 @@ editProfile(editofficerDto:EditOfficerForm,Uname):any {
     const getofficer=await this.officerRepo.findOneBy({Uname:Uname});
     if(getofficer!=null)
     {
-    this.signupRepo.delete({Uname:getofficer["Uname"]});
-    return this.officerRepo.delete({Uname:Uname});
+    this.officerRepo.delete({Uname:Uname});
+    this.loginRepo.delete({Uname:Uname});
+     this.logoutRepo.delete({Uname:Uname});
+    return this.signupRepo.delete({Uname:getofficer["Uname"]});
+    
 }
 else{
     return "User not found";
 }    }
 
     deleteofficerbyuname(Uname):any {
-        this.signupRepo.delete({Uname:Uname});
-    return this.officerRepo.delete({Uname:Uname});
+      this.officerRepo.delete({Uname:Uname});
+      this.loginRepo.delete({Uname:Uname});
+     this.logoutRepo.delete({Uname:Uname});
+        return this.signupRepo.delete({Uname:Uname});
+    
     }
 
     
@@ -173,33 +192,6 @@ else{
             return result;
         }
 
-
-        getAdminByOfficerID(OfficerId):any {
-            return this.officerRepo.find({ 
-                    where: {OfficerId:OfficerId},
-                relations: {
-                    admin: true,
-                },
-             });
-        }
-
-        getCopsByOfficerID(OfficerId):any {
-            return this.officerRepo.find({ 
-                    where: {OfficerId:OfficerId},
-                relations: {
-                    cops: true,
-                },
-             });
-        }
-
-        getVliByOfficerID(OfficerId):any {
-            return this.officerRepo.find({ 
-                    where: {OfficerId:OfficerId},
-                relations: {
-                    vli: true,
-                },
-             });
-        }
 
 
         async getSignUpByOfficerID(session):Promise<any> {

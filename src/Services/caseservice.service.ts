@@ -38,15 +38,49 @@ caseDto.AccusedUname=getvln["OwnerName"];
 caseDto.CopsUname=Uname;
 caseDto.Time=new Date().toString();
 caseDto.CaseStatus="PENDING";
+if(!caseDto.PenaltyDetails)
+{
+ caseDto.PenaltyDetails="N/A";   
+}
+if(!caseDto.SubSection)
+{
+ caseDto.SubSection="N/A";   
+}
+if(!caseDto.ViolationDetails)
+{
+ caseDto.ViolationDetails="N/A";   
+}
+if(!caseDto.Street)
+{
+ caseDto.Street="N/A";   
+}
             return this.caseRepo.save(caseDto);
         }
         else{
-          return "VLN is not registered yet"
+          return "VLN is not registered yet";
         }
         
     }
 
     editCase(editcaseDto:EditCaseForm,CaseId):any {
+
+        if(!editcaseDto.PenaltyDetails)
+        {
+            editcaseDto.PenaltyDetails="N/A";   
+        }
+        if(!editcaseDto.SubSection)
+        {
+            editcaseDto.SubSection="N/A";   
+        }
+        if(!editcaseDto.ViolationDetails)
+        {
+            editcaseDto.ViolationDetails="N/A";   
+        }
+        if(!editcaseDto.Street)
+        {
+            editcaseDto.Street="N/A";   
+        }
+
         return this.caseRepo.update({CaseId:CaseId},
             {ViolationOf:editcaseDto.ViolationOf,
                 ViolationDetails:editcaseDto.ViolationDetails,
@@ -79,19 +113,20 @@ caseDto.CaseStatus="PENDING";
 
     searchPreviousCase(Uname):any {
         return this.caseRepo.find({ 
-            where: [
-                { AccusedUname: Uname },
-                { CaseStatus: "PAID" }
-            ]
+            where: {
+AccusedUname: Uname ,
+                 CaseStatus: "PAID" 
+            }
+         
          });
     }
 
     searchPendingCase(Uname):any {
         return this.caseRepo.find({ 
-            where: [
-                { AccusedUname: Uname },
-                { CaseStatus: "PENDING" }
-            ]
+            where: {
+                 AccusedUname: Uname ,
+                 CaseStatus: "PENDING" 
+            }
          });
     }
 
@@ -114,13 +149,5 @@ caseDto.CaseStatus="PENDING";
                   })
             } 
 
-            getCopsByCaseID(CaseId):any {
-                return this.caseRepo.find({ 
-                        where: {CaseId:CaseId},
-                    relations: {
-                        cops: true,
-                    },
-                 });
-            }
-            
+ 
 }

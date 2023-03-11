@@ -32,10 +32,6 @@ export class AdminEntity{
   @Column()
   Gender: string;
 
- 
-
-  @OneToMany(() => OfficerEntity, (Officer) => Officer.admin)
-  officers: OfficerEntity[];
 
   @OneToOne(() => SignUpEntity, (signup) => signup.admin)
   @JoinColumn({ name: "SignUpId" })

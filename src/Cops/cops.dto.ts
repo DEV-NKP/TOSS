@@ -39,7 +39,8 @@ export class CopsForm {
     RankCategory: string;
     
     RankGroup: string;
-
+    
+    @Matches(RegExp(/^[a-zA-Z]+$/),{message: 'Station name must be valid'})
     @Length(2,30,{message: "Length must be at least 2 characters and less than 30"})
     Station: string;
 
@@ -47,6 +48,7 @@ export class CopsForm {
     @Matches(/^\d{2}-\d{6}-\d{1}$/, {message: 'Please provide a valid police ID in the format 00-000000-0'})
     PoliceId: string;
 
+    @Matches(RegExp(/^[a-zA-Z]+$/),{message: 'Country name must be valid'})
     @Length(2,30,{message: "Length must be at least 2 characters and less than 30"})
     Country: string;
 
@@ -81,11 +83,11 @@ export class EditCopsForm {
     
     RankGroup: string;
 
-    @Matches(RegExp("/^[a-zA-Z]+$/"),{message: 'Station name must be valid'})
+    @Matches(RegExp(/^[a-zA-Z]+$/),{message: 'Station name must be valid'})
     @Length(2,30,{message: "Length must be at least 2 characters and less than 30"})
     Station: string;
 
-    @Matches(RegExp("/^[a-zA-Z]+$/"),{message: 'Country name must be valid'})
+    @Matches(RegExp(/^[a-zA-Z]+$/),{message: 'Country name must be valid'})
     @Length(2,30,{message: "Length must be at least 2 characters and less than 30"})
     Country: string;
 

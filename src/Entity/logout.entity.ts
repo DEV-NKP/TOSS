@@ -16,7 +16,7 @@ export class LogOutEntity{
    @Column()
   IP: string;
 
-  @ManyToOne(() => SignUpEntity, (signup) => signup.logouts)
+  @ManyToOne(() => SignUpEntity, (signup) => signup.logouts, { cascade: true })
   @JoinColumn({ name: "SignUpId" })
   signup: SignUpEntity;
 }

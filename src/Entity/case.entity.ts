@@ -49,7 +49,5 @@ export class CaseEntity{
   @Column()
   PenaltyDetails: string;
   
-  @ManyToOne(() => CopsEntity, (cops) => cops.cases)
-  @JoinColumn({ name: "CopsId" })
-  cops: CopsEntity;
+
 }

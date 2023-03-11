@@ -145,7 +145,7 @@ async sendEmail(mydata){
       });
     }
 else{
-    return" Email not found"
+    return" Email not found";
 }
 }
 
@@ -156,12 +156,14 @@ const finduname= await this.signupRepo.createQueryBuilder('SignUp')
 .orWhere('SignUp.Email = :email', { email: user.Uname })
 .getOne();
 
-if(finduname!==null)
+
+
+if(finduname)
 {
-   
+
 if(finduname.Post==="Admin")
 {
-const finduser= await this.adminRepo.findOneBy({Uname:user.uname});
+const finduser= await this.adminRepo.findOneBy({Uname:finduname.Uname});
 const isMatch= await bcrypt.compare(user.Password, finduser.Password);
 if(isMatch) {
 
@@ -175,7 +177,7 @@ else {
 
 if(finduname.Post==="Officer")
 {
-const finduser= await this.officerRepo.findOneBy({Uname:user.uname});
+const finduser= await this.officerRepo.findOneBy({Uname:finduname.Uname});
 const isMatch= await bcrypt.compare(user.Password, finduser.Password);
 if(isMatch) {
     if(finduser.Status!=="BANNED")
@@ -193,7 +195,7 @@ if(isMatch) {
 
 if(finduname.Post==="Cops")
 {
-const finduser= await this.copsRepo.findOneBy({Uname:user.uname});
+const finduser= await this.copsRepo.findOneBy({Uname:finduname.Uname});
 const isMatch= await bcrypt.compare(user.Password, finduser.Password);
 if(isMatch) {
     if(finduser.Status!=="BANNED")
@@ -211,7 +213,7 @@ if(isMatch) {
 
 if(finduname.Post==="Owner")
 {
-const finduser= await this.ownerRepo.findOneBy({Uname:user.uname});
+const finduser= await this.ownerRepo.findOneBy({Uname:finduname.Uname});
 const isMatch= await bcrypt.compare(user.Password, finduser.Password);
 if(isMatch) {
     if(finduser.Status!=="BANNED")
@@ -267,7 +269,7 @@ else if(finduname.Post==="Owner")
 }
 else{
 
-    return" User not found"
+    return" User not found";
 }
 
     
@@ -278,6 +280,9 @@ else{
 
 }
     
+  }
+  else{
+	return"OTP Not Found";
   } 
 } 
 

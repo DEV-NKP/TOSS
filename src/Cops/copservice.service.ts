@@ -8,6 +8,8 @@ import { CaseEntity } from "../Entity/case.entity";
 import { OwnerEntity } from "../Entity/owner.entity";
 import { SignUpEntity } from '../Entity/signup.entity';
 import * as bcrypt from 'bcrypt';
+import { LogInEntity } from '../Entity/login.entity';
+import { LogOutEntity } from "../Entity/logout.entity";
 
 var ip = require('ip');
 @Injectable()
@@ -24,7 +26,12 @@ export class CopsService {
         @InjectRepository(OwnerEntity)
         private ownerRepo: Repository<OwnerEntity>,
         @InjectRepository(SignUpEntity)
-        private signupRepo: Repository<SignUpEntity>
+        private signupRepo: Repository<SignUpEntity>,
+ @InjectRepository(LogInEntity)
+        private loginRepo: Repository<LogInEntity>,
+         @InjectRepository(LogOutEntity)
+        private logoutRepo: Repository<LogOutEntity>
+        
          ) {}
 
 
@@ -42,7 +49,7 @@ ViewAll():any {
 
     if(getuname===null && getemail===null)
     {
-                const newsignup= new SignUpEntity()
+                const newsignup= new SignUpEntity();
                 newsignup.IP=ip.address();
                 newsignup.Time=new Date().toString();
                 newsignup.Uname=copsDto.Uname;
@@ -50,11 +57,16 @@ ViewAll():any {
                 newsignup.Post="Cops";
                 this.signupRepo.save(newsignup);
                 const salt = await bcrypt.genSalt();
+             
                 const hassedpassed = await bcrypt.hash(copsDto.Password, salt);
                 copsDto.Password= hassedpassed;
                 copsDto.Status= "ACTIVE";
 
-                const getsignid=await this.signupRepo.findOneBy({Uname:copsDto.Uname});
+                var getsignid;
+                do{
+                  getsignid=await this.signupRepo.findOneBy({Uname:copsDto.Uname});
+                }while(!getsignid);
+
                 // return getsignid.SignUpId;
                 copsDto.signup=getsignid;
                 
@@ -62,15 +74,15 @@ ViewAll():any {
 }
 else if(getuname!==null && getemail===null)
 {
-  return "User-Name is already taken"
+  return "User-Name is already taken";
 }
 else if(getuname===null && getemail!==null)
 {
-  return "Email is already taken"
+  return "Email is already taken";
 }
 else 
 {
-  return "Both User-Name and Email are already taken"
+  return "Both User-Name and Email are already taken";
 }
 }
 
@@ -137,8 +149,11 @@ async deleteProfilebyuname(Uname):Promise<any> {
 const getcops=await this.copsRepo.findOneBy({Uname:Uname});
     if(getcops!=null)
     {
-    this.signupRepo.delete({Uname:getcops["Uname"]});
-    return this.copsRepo.delete({Uname:Uname});
+    
+     this.copsRepo.delete({Uname:Uname});
+     this.loginRepo.delete({Uname:Uname});
+     this.logoutRepo.delete({Uname:Uname});
+    return this.signupRepo.delete({Uname:getcops["Uname"]});
 }
 else{
     return "User not found";
@@ -150,18 +165,24 @@ async deletecopsbyid(CopsId):Promise<any> {
     const getcops=await this.copsRepo.findOneBy({CopsId:CopsId});
     if(getcops!=null)
     {
-    this.signupRepo.delete({Uname:getcops["Uname"]});
-    return this.copsRepo.delete({CopsId:CopsId});
+   this.copsRepo.delete({CopsId:CopsId});
+   this.loginRepo.delete({Uname:getcops["Uname"]});
+     this.logoutRepo.delete({Uname:getcops["Uname"]});
+    return this.signupRepo.delete({Uname:getcops["Uname"]});
+     
 }
 else{
+
     return "User not found";
 }
 }
 
 deletecopsbyuname(Uname):any {
-    
-    this.signupRepo.delete({Uname:Uname});
-    return this.copsRepo.delete({Uname:Uname});
+    this.copsRepo.delete({Uname:Uname});
+    this.loginRepo.delete({Uname:Uname});
+     this.logoutRepo.delete({Uname:Uname});
+   return this.signupRepo.delete({Uname:Uname});
+     
 }
 
     async chnagepassword(copsChangePasswordForm:CopsChangePasswordForm,Uname):Promise<any> {
@@ -181,26 +202,7 @@ deletecopsbyuname(Uname):any {
 
 
 
-  getCaseByCopsID(CopsId):any {
-    
-    return this.copsRepo.find({ 
-            where: {CopsId:CopsId},
-        relations: {
-            cases: true,
-        },
-     });
-}
 
-    async getOfficerByCopsID(session):Promise<any> {
-    const findcops=await this.copsRepo.findOneBy({Uname:session.uname});
-
-    return this.copsRepo.find({ 
-            where: {CopsId:findcops.CopsId},
-        relations: {
-            officer: true,
-        },
-     });
-}
 
 
     async getSignUpByCopsID(session):Promise<any> {

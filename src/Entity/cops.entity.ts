@@ -52,14 +52,6 @@ export class CopsEntity{
   Status: string;
 
 
-  @ManyToOne(() => OfficerEntity, (officer) => officer.cops)
-  @JoinColumn({ name: "OfficerId" })
-  officer: OfficerEntity;
-
-
-
-  @OneToMany(() => CaseEntity, (cases) => cases.cops)
-  cases: CaseEntity[];
 
   @OneToOne(() => SignUpEntity, (signup) => signup.cops)
   @JoinColumn({ name: "SignUpId" })

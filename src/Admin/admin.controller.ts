@@ -77,7 +77,7 @@ export class AdminController
 {storage:diskStorage({
   destination: './../ProfilePicture',
   filename: function (req, file, cb) {
-    cb(null,"Admin_"+file.originalname+Date.now())
+    cb(null,"Admin_"+Date.now()+"_"+file.originalname)
   }
 })
 
@@ -89,7 +89,7 @@ updateProfilePicture(@Session() session,@UploadedFile(new ParseFilePipe({
   ],
 }),) file: Express.Multer.File){
 
- const ProfilePicture = file.filename;  
+const ProfilePicture = file.filename;  
 return this.adminService.updateProfilePicture(ProfilePicture,session.uname);
 
 }
@@ -139,7 +139,7 @@ revokebancops(@Param('Uname') Uname: string): any {
   async insertofficer(@Session() session,@Body() mydto:OfficerForm): Promise<any> {
 const findadmin = await this.adminService.viewProfile(session.uname);
 mydto.ProfilePicture="default.png";
- mydto.admin = findadmin["AdminId"]
+ mydto.admin = findadmin["AdminId"];
 return this.officerService.insertofficer(mydto);
 }
 
@@ -189,7 +189,7 @@ banowner(@Param('Uname') Uname: string): any {
 
 @Get("/revokebanowner/:Uname")
 revokebanowner(@Param('Uname') Uname: string): any {
-  return this.ownerService.banowner(Uname);
+  return this.ownerService.revokebanowner(Uname);
 }
 
 @Get("/viewreports")
@@ -316,13 +316,6 @@ deletereportbyid(
 return this.reportService.deletereportbyid(ReportId);
 }
 
-@Delete("/deletesignupbyid/:SignUpId")
-deletesignupbyid( 
-@Param("SignUpId", ParseIntPipe) SignUpId:number
-): any {
-return this.signupService.deletesignupbyid(SignUpId);
-}
-
 @Delete("/deletetransactionbyid/:TransactionId")
 deletetransactionbyid( 
 @Param("TransactionId", ParseIntPipe) TransactionId:number
@@ -342,16 +335,6 @@ return this.vliService.deletevlibyid(VliId);
 
 
 
-
-@Get('/findofficerbyadmin/:id')
-findofficerbyadmin(@Param('id', ParseIntPipe) id: number): any {
-  return this.adminService.getOfficerByAdminID(id);
-}
-
-@Get('/findadminbyofficer/:id')
-findadminbyofficer(@Param('id', ParseIntPipe) id: number): any {
-  return this.officerService.getAdminByOfficerID(id);
-}
 
 @Get('/findsignupbyadmin/:id')
 findsignupbyadmin(@Param('id', ParseIntPipe) id: number): any {

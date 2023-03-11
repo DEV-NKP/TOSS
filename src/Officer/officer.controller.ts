@@ -87,7 +87,7 @@ export class OfficerController
     {storage:diskStorage({
       destination: './../ProfilePicture',
       filename: function (req, file, cb) {
-        cb(null,"Officer_"+file.originalname+Date.now())
+        cb(null,"Officer_"+Date.now()+"_"+file.originalname)
       }
     })
     
@@ -151,8 +151,8 @@ viewcopsbyuname(@Param('Uname') Uname: string): any {
   async insertcops(@Session() session,@Body() mydto:CopsForm): Promise<any> {
   const findofficer = await this.officerService.ViewProfile(session.uname);
   mydto.ProfilePicture="default.png";
-   mydto.officer = findofficer["OfficerId"]
-  return this.copsService.insertcops(mydto);
+   mydto.officer = findofficer["OfficerId"];
+     return this.copsService.insertcops(mydto);
 }
 
 @Put("/editcops/:Uname")
@@ -190,7 +190,7 @@ return this.copsService.deletecopsbyid(CopsId);
     @Body() vliDto:VLIForm
     ): Promise<any> {
       const findofficer = await this.officerService.ViewProfile(session.uname);
-      vliDto.officer = findofficer["OfficerId"]
+      vliDto.officer = findofficer["OfficerId"];
       return this.vliService.insertLicense(vliDto);
     }
 
@@ -227,7 +227,7 @@ return this.copsService.deletecopsbyid(CopsId);
 
     @Get("/searchvlibyid/:VliId")
     searchvlibyid(@Param('VliId', ParseIntPipe) VliId: number): any {
-      return this.vliService.findLicense({VliId});
+      return this.vliService.findLicense(VliId);
     }  
 
     @Get("/viewalltransaction")
@@ -287,37 +287,7 @@ viewcasebyuname(@Param('Uname') Uname: string): any {
     }
 
 
-    
-@Get('/findofficerbyadmin/:id')
-findofficerbyadmin(@Param('id', ParseIntPipe) id: number): any {
-  return this.adminService.getOfficerByAdminID(id);
-}
 
-@Get('/findadminbyofficer/:id')
-findadminbyofficer(@Param('id', ParseIntPipe) id: number): any {
-  return this.officerService.getAdminByOfficerID(id);
-}
-
-@Get('/findcopsbyofficer/:id')
-findcopsbyofficer(@Param('id', ParseIntPipe) id: number): any {
-  return this.officerService.getCopsByOfficerID(id);
-}
-
-@Get('/findofficerbycops/:id')
-findofficerbycops(@Param('id', ParseIntPipe) id: number): any {
-  return this.copsService.getOfficerByCopsID(id);
-}
-
-
-@Get('/findvlibyofficer/:id')
-findvlibyofficer(@Param('id', ParseIntPipe) id: number): any {
-  return this.officerService.getVliByOfficerID(id);
-}
-
-@Get('/findofficerbyvli/:id')
-findofficerbyvli(@Param('id', ParseIntPipe) id: number): any {
-  return this.vliService.getOfficerByVliID(id);
-}
 @Get('/findsignupbyofficer')
 findsignupbyofficer(@Session() session): any {
   return this.officerService.getSignUpByOfficerID(session);

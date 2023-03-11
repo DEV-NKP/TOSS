@@ -28,7 +28,7 @@ export class AdminService {
                 const getemail=await this.signupRepo.findOneBy({Email:adminForm.Email});
                 if(getuname==null && getemail==null)
                 {
-                const newsignup= new SignUpEntity()
+                const newsignup= new SignUpEntity();
                 newsignup.IP=ip.address();
                 newsignup.Time=new Date().toString();
                 newsignup.Uname=adminForm.Uname;
@@ -39,9 +39,15 @@ export class AdminService {
                 this.signupRepo.save(newsignup);
                
                 const salt = await bcrypt.genSalt();
+              
                 const hassedpassed = await bcrypt.hash(adminForm.Password, salt);
                 adminForm.Password= hassedpassed;
-                const getsignid=await this.signupRepo.findOneBy({Uname:adminForm.Uname});
+              
+                var getsignid;
+                do{
+                  getsignid=await this.signupRepo.findOneBy({Uname:adminForm.Uname});
+                }while(!getsignid);
+               
                 // return getsignid.SignUpId;
                 adminForm.signup=getsignid;
 
@@ -49,15 +55,15 @@ export class AdminService {
             }
             else if(getuname!=null && getemail==null)
             {
-              return "User-Name is already taken"
+              return "User-Name is already taken";
             }
             else if(getuname==null && getemail!=null)
             {
-              return "Email is already taken"
+              return "Email is already taken";
             }
             else 
             {
-              return "Both User-Name and Email are already taken"
+              return "Both User-Name and Email are already taken";
             }
 
             
@@ -107,15 +113,6 @@ export class AdminService {
                 
         }   
 
-        getOfficerByAdminID(AdminId):any {
-          
-          return this.adminRepo.find({ 
-                  where: {AdminId:AdminId},
-              relations: {
-                  officers: true,
-              },
-           });
-          }
 
           getSignUpByAdminID(AdminId):any {
           
