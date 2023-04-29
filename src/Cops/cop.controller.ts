@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put, Query, Req,  UsePipes, ValidationPipe ,MiddlewareConsumer, UseGuards, Session, UseInterceptors, UploadedFile, FileTypeValidator, ParseFilePipe } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put, Query, Req, Res, UsePipes, ValidationPipe ,MiddlewareConsumer, UseGuards, Session, UseInterceptors, UploadedFile, FileTypeValidator, ParseFilePipe } from "@nestjs/common";
 import { query } from "express";
 
 import { AdminForm } from "../Admin/admin.dto";
@@ -33,16 +33,18 @@ import { CopsChangePasswordForm } from "./cops.dto";
 import { CopsGuard } from "../toss.guard";
 import { FileInterceptor } from "@nestjs/platform-express";
 import { diskStorage } from "multer";
+import { TossService } from "../toss.service";
 
 
 
 
 @Controller("/cops")
-@UseGuards(CopsGuard)
+// @UseGuards(CopsGuard)
 export class CopsController
 { 
   constructor(
-    
+    private tossService: TossService,
+    private adminService: AdminService,
     private officerService: OfficerService,
     private copsService: CopsService,
     private ownerService: OwnerService,
@@ -84,7 +86,7 @@ export class CopsController
     }
 
 
-    @Post('/updateprofilepicture')
+    @Put('/updateprofilepicture')
     @UseInterceptors(FileInterceptor('image',
     {storage:diskStorage({
       destination: './../ProfilePicture',
@@ -161,6 +163,27 @@ viewCaseByAccused(
     ): any {
     return this.caseService.searchByCops(CopsUname);
     }
+
+    //Edited by Fahim from here-----------------------------
+
+    
+      @Get('/getimagebycopsuname/:Uname')
+      getimagebycopsuname(@Param('Uname') Uname, @Res() res) {
+        res.sendFile(Uname,{ root: './../ProfilePicture' })
+      }
+
+      @Get('/getimagebyowneruname/:Uname')
+      getimagebyowneruname(@Param('Uname') Uname, @Res() res) {
+        res.sendFile(Uname,{ root: './../ProfilePicture' })
+      }
+
+      @Get('/getimagebyaccuseduname/:AccusedUname')
+      getimagebyaccuseduname(@Param('AccusedUname') AccusedUname, @Res() res) {
+        res.sendFile(AccusedUname,{ root: './../ProfilePicture' })
+      }
+
+
+    //To here-----------------------------
 
     @Post("/createcase")
     @UsePipes(new ValidationPipe())
@@ -247,7 +270,26 @@ findloginbysignup(@Session() session): any {
 findlogoutbysignup(@Session() session): any {
   return this.logoutService.findlogoutbysignup(session);
 }
-
+@Get("/searchadminbyname/:name")
+searchadminbyname(@Param('name') name: string): any {
+  return this.adminService.searchadminbyname(name);
+}
+@Get("/searchcopsbyname/:name")
+searchcopsbyname(@Param('name') name: string): any {
+  return this.copsService.searchcopsbyname(name);
+}
+@Get("/searchofficerbyname/:name")
+searchofficerbyname(@Param('name') name: string): any {
+  return this.officerService.searchofficerbyname(name);
+}
+@Get("/searchownerbyname/:name")
+searchownerbyname(@Param('name') name: string): any {
+  return this.ownerService.searchownerbyname(name);
+}
+@Get("/searchuserbyname/:name")
+searchuserbyname(@Param('name') name: string): any {
+  return this.tossService.searchuserbyname(name);
+}
 }
 
 

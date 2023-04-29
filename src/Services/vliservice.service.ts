@@ -53,11 +53,11 @@ private caseRepo: Repository<CaseEntity>,
     }
         
     searchByOwnerName(OwnerName):any {
-        return this.vliRepo.findBy({OwnerName:OwnerName});
+        return this.vliRepo.findOneBy({OwnerName:OwnerName});
     }
 
     findLicense(VliId):any {
-        return this.vliRepo.findBy({VliId:VliId});
+        return this.vliRepo.findOneBy({VliId:VliId});
     }
 
     updateLicenseNo(editvlidto:EditVLIForm,VliId):any {

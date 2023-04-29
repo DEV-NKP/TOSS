@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, FileTypeValidator, Get, Param, ParseFilePipe, ParseIntPipe, Post, Put, Query, Req, Request, Session, UploadedFile, UseGuards, UseInterceptors, UsePipes, ValidationPipe } from "@nestjs/common";
+import { Body, Controller, Delete, FileTypeValidator, Get, Param, ParseFilePipe, ParseIntPipe, Post, Put, Query, Req, Request, Res, Session, UploadedFile, UseGuards, UseInterceptors, UsePipes, ValidationPipe } from "@nestjs/common";
 
 import { AdminForm } from "../Admin/admin.dto";
 import { EditOfficerForm, OfficerForm } from "../Officer/officer.dto";
@@ -33,14 +33,18 @@ import { WithdrawBankForm } from "../DTO/bank.dto";
 import { OfficerGuard } from "../toss.guard";
 import { FileInterceptor } from "@nestjs/platform-express";
 import { diskStorage } from "multer";
+import { TossService } from "../toss.service";
 
 
 
 @Controller("/officer")
-@UseGuards(OfficerGuard)
+// @UseGuards(OfficerGuard)
 export class OfficerController
 { 
-  constructor(private adminService: AdminService,
+  constructor(
+    
+      private tossService: TossService,
+    private adminService: AdminService,
     private officerService: OfficerService,
     private copsService: CopsService,
     private ownerService: OwnerService,
@@ -82,7 +86,7 @@ export class OfficerController
 
 
 
-    @Post('/updateprofilepicture')
+    @Put('/updateprofilepicture')
     @UseInterceptors(FileInterceptor('image',
     {storage:diskStorage({
       destination: './../ProfilePicture',
@@ -304,6 +308,43 @@ findlogoutbysignup(@Session() session): any {
 }
 
 
+@Get("/searchadminbyname/:name")
+searchadminbyname(@Param('name') name: string): any {
+  return this.adminService.searchadminbyname(name);
+}
+@Get("/searchcopsbyname/:name")
+searchcopsbyname(@Param('name') name: string): any {
+  return this.copsService.searchcopsbyname(name);
+}
+@Get("/searchofficerbyname/:name")
+searchofficerbyname(@Param('name') name: string): any {
+  return this.officerService.searchofficerbyname(name);
+}
+@Get("/searchownerbyname/:name")
+searchownerbyname(@Param('name') name: string): any {
+  return this.ownerService.searchownerbyname(name);
+}
+@Get("/searchuserbyname/:name")
+searchuserbyname(@Param('name') name: string): any {
+  return this.tossService.searchuserbyname(name);
+}
 
 
+
+
+@Get('/viewtransactionbyid/:TransactionId')
+viewtransactionbyid(@Param('TransactionId') TransactionId: number): any {
+  return this.transactionService.searchByTransId(TransactionId);
+}
+
+@Get('/viewcasebyid/:CaseId')
+viewcasebyid(@Param('CaseId') CaseId: number): any {
+  return this.caseService.searchCase(CaseId);
+}
+
+
+@Get('/getimage/:name')
+getImages(@Param('name') name, @Res() res) {
+  res.sendFile(name,{ root: './../ProfilePicture' })
+}
 }

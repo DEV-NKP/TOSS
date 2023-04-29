@@ -1,6 +1,6 @@
-import { Inject, Injectable } from "@nestjs/common";
+import { Inject, Injectable, Get } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { ILike, Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { MailerService } from "@nestjs-modules/mailer/dist";
 import { SignupService } from './Services/signupservice.service';
@@ -297,5 +297,27 @@ makeotp(length) {
     }
     return result;
 }
+
+searchuserbyname(name):any{
+
+return this.signupRepo
+.createQueryBuilder('SignUp')
+.leftJoinAndSelect('SignUp.admin', 'admin')
+.where('SignUp.Uname ILike :name', { name: `%${name}%` })
+.orWhere('admin.FirstName ILike :name', { name: `%${name}%` })
+.orWhere('admin.LastName ILike :name', { name: `%${name}%` })
+.leftJoinAndSelect('SignUp.officer', 'officer')
+.orWhere('officer.FirstName ILike :name', { name: `%${name}%` })
+.orWhere('officer.LastName ILike :name', { name: `%${name}%` })
+.leftJoinAndSelect('SignUp.cops', 'cops')
+.orWhere('cops.FirstName ILike :name', { name: `%${name}%` })
+.orWhere('cops.LastName ILike :name', { name: `%${name}%` })
+.leftJoinAndSelect('SignUp.owner', 'owner')
+.orWhere('owner.FirstName ILike :name', { name: `%${name}%` })
+.orWhere('owner.LastName ILike :name', { name: `%${name}%` })
+.getMany();
+
+}
+
 
 }

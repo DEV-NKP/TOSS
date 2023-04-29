@@ -2,7 +2,7 @@ import { Injectable } from "@nestjs/common";
 import { CopsForm, CopsChangePasswordForm, EditCopsForm } from './cops.dto';
 import { CaseForm } from "../DTO/case.dto";
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { ILike, Repository } from 'typeorm';
 import { CopsEntity } from "../Entity/cops.entity";
 import { CaseEntity } from "../Entity/case.entity";
 import { OwnerEntity } from "../Entity/owner.entity";
@@ -219,6 +219,16 @@ deletecopsbyuname(Uname):any {
     }
 
 
+    searchcopsbyname(name):any{
+        return this.copsRepo.find({
+          where: [
+            {Uname: ILike(`%${name}%`)},
+            {FirstName: ILike(`%${name}%`)},
+            {LastName: ILike(`%${name}%`)},
+          ],
+        });
+      
 
+      }
 
 }

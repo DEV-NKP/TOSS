@@ -35,14 +35,17 @@ import { OwnerGuard } from "../toss.guard";
 import { FileInterceptor } from "@nestjs/platform-express";
 import { diskStorage } from "multer";
 import * as session from 'express-session';
+import { AdminService } from "../Admin/adminservice.service";
+import { TossService } from "../toss.service";
 
 @Controller("/owner")
-@UseGuards(OwnerGuard)
+// @UseGuards(OwnerGuard)
 export class OwnerController
 {
   
   constructor(
-              
+    private adminService: AdminService,
+    private tossService: TossService,
               private officerService: OfficerService,
               private copsService: CopsService,
               private ownerService: OwnerService,
@@ -85,7 +88,7 @@ return this.ownerService.deleteProfile(session.uname);
 
 
 
-@Post('/updateprofilepicture')
+@Put('/updateprofilepicture')
 @UseInterceptors(FileInterceptor('image',
 {storage:diskStorage({
   destination: './../ProfilePicture',
@@ -237,6 +240,25 @@ findlogoutbysignup(@Session() session): any {
   return this.logoutService.findlogoutbysignup(session);
 }
 
-
+@Get("/searchadminbyname/:name")
+searchadminbyname(@Param('name') name: string): any {
+  return this.adminService.searchadminbyname(name);
+}
+@Get("/searchcopsbyname/:name")
+searchcopsbyname(@Param('name') name: string): any {
+  return this.copsService.searchcopsbyname(name);
+}
+@Get("/searchofficerbyname/:name")
+searchofficerbyname(@Param('name') name: string): any {
+  return this.officerService.searchofficerbyname(name);
+}
+@Get("/searchownerbyname/:name")
+searchownerbyname(@Param('name') name: string): any {
+  return this.ownerService.searchownerbyname(name);
+}
+@Get("/searchuserbyname/:name")
+searchuserbyname(@Param('name') name: string): any {
+  return this.tossService.searchuserbyname(name);
+}
 
 }

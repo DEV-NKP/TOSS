@@ -36,7 +36,7 @@ constructor(
         }
 
     searchByTransId(TransactionId):any {
-        return this.transRepo.findBy({ TransactionId:TransactionId });
+        return this.transRepo.findOneBy({ TransactionId:TransactionId });
     }
       
     searchtransactionbyaccount(account):any {

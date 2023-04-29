@@ -2,7 +2,7 @@ import { Injectable } from "@nestjs/common";
 import { OfficerForm, OfficerChangePasswordForm, EditOfficerForm } from './officer.dto';
 import { OwnerForm } from "../Owner/owner.dto";
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { ILike, Repository } from 'typeorm';
 import { OfficerEntity } from "../Entity/officer.entity";
 import { SignUpEntity } from '../Entity/signup.entity';
 import { BankEntity } from '../Entity/bank.entity';
@@ -209,5 +209,18 @@ else{
         updateProfilePicture(ProfilePicture, Uname):any {
             return this.officerRepo.update({Uname:Uname},{ProfilePicture:ProfilePicture});
           }
+
+          searchofficerbyname(name):any{
+            return this.officerRepo.find({
+              where: [
+                {Uname: ILike(`%${name}%`)},
+                {FirstName: ILike(`%${name}%`)},
+                {LastName: ILike(`%${name}%`)},
+              ],
+            });
+          
+
+          }
+
 
 }

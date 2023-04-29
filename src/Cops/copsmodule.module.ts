@@ -28,6 +28,8 @@ import { ReportService } from "../Services/reportservice.service";
 import { SignupService } from "../Services/signupservice.service";
 import { TransactionService } from "../Services/transactionservice.service";
 import { VLIService } from "../Services/vliservice.service";
+import { AdminService } from "../Admin/adminservice.service";
+import { TossService } from "../toss.service";
 
 
 @Module({
@@ -35,7 +37,7 @@ import { VLIService } from "../Services/vliservice.service";
     imports: [TypeOrmModule.forFeature([CopsEntity,BankEntity,SignUpEntity,VLIEntity,LogOutEntity,LogInEntity,ReportEntity,CaseEntity,TransactionEntity,OfficerEntity,CaseEntity,AdminEntity,OwnerEntity])],
     controllers: [CopsController],
     
-    providers: [ReportService,CaseService,SignupService,VLIService,LogoutService,BankService,LoginService,TransactionService,OwnerService,OfficerService,CopsService],
+    providers: [AdminService,TossService,ReportService,CaseService,SignupService,VLIService,LogoutService,BankService,LoginService,TransactionService,OwnerService,OfficerService,CopsService],
 
 })
 

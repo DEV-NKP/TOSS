@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, FileTypeValidator, Get, MaxFileSizeValidator, Param, ParseFilePipe, ParseIntPipe, Post, Put, Query, Req, Request, Session, UploadedFile, UseGuards, UseInterceptors, UsePipes, ValidationPipe } from "@nestjs/common";
+import { Body, Controller, Delete, FileTypeValidator, Get, MaxFileSizeValidator, Param, ParseFilePipe, ParseIntPipe, Post, Put, Query, Req, Request, Res, Session, UploadedFile, UseGuards, UseInterceptors, UsePipes, ValidationPipe } from "@nestjs/common";
 
 import { AdminForm, EditAdminForm } from "./admin.dto";
 import { EditOfficerForm, OfficerForm } from "../Officer/officer.dto";
@@ -33,13 +33,14 @@ import { UnauthorizedException } from '@nestjs/common/exceptions';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { AdminGuard } from '../toss.guard';
 import { diskStorage } from 'multer';
+import { TossService } from "../toss.service";
 
 @Controller("/admin")
-@UseGuards(AdminGuard)
+// @UseGuards(AdminGuard)
 export class AdminController
 { 
   constructor(
-    
+    private tossService: TossService,
               private adminService: AdminService,
               private officerService: OfficerService,
               private copsService: CopsService,
@@ -72,7 +73,7 @@ export class AdminController
     }
 
 
-@Post('/updateprofilepicture')
+@Put('/updateprofilepicture')
 @UseInterceptors(FileInterceptor('image',
 {storage:diskStorage({
   destination: './../ProfilePicture',
@@ -95,7 +96,10 @@ return this.adminService.updateProfilePicture(ProfilePicture,session.uname);
 }
 
 
-
+@Get('/getimage/:name')
+getImages(@Param('name') name, @Res() res) {
+  res.sendFile(name,{ root: './../ProfilePicture' })
+}
 
 
 @Put("/changepassword")
@@ -352,7 +356,71 @@ findlogoutbysignup(@Session() session): any {
   return this.logoutService.findlogoutbysignup(session);
 }
 
+/*Niloy*/
+@Get("/searchadminbyname/:name")
+searchadminbyname(@Param('name') name: string): any {
+  return this.adminService.searchadminbyname(name);
+}
+@Get("/searchcopsbyname/:name")
+searchcopsbyname(@Param('name') name: string): any {
+  return this.copsService.searchcopsbyname(name);
+}
+@Get("/searchofficerbyname/:name")
+searchofficerbyname(@Param('name') name: string): any {
+  return this.officerService.searchofficerbyname(name);
+}
+@Get("/searchownerbyname/:name")
+searchownerbyname(@Param('name') name: string): any {
+  return this.ownerService.searchownerbyname(name);
+}
+@Get("/searchuserbyname/:name")
+searchuserbyname(@Param('name') name: string): any {
+  return this.tossService.searchuserbyname(name);
+}
+/*Niloy*/
+@Get('/viewadminbyuname/:Uname')
+viewadminbyuname(@Param('Uname') Uname: string): any {
+  return this.adminService.ViewProfileByName(Uname);
+}
+  
+@Get('/viewbankbyaccno/:AccountNo')
+viewbankbyaccno(@Param('AccountNo') AccountNo: string): any {
+  return this.bankService.searchByAccountNo(AccountNo);
+}
 
+
+@Get('/viewtransactionbyid/:TransactionId')
+viewtransactionbyid(@Param('TransactionId') TransactionId: number): any {
+  return this.transactionService.searchByTransId(TransactionId);
+}
+
+@Get('/viewcasebycaseid/:CaseId')
+viewcasebycaseid(@Param('CaseId') CaseId: number): any {
+  return this.caseService.searchCase(CaseId);
+}
+
+@Get('/viewvlibyvliid/:VliId')
+viewvlibyvliid(@Param('VliId') VliId: number): any {
+  return this.vliService.findLicense(VliId);
+}
+
+
+@Get('/viewsignupbysignupid/:SignUpId')
+viewsignupbysignupid(@Param('SignUpId') SignUpId: number): any {
+  return this.signupService.searchSignUp(SignUpId);
+}
+
+
+@Get('/viewloginbyloginid/:LogInId')
+viewloginbyloginid(@Param('LogInId') LogInId: number): any {
+  return this.loginService.searchAccount(LogInId);
+}
+
+
+@Get('/viewlogoutbylogoutid/:LogOutId')
+viewlogoutbylogoutid(@Param('LogOutId') LogOutId: number): any {
+  return this.logoutService.searchAccount(LogOutId);
+}
 
 
 }

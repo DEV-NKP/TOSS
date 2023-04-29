@@ -41,7 +41,7 @@ constructor(
     }
 
     checkuname(Uname):any {
-        return this.signupRepo.findBy({ Uname:Uname });
+        return this.signupRepo.findOneBy({ Uname:Uname });
     }
 
     updateUname(Uname,SignUpId):any {

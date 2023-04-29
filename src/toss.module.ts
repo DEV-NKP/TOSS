@@ -1,5 +1,9 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { ServeStaticModule } from '@nestjs/serve-static';
+
+
+
 import { OfficerModule } from './Officer/officermodule.module';
 import { OwnerModule } from './Owner/ownermodule.module';
 import { AdminModule } from './Admin/adminmodule.module';
@@ -29,6 +33,7 @@ import { TossController } from './toss.controller';
 import { SignupService } from './Services/signupservice.service';
 import { AdminService } from './Admin/adminservice.service';
 import { OwnerService } from './Owner/ownerservice.service';
+import { join } from 'path';
 
 @Module({
   imports: [OfficerModule, OwnerModule, CopsModule, AdminModule , TypeOrmModule.forRoot(
@@ -65,6 +70,10 @@ import { OwnerService } from './Owner/ownerservice.service';
                    pass: 'nhdzzoorwakobtfo'
                },
               }
+  }),  
+  ServeStaticModule.forRoot({
+    rootPath: join(__dirname, '..', '../public'), // added ../ to get one folder back
+    serveRoot: '/public/' //last slash was important
   }),
   ],
  

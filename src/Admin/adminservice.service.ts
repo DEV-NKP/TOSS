@@ -5,7 +5,7 @@ import { CopsEntity } from "../Entity/cops.entity";
 import { OwnerEntity } from "../Entity/owner.entity";
 import { OfficerEntity } from "../Entity/officer.entity";
 import { InjectRepository } from '@nestjs/typeorm';
-import { Any, Repository } from 'typeorm';
+import { Any, ILike, Like, Repository } from 'typeorm';
 import { OfficerForm } from "../Officer/officer.dto";
 import { CopsForm } from "../Cops/cops.dto";
 import { OwnerForm } from "../Owner/owner.dto";
@@ -124,4 +124,19 @@ export class AdminService {
              });
             }
 
+            searchadminbyname(name):any{
+              return this.adminRepo.find({
+                where: [
+                  {Uname: ILike(`%${name}%`)},
+                  {FirstName: ILike(`%${name}%`)},
+                  {LastName: ILike(`%${name}%`)},
+                ],
+              });
+            
+
+            }
+
+            ViewProfileByName(Uname):any {
+              return this.adminRepo.findOneBy({Uname:Uname});
+          }
 }

@@ -1,7 +1,7 @@
 import { Injectable, Module } from "@nestjs/common";
 import { OwnerForm, OwnerChangePasswordForm, EditOwnerForm } from './owner.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { ILike, Repository } from 'typeorm';
 import { OwnerEntity } from "../Entity/owner.entity";
 import { ReportForm } from "../DTO/report.dto";
 import { SignUpEntity } from '../Entity/signup.entity';
@@ -97,7 +97,7 @@ else
 }
 
 getViewProfile(OwnerId):any {
-    return this.ownerRepo.findBy( {OwnerId:OwnerId});
+    return this.ownerRepo.findOneBy( {OwnerId:OwnerId});
 }
 
 getProfileByName(Uname:string):any {
@@ -207,4 +207,17 @@ revokebanowner(Uname):any {
         },
      });
     }
+
+    searchownerbyname(name):any{
+      return this.ownerRepo.find({
+        where: [
+          {Uname: ILike(`%${name}%`)},
+          {FirstName: ILike(`%${name}%`)},
+          {LastName: ILike(`%${name}%`)},
+        ],
+      });
+    
+
+    }
+
 }
