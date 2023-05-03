@@ -194,8 +194,8 @@ else{
 
 
 
-        async getSignUpByOfficerID(session):Promise<any> {
-            const findofficer=await this.officerRepo.findOneBy({Uname:session.uname});
+        async getSignUpByOfficerID(Uname):Promise<any> {
+            const findofficer=await this.officerRepo.findOneBy({Uname:Uname});
 
             return this.officerRepo.find({ 
                     where: {OfficerId:findofficer.OfficerId},

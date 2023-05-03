@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, FileTypeValidator, Get, Param, ParseFilePipe, ParseIntPipe, Post, Put, Query, Req, Request, Session, UploadedFile, UseGuards, UseInterceptors, UsePipes, ValidationPipe } from "@nestjs/common";
+import { Body, Controller, Delete, FileTypeValidator, Get, Param, ParseFilePipe, ParseIntPipe, Post, Put, Query, Req, Request, Res, Session, UploadedFile, UseGuards, UseInterceptors, UsePipes, ValidationPipe } from "@nestjs/common";
 
 
 import { OfficerForm } from "../Officer/officer.dto";
@@ -61,34 +61,37 @@ export class OwnerController
 
 
 
-
-
-@Get("/viewprofile")
-viewProfile(     
-  @Session() session
-): any { 
-    return this.ownerService.getProfileByName(session.uname);
+@Get('/getimage/:name')
+getImages(@Param('name') name, @Res() res) {
+  res.sendFile(name,{ root: './../ProfilePicture' })
 }
 
-@Put("/editprofile")
+@Get("/viewprofile/:Uname")
+viewProfile(     
+  @Session() session,@Param('Uname') Uname
+): any { 
+    return this.ownerService.getProfileByName(Uname);
+}
+
+@Put("/editprofile/:Uname")
 @UsePipes(new ValidationPipe())
 editProfile( 
-  @Session() session,
+  @Session() session,@Param('Uname') Uname,
   @Body() editownerDto: EditOwnerForm,
 ): any {
-return this.ownerService.editProfile(editownerDto, session.uname);
+return this.ownerService.editProfile(editownerDto, Uname);
 }
 
-@Delete('/deleteprofile')
+@Delete('/deleteprofile/:Uname')
 deleteProfile(
-  @Session() session
+  @Session() session,@Param('Uname') Uname
 ): any {
-return this.ownerService.deleteProfile(session.uname);
+return this.ownerService.deleteProfile(Uname);
 }
 
 
 
-@Put('/updateprofilepicture')
+@Put('/updateprofilepicture/:Uname')
 @UseInterceptors(FileInterceptor('image',
 {storage:diskStorage({
   destination: './../ProfilePicture',
@@ -98,7 +101,7 @@ return this.ownerService.deleteProfile(session.uname);
 })
 
 }))
-updateProfilePicture(@Session() session,@UploadedFile(new ParseFilePipe({
+updateProfilePicture(@Session() session,@Param('Uname') Uname,@UploadedFile(new ParseFilePipe({
   validators: [
     //new MaxFileSizeValidator({ maxSize: 16000 }),
     new FileTypeValidator({ fileType: 'png|jpg|jpeg|' }),
@@ -106,17 +109,17 @@ updateProfilePicture(@Session() session,@UploadedFile(new ParseFilePipe({
 }),) file: Express.Multer.File){
 
  const ProfilePicture = file.filename;  
-return this.ownerService.updateProfilePicture(ProfilePicture,session.uname);
+return this.ownerService.updateProfilePicture(ProfilePicture,Uname);
 
 }
 
-@Put("/changepassword")
+@Put("/changepassword/:Uname")
 @UsePipes(new ValidationPipe())
 changepassword( 
-  @Session() session,
+  @Session() session,@Param('Uname') Uname,
 @Body() passdto: OwnerChangePasswordForm,
 ): any {
-return this.ownerService.chnagepassword(passdto, session.uname );
+return this.ownerService.chnagepassword(passdto, Uname );
 }
 
 
@@ -148,96 +151,98 @@ return this.copsService.viewcopsbyuname(Uname);
 }
 
 
-@Put("/withdraw")
+@Put("/withdraw/:Accno")
 @UsePipes(new ValidationPipe())
-withdraw( @Session() session,
+withdraw( @Session() session,@Param('Accno') Accno,
   @Body() withdrawBankForm: WithdrawBankForm): any {
-return this.bankService.withdrawbyowner(withdrawBankForm,session.accno);
+return this.bankService.withdrawbyowner(withdrawBankForm,Accno);
 }
 
-@Put("/deposit")
+@Put("/deposit/:Accno")
 @UsePipes(new ValidationPipe())
-deposit( @Session() session,
+deposit( @Session() session,@Param('Accno') Accno,
   @Body() depositBankForm: WithdrawBankForm): any {
-return this.bankService.depositbyowner(depositBankForm,session.accno);
+return this.bankService.depositbyowner(depositBankForm,Accno);
 }
 
-@Put("/payment")
+@Put("/payment/:Accno")
 @UsePipes(new ValidationPipe())
-payment( @Session() session,
+payment( @Session() session,@Param('Accno') Accno,
   @Body() paymentBankForm: PaymentBankForm): any {
-    paymentBankForm.SenderAccountNo=session.accno;
+    paymentBankForm.SenderAccountNo=Accno;
 return this.bankService.paymentbyowner(paymentBankForm);
 }
 
 
-@Put("/paymentpenalty")
+@Put("/paymentpenalty/:Uname")
 @UsePipes(new ValidationPipe())
-paymentpenalty( @Session() session, @Body() recentcase): any {
-return this.bankService.paymentpenalty(recentcase, session.uname, session.accno);
+paymentpenalty( @Session() session, @Body() recentcase,@Param('Uname') Uname): any {
+return this.bankService.paymentpenalty(recentcase, Uname);
 }
 
 
-@Get("/viewbank")
-viewbank(@Session() session): any {
-return this.bankService.searchByAccountNo(session.accno);
+@Get("/viewbank/:Accno")
+viewbank(@Session() session,@Param('Accno') Accno): any {
+return this.bankService.searchByAccountNo(Accno);
 }
 
-@Get('/applyforvli')
+@Get('/applyforvli/:Uname')
 @UsePipes(new ValidationPipe())
 applyForVli(
-  @Session() session,
+  @Session() session,@Param('Uname') Uname,
   @Body() applyVli: ApplyVLIForm): any {
-    return this.vliService.applyForVli(applyVli,session.uname);
+    return this.vliService.applyForVli(applyVli,Uname);
     }
 
-@Get("/viewtransaction")
-viewalltransaction(@Session() session): any {
-return this.transactionService.searchtransactionbyaccount(session.accno);
+@Get("/viewtransaction/:Accno")
+viewalltransaction(@Session() session,@Param('Accno') Accno): any {
+return this.transactionService.searchtransactionbyaccount(Accno);
 }
 
-@Get("/viewpreviouscase")
+@Get("/viewpreviouscase/:Uname")
    viewPreviousCase(
-    @Session() session
+    @Session() session,@Param('Uname') Uname
    ): any {
-    return this.caseService.searchPreviousCase(session.uname);
+    return this.caseService.searchPreviousCase(Uname);
    }
 
-   @Get("/viewpendingcase")
+   @Get("/viewpendingcase/:Uname")
    viewPendingCase(
-    @Session() session
+    @Session() session,@Param('Uname') Uname
    ): any {
-    return this.caseService.searchPendingCase(session.uname);
+    return this.caseService.searchPendingCase(Uname);
    }
 
-   @Post("/report")
+   @Post("/report/:Uname")
    @UsePipes(new ValidationPipe())
-   report(@Session() session,
+   async report(@Session() session,@Param('Uname') Uname,
    @Body() reportForm:ReportForm
-   ): any {
-    reportForm.Email=session.email;
-    reportForm.Uname=session.uname;
+   
+   ): Promise<any> {
+    const uemail=await this.ownerService.viewownerbyuname(Uname);
+    reportForm.Email=uemail.Email;
+    reportForm.Uname=Uname;
      return this.reportService.reportProblem(reportForm);
    }
 
    
 
 
-@Get('/findsignupbyowner')
-findsignupbyowner(@Session() session): any {
-  return this.ownerService.getSignUpByOwnerID(session);
+@Get('/findsignupbyowner/:Uname')
+findsignupbyowner(@Session() session,@Param('Uname') Uname): any {
+  return this.ownerService.getSignUpByOwnerID(Uname);
 }
 
 
 
-@Get('/findloginbysignup')
-findloginbysignup(@Session() session): any {
-  return this.loginService.findloginbysignup(session);
+@Get('/findloginbysignup/:Uname')
+findloginbysignup(@Session() session,@Param('Uname') Uname): any {
+  return this.loginService.findloginbysignup(Uname);
 }
 
-@Get('/findlogoutbysignup')
-findlogoutbysignup(@Session() session): any {
-  return this.logoutService.findlogoutbysignup(session);
+@Get('/findlogoutbysignup/:Uname')
+findlogoutbysignup(@Session() session,@Param('Uname') Uname): any {
+  return this.logoutService.findlogoutbysignup(Uname);
 }
 
 @Get("/searchadminbyname/:name")

@@ -150,7 +150,7 @@ else{
 }
 
 async login(user){
-
+	//console.log(user.Uname+" "+user.Password);
 const finduname= await this.signupRepo.createQueryBuilder('SignUp')
 .where('SignUp.Uname = :uname', { uname: user.Uname })
 .orWhere('SignUp.Email = :email', { email: user.Uname })

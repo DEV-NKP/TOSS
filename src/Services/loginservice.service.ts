@@ -48,8 +48,8 @@ createlogIn(newlogin):any {
     }
 
 
-    async findloginbysignup(session):Promise<any> {
-        const findlogin=await this.signupRepo.findOneBy({Uname:session.uname});      
+    async findloginbysignup(Uname):Promise<any> {
+        const findlogin=await this.signupRepo.findOneBy({Uname:Uname});      
             return this.signupRepo.find({
                     where: {SignUpId:findlogin.SignUpId},
                 relations: {

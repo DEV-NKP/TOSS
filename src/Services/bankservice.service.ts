@@ -11,6 +11,7 @@ import { BankForm, PaymentBankForm } from '../DTO/bank.dto';
 import { WithdrawBankForm } from "../DTO/bank.dto";
 import { TransactionEntity } from '../Entity/transaction.entity';
 import { CaseEntity } from '../Entity/case.entity';
+import { OwnerEntity } from "../Entity/owner.entity";
 
 @Injectable()
 export class BankService {
@@ -22,6 +23,8 @@ constructor(
         private transactionRepo: Repository<TransactionEntity>,
          @InjectRepository(CaseEntity)
         private caseRepo: Repository<CaseEntity>,
+        @InjectRepository(OwnerEntity)
+        private ownerRepo: Repository<OwnerEntity>,
       ) {}
 
     ViewAll():any { 
@@ -185,7 +188,8 @@ else{
 
 
 
-    async paymentpenalty(recentcase, Uname, AccountNo):Promise<any> {
+    async paymentpenalty(recentcase, Uname):Promise<any> {
+const accno=await this.ownerRepo.findOneBy({Uname:Uname});
 
         const caseid= await this.caseRepo.findOneBy({CaseId:recentcase.CaseId});
 
@@ -193,7 +197,7 @@ else{
         {
             if(caseid.AccusedUname===Uname)
             {
-                 const senderaccount= await this.bankRepo.findOneBy({AccountNo:AccountNo});
+                 const senderaccount= await this.bankRepo.findOneBy({AccountNo:accno.AccountNo});
         const receiveraccount= await this.bankRepo.findOneBy({AccountNo:"9999-9999-9999-9999-9999"});
         if(senderaccount!=null && receiveraccount!=null){
             if(caseid.PenaltyAmount>0)
@@ -210,9 +214,9 @@ else{
         newTransaction.Time=new Date().toString();
         newTransaction.Amount=caseid.PenaltyAmount;
         newTransaction.ReceiverAc="9999-9999-9999-9999-9999";
-        newTransaction.SenderAc=AccountNo;
+        newTransaction.SenderAc=accno.AccountNo;
         
-         this.bankRepo.update({AccountNo:AccountNo}, {Amount:senderaccount["Amount"]  });
+         this.bankRepo.update({AccountNo:accno.AccountNo}, {Amount:senderaccount["Amount"]  });
          this.bankRepo.update({AccountNo:"9999-9999-9999-9999-9999"}, {Amount:receiveraccount["Amount"]  });
          this.transactionRepo.save(newTransaction);
 

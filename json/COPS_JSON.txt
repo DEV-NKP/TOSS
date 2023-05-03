@@ -1,0 +1,68 @@
+->   /officer/insertcops
+
+    "Uname":"adi",
+    "FirstName":"Adiba",
+    "LastName":"Dash",
+    "Email":"niloykantipaul2021@gmail.com",
+    "Password":"AN#ww1234",
+    "MobileNo":"0189097480",
+    "Gender":"Female",
+    "RankCategory":"Heffad",
+    "RankGroup":"Alpha",
+    "Station":"Baridhara",
+    "PoliceId":"11-456789-2",
+    "Country":"Bangladesh"
+
+->   /officer/insertcops
+
+    "Uname":"Sami",
+    "FirstName":"Samim",
+    "LastName":"Hossain",
+    "Email":"niloykanti.paul2017@gmail.com",
+    "Password":"AN#ww1234",
+    "MobileNo":"0189097480",
+    "Gender":"Male",
+    "RankCategory":"Kotted",
+    "RankGroup":"Beta",
+    "Station":"Kuratoli",
+    "PoliceId":"11-456789-2",
+    "Country":"Bangladesh"
+
+
+->  /toss/forgotpassword
+
+   "Email":"niloykantipaul2021@gmail.com"
+
+->  /toss/changeforgotpassword
+
+    "OTP":"057399",
+   "Password":"ADad<20>"
+
+->  /toss/login      
+
+    "Uname":"adi",
+    "Password":"AN#ww1234" 
+
+->  /cops/viewprofile
+
+->  /cops/editprofile
+
+    "FirstName": "Adiba",
+    "LastName": "Biswas",
+    "MobileNo": "01853380090",
+    "Gender": "Female", 
+    "RankCategory":"Silver",
+    "RankGroup":"Beta",
+    "Station":"Badda",
+    "PoliceId":"11-456789-2",
+    "Country":"Bangladesh"
+
+
+->  /cops/deleteprofile    log in table has sign up foreign key
+
+->  /cops/updateprofilepicture 
+
+->  /officer/changepassword    
+
+    "OLDPassword": "ASas<01>",
+    "NEWPassword": "ASaa<01>"

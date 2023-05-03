@@ -57,36 +57,39 @@ export class CopsController
     private transactionService: TransactionService,
     private vliService: VLIService ){}
 
+    @Get('/getimage/:name')
+    getImages(@Param('name') name, @Res() res) {
+      res.sendFile(name,{ root: './../ProfilePicture' })
+    }
 
-
-    @Get("/viewprofile")
+    @Get("/viewprofile/:Uname")
     viewProfile(     
-      @Session() session
+      @Session() session,@Param('Uname') Uname
     ): any { 
-        return this.copsService.viewProfile(session.uname);
+        return this.copsService.viewProfile(Uname);
         
     }
 
-    @Put("/editprofile")
+    @Put("/editprofile/:Uname")
     @UsePipes(new ValidationPipe())
     editProfile( 
-      @Session() session,
+      @Session() session,@Param('Uname') Uname,
       @Body() mydto: EditCopsForm,
     ): any {
     
-  return this.copsService.editProfile(mydto, session.uname);
+  return this.copsService.editProfile(mydto, Uname);
     }
 
-    @Delete('/deleteprofile')
+    @Delete('/deleteprofile/:Uname')
     deleteProfile(
-      @Session() session
+      @Session() session,@Param('Uname') Uname
     ): any {
    
-      return this.copsService.deleteProfilebyuname(session.uname);
+      return this.copsService.deleteProfilebyuname(Uname);
     }
 
 
-    @Put('/updateprofilepicture')
+    @Put('/updateprofilepicture/:Uname')
     @UseInterceptors(FileInterceptor('image',
     {storage:diskStorage({
       destination: './../ProfilePicture',
@@ -96,7 +99,7 @@ export class CopsController
     })
     
     }))
-    updateProfilePicture(@Session() session,@UploadedFile(new ParseFilePipe({
+    updateProfilePicture(@Session() session,@Param('Uname') Uname,@UploadedFile(new ParseFilePipe({
       validators: [
         //new MaxFileSizeValidator({ maxSize: 16000 }),
         new FileTypeValidator({ fileType: 'png|jpg|jpeg|' }),
@@ -104,19 +107,19 @@ export class CopsController
     }),) file: Express.Multer.File){
     
      const ProfilePicture = file.filename;  
-    return this.copsService.updateProfilePicture(ProfilePicture,session.uname);
+    return this.copsService.updateProfilePicture(ProfilePicture,Uname);
     
     }
     
 
 
-@Put("/changepassword")
+@Put("/changepassword/:Uname")
 @UsePipes(new ValidationPipe())
 changepassword( 
-  @Session() session,
+  @Session() session,@Param('Uname') Uname,
   @Body() passdto: CopsChangePasswordForm,
 ): any {
-return this.copsService.chnagepassword(passdto, session.uname );
+return this.copsService.chnagepassword(passdto, Uname );
 }
 
 
@@ -185,12 +188,12 @@ viewCaseByAccused(
 
     //To here-----------------------------
 
-    @Post("/createcase")
+    @Post("/createcase/:Uname")
     @UsePipes(new ValidationPipe())
-    async createCase(@Session() session,@Body() caseDto:CaseForm): Promise<any> {
-    const findcops = await this.copsService.viewProfile(session.uname);
+    async createCase(@Session() session,@Param('Uname') Uname,@Body() caseDto:CaseForm): Promise<any> {
+    const findcops = await this.copsService.viewProfile(Uname);
     caseDto.cops = findcops["CopsId"];
-    return this.caseService.insertCase(caseDto,session.uname);
+    return this.caseService.insertCase(caseDto,Uname);
     }
   
     @Put("/editcase")
@@ -241,34 +244,36 @@ return this.caseService.ViewAll();
     return this.vliService.searchByOwnerName(OwnerName);
     }
 
-    @Post("/report")
+    @Post("/report/:Uname")
     @UsePipes(new ValidationPipe())
-    report(
+    async report(
       @Session() session,
+      @Param('Uname') Uname,
     @Body() reportForm:ReportForm
-    ): any {
-      reportForm.Email=session.email;
-      reportForm.Uname=session.uname;
+    ): Promise<any> {
+      const findcops = await this.copsService.viewProfile(Uname);
+      reportForm.Email=findcops.Email;
+      reportForm.Uname=Uname;
       return this.reportService.reportProblem(reportForm);
     }
 
 
 
 
-@Get('/findsignupbycops')
-findsignupbycops(@Session() session): any {
-  return this.copsService.getSignUpByCopsID(session);
+@Get('/findsignupbycops/:Uname')
+findsignupbycops(@Session() session,@Param('Uname') Uname): any {
+  return this.copsService.getSignUpByCopsID(Uname);
 }
 
 
-@Get('/findloginbysignup')
-findloginbysignup(@Session() session): any {
-  return this.loginService.findloginbysignup(session);
+@Get('/findloginbysignup/:Uname')
+findloginbysignup(@Session() session,@Param('Uname') Uname): any {
+  return this.loginService.findloginbysignup(Uname);
 }
 
-@Get('/findlogoutbysignup')
-findlogoutbysignup(@Session() session): any {
-  return this.logoutService.findlogoutbysignup(session);
+@Get('/findlogoutbysignup/:Uname')
+findlogoutbysignup(@Session() session,@Param('Uname') Uname): any {
+  return this.logoutService.findlogoutbysignup(Uname);
 }
 @Get("/searchadminbyname/:name")
 searchadminbyname(@Param('name') name: string): any {

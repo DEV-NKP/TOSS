@@ -63,9 +63,10 @@ insertowner(@Body() mydto:OwnerForm): any {
 }
 
 
-      @Get("/login")
+      @Post("/login")
       async login(@Session() session, @Body() user)
        {
+       // console.log(user.Uname+" "+user.Password);
         const finduser= await this.tossService.login(user);
         
        
@@ -80,7 +81,7 @@ insertowner(@Body() mydto:OwnerForm): any {
           session.post = findpost["Post"];
 
           session.email = finduser["Email"];
-          
+          //console.log(session.uname+" "+session.post);
             if(findpost["Post"]==="Owner")
             { const findaccno= await this.ownerService.viewownerbyuname(finduser["Uname"]);
             session.accno = findaccno["AccountNo"];
@@ -90,10 +91,10 @@ insertowner(@Body() mydto:OwnerForm): any {
             newlogin.Uname=finduser["Uname"];
          newlogin.signup=findpost;
             this.loginService.createlogIn(newlogin);
-          return {message:"success"};
+          return findpost;
         }
         else{
-          return {message:"invalid credentials"};
+          return "invalid credentials";
         }
       }
 
@@ -101,6 +102,7 @@ insertowner(@Body() mydto:OwnerForm): any {
 
       @Get("/logout")
       async logout(@Session() session): Promise<any> {
+
         const findpost= await this.signupService.searchSignUpByUname(session.uname);
 
         const newlogout= new LogoutForm();

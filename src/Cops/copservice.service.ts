@@ -205,8 +205,8 @@ deletecopsbyuname(Uname):any {
 
 
 
-    async getSignUpByCopsID(session):Promise<any> {
-    const findcops=await this.copsRepo.findOneBy({Uname:session.uname});
+    async getSignUpByCopsID(Uname):Promise<any> {
+    const findcops=await this.copsRepo.findOneBy({Uname:Uname});
 
     return this.copsRepo.findOne({
         relations: ["signup"],

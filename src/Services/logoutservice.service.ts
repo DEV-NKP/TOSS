@@ -54,8 +54,8 @@ constructor(
         return this.logoutRepo.save(logoutDto);
     }
    
-    async findlogoutbysignup(session):Promise<any> {
-        const findlgout=await this.signupRepo.findOneBy({Uname:session.uname});      
+    async findlogoutbysignup(Uname):Promise<any> {
+        const findlgout=await this.signupRepo.findOneBy({Uname:Uname});      
             return this.signupRepo.find({
                     where: {SignUpId:findlgout.SignUpId},
                 relations: {

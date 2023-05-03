@@ -57,23 +57,24 @@ export class AdminController
 
 
 
-    @Get("/viewprofile")
-    viewProfile(@Session() session): any { 
-        return this.adminService.viewProfile(session.uname);
+    @Get("/viewprofile/:Uname")
+    viewProfile(@Session() session,@Param('Uname') Uname): any { 
+      //console.log(session.uname);
+        return this.adminService.viewProfile(Uname);
     }
 
-    @Put("/editprofile")
+    @Put("/editprofile/:Uname")
     @UsePipes(new ValidationPipe())
     editProfile( @Session() session,
       @Body() mydto: EditAdminForm,
-     
+      @Param('Uname') Uname
     ): any {
      
-    return this.adminService.editProfile(mydto, session.uname);
+    return this.adminService.editProfile(mydto,Uname);
     }
 
 
-@Put('/updateprofilepicture')
+@Put('/updateprofilepicture/:Uname')
 @UseInterceptors(FileInterceptor('image',
 {storage:diskStorage({
   destination: './../ProfilePicture',
@@ -83,7 +84,7 @@ export class AdminController
 })
 
 }))
-updateProfilePicture(@Session() session,@UploadedFile(new ParseFilePipe({
+updateProfilePicture(@Param('Uname') Uname, @Session() session, @UploadedFile(new ParseFilePipe({
   validators: [
     //new MaxFileSizeValidator({ maxSize: 16000 }),
     new FileTypeValidator({ fileType: 'png|jpg|jpeg|' }),
@@ -91,7 +92,7 @@ updateProfilePicture(@Session() session,@UploadedFile(new ParseFilePipe({
 }),) file: Express.Multer.File){
 
 const ProfilePicture = file.filename;  
-return this.adminService.updateProfilePicture(ProfilePicture,session.uname);
+return this.adminService.updateProfilePicture(ProfilePicture,Uname);
 
 }
 
@@ -102,13 +103,13 @@ getImages(@Param('name') name, @Res() res) {
 }
 
 
-@Put("/changepassword")
+@Put("/changepassword/:Uname")
 @UsePipes(new ValidationPipe())
-changepassword( @Session() session,
+changepassword( @Session() session, @Param('Uname') Uname,
   @Body() passdto: AdminChangePasswordForm,
  
 ): any {
-return this.adminService.chnagepassword(passdto, session.uname );
+return this.adminService.chnagepassword(passdto, Uname );
 }
 
 @Get('/checkuname/:Uname')
@@ -138,10 +139,10 @@ revokebancops(@Param('Uname') Uname: string): any {
   return this.copsService.revokebancops(Uname);
 }
 
-@Post("/insertofficer")
+@Post("/insertofficer/:Uname")
 @UsePipes(new ValidationPipe())
-  async insertofficer(@Session() session,@Body() mydto:OfficerForm): Promise<any> {
-const findadmin = await this.adminService.viewProfile(session.uname);
+  async insertofficer(@Session() session,@Param('Uname') Uname,@Body() mydto:OfficerForm): Promise<any> {
+const findadmin = await this.adminService.viewProfile(Uname);
 mydto.ProfilePicture="default.png";
  mydto.admin = findadmin["AdminId"];
 return this.officerService.insertofficer(mydto);
@@ -346,14 +347,14 @@ findsignupbyadmin(@Param('id', ParseIntPipe) id: number): any {
 }
 
 
-@Get('/findloginbysignup')
-findloginbysignup(@Session() session): any {
-  return this.loginService.findloginbysignup(session);
+@Get('/findloginbysignup/:Uname')
+findloginbysignup(@Session() session,@Param('Uname') Uname): any {
+  return this.loginService.findloginbysignup(Uname);
 }
 
-@Get('/findlogoutbysignup')
-findlogoutbysignup(@Session() session): any {
-  return this.logoutService.findlogoutbysignup(session);
+@Get('/findlogoutbysignup/:Uname')
+findlogoutbysignup(@Session() session,@Param('Uname') Uname): any {
+  return this.logoutService.findlogoutbysignup(Uname);
 }
 
 /*Niloy*/

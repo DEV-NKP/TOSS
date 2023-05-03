@@ -7,15 +7,22 @@ insertadmin
     "FirstName":"Dipanwita",
     "LastName":"Saha",
     "Email":"dipa@gmail.ddd",
-    "Password":"AN#ww1234",
+    "Password":"ABCDabcd1234#",
     "MobileNo":"0473380003",
     "ProfilePicture":" ",
     "Gender":"Female"  
 
+log in
+-------------
+
+"Uname":"dipa",
+    "Password":"ABCDabcd1234#" 
+
+    
 
 insertofficer
 ------------------
-
+ 
  "Uname":"kawa",
     "FirstName":"Kaushik",
     "LastName":"Biswas",
@@ -25,15 +32,13 @@ insertofficer
     "ProfilePicture":" ",
     "Gender":"Male",
     "Designation":"Cashier",
-    "EmployeeId":"2345",
-    "AccountNo":"ab12",
-    "Status":"ACTIVE"
+    "EmployeeId":"E-987654"
 
 insertcops
 -------------
-"Uname":"dipa",
-    "FirstName":"dipa",
-    "LastName":"gg",
+  "Uname":"adi",
+    "FirstName":"Adiba",
+    "LastName":"Dash",
     "Email":"d@gmail.ddd",
     "Password":"AN#ww1234",
     "MobileNo":"018976537480",
@@ -41,10 +46,11 @@ insertcops
     "Gender":"Female",
     "RankCategory":"Heffad",
     "RankGroup":"Alpha",
-    "Station":"Dinajpur",
-    "PoliceId":"ab12",
+    "Station":"kkkjjknkj",
+    "PoliceId":"12-456789-2",
     "Country":"Bangladesh",
-    "Status":"ACTIVE"
+   "officer":5
+
 
 insertowner
 --------------
@@ -72,4 +78,27 @@ report
 insert vli
 -------------
 
+ "LicenseNo":"AD-2209-C",
+    "ChesisNo":"NNBVGFDHSYTENCZKL",
+    "EngineNo":"8998SJJ",
+    "Details":"Blue car",
+    "OwnerName":"Lara",
+    "OwnerNid":"0987654376898",
+   "officer":5
+
+
+insert case
+---------------
+"AccusedUname":"Maria",
+    "CopsUname":"adi",
+    "ViolationOf":"car crash",
+    "ViolationDetails":"",
+    "Section":"medium",
+    "SubSection":"",
+    "VLN":"LL-2219-C",
+    "PenaltyAmount":300,
+    "PenaltyDetails":"",
+    "City":"Dhaka",
+    "Street":"",
+    "ZIPCode":"1213"
 

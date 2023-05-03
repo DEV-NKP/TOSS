@@ -59,34 +59,34 @@ export class OfficerController
     ){}
 
 
-    @Get("/viewprofile")
+    @Get("/viewprofile/:Uname")
     viewProfile(     
-      @Session() session
+      @Session() session,@Param('Uname') Uname
     ): any { 
-        return this.officerService.ViewProfile(session.uname);
+        return this.officerService.ViewProfile(Uname);
         
     }
 
-    @Put("/editprofile")
+    @Put("/editprofile/:Uname")
     @UsePipes(new ValidationPipe())
     editProfile( 
-      @Session() session,
+      @Session() session,@Param('Uname') Uname,
       @Body() mydto: EditOfficerForm,
     ): any {
    
-    return this.officerService.editProfile(mydto,session.uname);
+    return this.officerService.editProfile(mydto,Uname);
     }
 
-    @Delete('/deleteprofile')
+    @Delete('/deleteprofile/:Uname')
     deleteProfile(
-      @Session() session
+      @Session() session,@Param('Uname') Uname
     ): any {
-      return this.officerService.deleteProfile(session.uname);
+      return this.officerService.deleteProfile(Uname);
     }
 
 
 
-    @Put('/updateprofilepicture')
+    @Put('/updateprofilepicture/:Uname')
     @UseInterceptors(FileInterceptor('image',
     {storage:diskStorage({
       destination: './../ProfilePicture',
@@ -96,7 +96,7 @@ export class OfficerController
     })
     
     }))
-    updateProfilePicture(@Session() session,@UploadedFile(new ParseFilePipe({
+    updateProfilePicture(@Session() session,@Param('Uname') Uname,@UploadedFile(new ParseFilePipe({
       validators: [
         //new MaxFileSizeValidator({ maxSize: 16000 }),
         new FileTypeValidator({ fileType: 'png|jpg|jpeg|' }),
@@ -104,18 +104,18 @@ export class OfficerController
     }),) file: Express.Multer.File){
     
      const ProfilePicture = file.filename;  
-    return this.officerService.updateProfilePicture(ProfilePicture,session.uname);
+    return this.officerService.updateProfilePicture(ProfilePicture,Uname);
     
     }
 
-@Put("/changepassword")
+@Put("/changepassword/:Uname")
 @UsePipes(new ValidationPipe())
 changepassword( 
-  @Session() session,
+  @Session() session,@Param('Uname') Uname,
   @Body() passdto: OfficerChangePasswordForm,
   r
 ): any {
-return this.officerService.chnagepassword(passdto, session.uname );
+return this.officerService.chnagepassword(passdto, Uname );
 }
 
 @Get('/checkuname/:Uname')
@@ -150,10 +150,10 @@ viewcopsbyuname(@Param('Uname') Uname: string): any {
   return this.copsService.viewcopsbyuname(Uname);
 }
 
-@Post("/insertcops")
+@Post("/insertcops/:Uname")
 @UsePipes(new ValidationPipe())
-  async insertcops(@Session() session,@Body() mydto:CopsForm): Promise<any> {
-  const findofficer = await this.officerService.ViewProfile(session.uname);
+  async insertcops(@Session() session,@Param('Uname') Uname,@Body() mydto:CopsForm): Promise<any> {
+  const findofficer = await this.officerService.ViewProfile(Uname);
   mydto.ProfilePicture="default.png";
    mydto.officer = findofficer["OfficerId"];
      return this.copsService.insertcops(mydto);
@@ -187,13 +187,13 @@ return this.copsService.deletecopsbyid(CopsId);
 }
 
 
-@Post("/insertvli")
+@Post("/insertvli/:Uname")
     @UsePipes(new ValidationPipe())
     async insertvli(
-      @Session() session,
+      @Session() session,@Param('Uname') Uname,
     @Body() vliDto:VLIForm
     ): Promise<any> {
-      const findofficer = await this.officerService.ViewProfile(session.uname);
+      const findofficer = await this.officerService.ViewProfile(Uname);
       vliDto.officer = findofficer["OfficerId"];
       return this.vliService.insertLicense(vliDto);
     }
@@ -279,32 +279,33 @@ viewcasebyuname(@Param('Uname') Uname: string): any {
   return this.caseService.viewcasebyuname(Uname);
 }
 
-@Post("/report")
+@Post("/report/:Uname")
     @UsePipes(new ValidationPipe())
-    report(
-      @Session() session,
+    async report(
+      @Session() session,@Param('Uname') Uname,
     @Body() reportForm:ReportForm
-    ): any {
-      reportForm.Email=session.email;
-      reportForm.Uname=session.uname;
+    ): Promise<any> {
+      const findofficer = await this.officerService.ViewProfile(Uname);
+      reportForm.Email=findofficer.Email;
+      reportForm.Uname=Uname;
       return this.reportService.reportProblem(reportForm);
     }
 
 
 
-@Get('/findsignupbyofficer')
-findsignupbyofficer(@Session() session): any {
-  return this.officerService.getSignUpByOfficerID(session);
+@Get('/findsignupbyofficer/:Uname')
+findsignupbyofficer(@Session() session,@Param('Uname') Uname): any {
+  return this.officerService.getSignUpByOfficerID(Uname);
 }
 
-@Get('/findloginbysignup')
-findloginbysignup(@Session() session): any {
-  return this.loginService.findloginbysignup(session);
+@Get('/findloginbysignup/:Uname')
+findloginbysignup(@Session() session,@Param('Uname') Uname): any {
+  return this.loginService.findloginbysignup(Uname);
 }
 
-@Get('/findlogoutbysignup')
-findlogoutbysignup(@Session() session): any {
-  return this.logoutService.findlogoutbysignup(session);
+@Get('/findlogoutbysignup/:Uname')
+findlogoutbysignup(@Session() session,@Param('Uname') Uname): any {
+  return this.logoutService.findlogoutbysignup(Uname);
 }
 
 

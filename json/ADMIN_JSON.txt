@@ -1,0 +1,250 @@
+->  /toss/insertadmin
+
+    "Uname":"Dipa",
+    "FirstName":"Dipanwita",
+    "LastName":"Saha",
+    "Email":"dipanwitasaha7009@gmail.com",
+    "Password":"ABab<20>",
+    "MobileNo":"01876546789",
+    "Gender":"Female" 
+
+->  /toss/insertadmin
+
+    "Uname":"Froza",
+    "FirstName":"Frozen",
+    "LastName":"Bella",
+    "Email":"frozenbella2070@gmail.com",
+    "Password":"ABab<20>",
+    "MobileNo":"01909546789",
+    "Gender":"Female"  
+
+    "Uname":"dipa1",
+    "FirstName":"Dipanwita",
+    "LastName":"Saha",
+    "Email":"dipanwitasaha@gmail.com",
+    "Password":"ABab<20>",
+    "MobileNo":"01876546789",
+    "Gender":"Female"   
+
+
+->  /toss/login
+
+    "Uname":"Dipa",
+    "Password":"ABab<20>" 
+
+->  /admin/viewprofile
+
+->  /admin/editprofile
+
+    "FirstName": "Dipanwita",
+    "LastName": "Saha Paul",
+    "MobileNo": "01006546789",
+    "Gender": "Female"
+
+->  /admin/updateprofilepicture
+
+body->form data->image
+
+->  /admin/changepassword
+
+    "OLDPassword": "ABab<20>",
+    "NEWPassword": "ADad<20>"
+
+->   /admin/checkuname/Dipa  
+
+->  /admin/insertofficer
+
+    "Uname":"niloy",
+    "FirstName":"Niloy Kanti",
+    "LastName":"Paul",
+    "Email":"paul@gmail.com",
+    "Password":"ASas<01>",
+    "MobileNo":"01890533890",
+    "Gender":"Male",
+    "Designation":"Cashier",
+    "EmployeeId":"E-007654"
+
+->  /admin/insertofficer
+
+    "Uname":"tithi",
+    "FirstName":"Bithika",
+    "LastName":"Paul",
+    "Email":"niloykantipaul.aiub@gmail.com",
+    "Password":"ASas<01>",
+    "MobileNo":"01890533890",
+    "Gender":"Female",
+    "Designation":"Manager",
+    "EmployeeId":"E-007654"
+
+->  /admin/editofficer/nil
+
+    "FirstName":"Niloy Kanti",
+    "LastName":"Paul",
+    "MobileNo":"01890533890",
+    "Gender":"Male",
+    "Designation":"Manager"
+
+->   /admin/viewofficerbyuname/nil
+
+->   /admin/deleteofficerbyuname/niha
+
+->   /admin/banofficer/nil
+
+->   /admin/revokebanofficer/nil
+
+->   /officer/insertcops
+
+    "Uname":"adi",
+    "FirstName":"Adiba",
+    "LastName":"Dash",
+    "Email":"niloykantipaul2021@gmail.com",
+    "Password":"AN#ww1234",
+    "MobileNo":"0189097480",
+    "Gender":"Female",
+    "RankCategory":"Heffad",
+    "RankGroup":"Alpha",
+    "Station":"Baridhara",
+    "PoliceId":"11-456789-2",
+    "Country":"Bangladesh"
+
+->   /officer/insertcops
+
+    "Uname":"Sami",
+    "FirstName":"Samim",
+    "LastName":"Hossain",
+    "Email":"niloykanti.paul2017@gmail.com",
+    "Password":"AN#ww1234",
+    "MobileNo":"0189097480",
+    "Gender":"Male",
+    "RankCategory":"Kotted",
+    "RankGroup":"Beta",
+    "Station":"Kuratoli",
+    "PoliceId":"11-456789-2",
+    "Country":"Bangladesh"
+
+->  /admin/viewcopsbyuname/adi
+
+->  /admin/deletecopsbyuname/Sami
+
+->  /admin/bancops/adi
+
+->  /admin/revokebancops/adi
+
+->  /toss/signup
+
+    "Uname":"kaushik",
+    "FirstName":"Kaushik",
+    "LastName":"Biswas",
+    "Email":"niloykantipaul@yahoo.com",
+    "Password":"AN#aa234",
+    "MobileNo":"018976537480",
+    "Gender":"Female",
+    "DLN":"AB9876543256M"
+
+->  /toss/signup
+
+    "Uname":"gigi",
+    "FirstName":"Gulabi",
+    "LastName":"Biswas",
+    "Email":"niloykantipaul@hotmail.com",
+    "Password":"AN#aa234",
+    "MobileNo":"018976537480",
+    "Gender":"Female",
+    "DLN":"AB9872233256M"
+
+->  /admin/viewownerbyuname/gigi
+
+->  /admin/deleteownerbyuname/gigi
+
+->  /admin/banowner/kaushik
+
+->  /admin/revokebanowner/kaushik
+
+->  /officer/report
+
+    "Details":"The car crashed with a bike. But the cops didn't write it down"
+
+->  /admin/viewreports
+
+->  /admin/viewreportbyid/1
+
+->  /admin/viewreportbyuname/nil
+
+->  /admin/solvereportbyid/1
+
+->  /admin/viewalladmin
+
+->  /admin/viewallbank
+
+->  /admin/viewallcase   
+
+->  /admin/viewalllogin
+
+->  /admin/viewallcops
+
+->  /admin/viewallowner
+
+->  /admin/viewallofficer
+
+->  /admin/viewalltransaction   
+
+->  /admin/viewallvli 
+
+->  /admin/viewallsignup
+
+->  /toss/logout
+
+->  /admin/viewalllogout
+
+->  /admin/deletecasebyid/3 
+
+->  /admin/deletecopsbyid/2
+
+->  /admin/deleteloginbyid/2
+
+->  /admin/deletelogoutbyid/:LogOutId
+
+->  /admin/deletelogoutbyid/1
+
+->  /admin/deleteofficerbyid/2
+
+->  /admin/deleteownerbyid/4
+
+->  /admin/deletereportbyid/1
+
+->  /admin/deletetransactionbyid/:TransactionId  
+
+->  /admin/deletevlibyid/1  
+
+->  /admin/findsignupbyadmin/1
+
+->  /admin/findloginbysignup
+
+->  /admin/findlogoutbysignup
+
+->  /officer/insertvli
+
+    "LicenseNo":"AD-2999-C",
+    "ChesisNo":"NNBVDPLJHSYTENCZK",
+    "EngineNo":"8998SJJ",
+    "Details":"Blue car",
+    "OwnerName":"kaushik",
+    "OwnerNid":"0987650046898"
+
+->  /officer/insertvli
+
+    "LicenseNo":"AD-1199-C",
+    "ChesisNo":"NNPLDPLJHSYTENCZK",
+    "EngineNo":"899ADKJ",
+    "Details":"Red MW car",
+    "OwnerName":"habibi",
+    "OwnerNid":"0987650046898"
+
+->  /owner/applyforvli
+
+    "LicenseNo":"AD-2999-C",
+    "ChesisNo":"NNBVDPLJHSYTENCZK",
+    "EngineNo":"8998SJJ"
+
+->  
+

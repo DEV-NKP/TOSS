@@ -197,8 +197,8 @@ revokebanowner(Uname):any {
     }
 
     
-    async getSignUpByOwnerID(session):Promise<any> {
-    const findowner=await this.ownerRepo.findOneBy({Uname:session.uname});
+    async getSignUpByOwnerID(Uname):Promise<any> {
+    const findowner=await this.ownerRepo.findOneBy({Uname:Uname});
 
     return this.ownerRepo.find({ 
             where: {OwnerId:findowner.OwnerId},

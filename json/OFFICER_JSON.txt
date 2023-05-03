@@ -1,0 +1,220 @@
+->  /admin/insertofficer
+
+    "Uname":"tithi",
+    "FirstName":"Bithika",
+    "LastName":"Paul",
+    "Email":"niloykantipaul.aiub@gmail.com",
+    "Password":"ASas<01>",
+    "MobileNo":"01890533890",
+    "Gender":"Female",
+    "Designation":"Manager",
+    "EmployeeId":"E-007654"
+
+->  /toss/forgotpassword
+
+   "Email":"dipanwitasaha7009@gmail.com"
+
+->  /toss/changeforgotpassword
+
+    "OTP":"057399",
+   "Password":"ADad<20>"
+
+->  /toss/login     
+
+    "Uname":"tithi",
+    "Password":"ASaa<01>" 
+
+->  /officer/viewprofile
+
+->  /officer/editprofile
+
+    "FirstName": "Tithika",
+    "LastName": "Biswas",
+    "MobileNo": "01853380090",
+    "Gender": "Female",
+    "Designation": "Officer"
+
+->  /officer/deleteprofile
+
+->  /officer/updateprofilepicture 
+
+->  /officer/changepassword    
+
+    "OLDPassword": "ASas<01>",
+    "NEWPassword": "ASaa<01>"
+
+->  /officer/checkuname/tithi
+
+->  /officer/viewallcops
+
+->  /officer/viewallowner
+
+->  /officer/viewallofficer
+
+->  /officer/viewownerbyuname/kaushik
+
+->  /offiser/viewofficerbyuname/nil
+
+->  /officer/viewcopsbyuname/Sami
+
+->   /officer/insertcops
+
+    "Uname":"adi",
+    "FirstName":"Adiba",
+    "LastName":"Dash",
+    "Email":"niloykantipaul2021@gmail.com",
+    "Password":"AN#ww1234",
+    "MobileNo":"0189097480",
+    "Gender":"Female",
+    "RankCategory":"Heffad",
+    "RankGroup":"Alpha",
+    "Station":"Baridhara",
+    "PoliceId":"11-456789-2",
+    "Country":"Bangladesh"
+
+  "Uname":"fahim",
+    "FirstName":"Fahim",
+    "LastName":"Hossain",
+    "Email":"fahim@gmail.com",
+    "Password":"AN#ww1234",
+    "MobileNo":"0189097480",
+    "Gender":"Male",
+    "Station":"Baridhara",
+    "PoliceId":"11-456555-2",
+    "Country":"Bangladesh"
+
+->   /officer/insertcops
+
+    "Uname":"Sami",
+    "FirstName":"Samim",
+    "LastName":"Hossain",
+    "Email":"niloykanti.paul2017@gmail.com",
+    "Password":"AN#ww1234",
+    "MobileNo":"0189097480",
+    "Gender":"Male",
+    "RankCategory":"Kotted",
+    "RankGroup":"Beta",
+    "Station":"Kuratoli",
+    "PoliceId":"11-456789-2",
+    "Country":"Bangladesh"
+
+->  /officer/editcops/Sami
+
+    "FirstName":"Sabbir",
+    "LastName":"Hossain",
+    "MobileNo":"0189097480",
+    "Gender":"Male",
+    "RankCategory":"Latte",
+    "RankGroup":"Gred",
+    "Station":"Hatirjhil",
+    "Country":"Bangladesh"
+
+->  /officer/deletecopsbyuname/Sami
+
+->  /officer/bancops/adi
+
+->  /officer/revokebancops/adi
+
+->  /officer/deletecopsbyid/1
+
+->  /officer/insertvli
+
+    "LicenseNo":"AD-2999-C",
+    "ChesisNo":"NNBVDPLJHSYTENCZK",
+    "EngineNo":"8998SJJ",
+    "Details":"Blue car",
+    "OwnerName":"kaushik",
+    "OwnerNid":"0987650046898"
+
+->  /officer/insertvli
+
+    "LicenseNo":"AD-1199-C",
+    "ChesisNo":"NNPLDPLJHSYTENCZK",
+    "EngineNo":"899ADKJ",
+    "Details":"Red MW car",
+    "OwnerName":"habibi",
+    "OwnerNid":"0987650046898"
+
+->  /officer/editvli/3
+
+    "Details":"Red Audi car",
+    "OwnerNid":"09098750046898"
+
+->  /officer/deletevli/3
+
+->  /officer/viewallvli
+
+->  /officer/searchvlibylicense/AD-2999-C
+
+->  /officer/searchvlibyowner/kaushik
+
+->  /officer/searchvlibyid/5   
+
+->  /owner/applyforvli
+
+    "LicenseNo":"AD-2999-C",
+    "ChesisNo":"NNBVDPLJHSYTENCZK",
+    "EngineNo":"8998SJJ"
+
+->  /cops/createcase
+
+   "AccusedUname":"kaushik",
+    "CopsUname":"Sami",
+    "ViolationOf":"car crash",
+    "ViolationDetails":"",
+    "Section":"medium",
+    "SubSection":"",
+    "VLN":"AD-2999-C",
+    "PenaltyAmount":300,
+    "PenaltyDetails":"",
+    "City":"Dhaka",
+    "Street":"",
+    "ZIPCode":"1213"
+
+->  /cops/createcase
+
+   "AccusedUname":"habibi",
+    "CopsUname":"Sami",
+    "ViolationOf":"car crash",
+    "ViolationDetails":"",
+    "Section":"medium",
+    "SubSection":"",
+    "VLN":"AD-1199-C",
+    "PenaltyAmount":220,
+    "PenaltyDetails":"",
+    "City":"Dhaka",
+    "Street":"",
+    "ZIPCode":"1213"
+
+->  /owner/payment  
+
+->  /officer/viewalltransaction  
+
+->  /officer/searchtransactionbyaccount/ylDM-guBk-qg0l-Ez2U-HRL6  
+
+->  /officer/viewtransaction 
+
+->  /officer/viewtransactionbysender/ylDM-guBk-qg0l-Ez2U-HRL6
+
+->  /officer/viewtransactionbyreceiver/ylDM-guBk-qg0l-Ez2U-HRL6
+
+->  /officer/withdraw 
+
+->  /officer/getofficeraccount
+
+->  /officer/viewallcase   
+
+->  /officer/viewcasebyuname/kaushik  
+
+->  /officer/report
+
+    "Details":"The car crashed with a bike. But the cops didn't write it down"
+
+->  /officer/findsignupbyofficer
+
+->  /officer/findloginbysignup
+
+->  /officer/findlogoutbysignup
+
+
+
