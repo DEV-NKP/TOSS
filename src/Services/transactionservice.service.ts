@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { ILike, Repository } from 'typeorm';
 import { OwnerForm } from "../Owner/owner.dto";
 import { TransactionEntity } from "../Entity/transaction.entity";
 import { OfficerForm } from "../Officer/officer.dto";
@@ -21,7 +21,14 @@ constructor(
         return this.transRepo.find();
     
     }
-
+    searchalltransaction(search):any { 
+        return this.transRepo.find({
+            where: [ {ReceiverAc: ILike(`%${search}%`)},
+               {SenderAc: ILike(`%${search}%`)},
+              {Time: ILike(`%${search}%`)},
+               
+            ],
+          });}
     ////////////////////////////////////////////
 
     insertTransaction(transDto:TransactionForm):any {

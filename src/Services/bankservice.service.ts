@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { TransactionForm } from "../DTO/transaction.dto";
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { ILike, Repository } from 'typeorm';
 import { OwnerForm } from "../Owner/owner.dto";
 import { BankEntity } from "../Entity/bank.entity";
 import { OfficerForm } from "../Officer/officer.dto";
@@ -31,7 +31,14 @@ constructor(
         return this.bankRepo.find();
     
     }
-
+    searchallbank(search):any { 
+        return this.bankRepo.find({
+            where: [
+              {AccountNo: ILike(`%${search}%`)},
+            ],
+          });
+    
+    }
     ////////////////////////////////////////////
 
     insertAccount(bankDto:BankForm):any {
@@ -62,10 +69,13 @@ constructor(
     }
 
     async withdrawbyofficer(withdrawBankForm:WithdrawBankForm):Promise<any> {
-        const AccountNo="9999-9999-9999-9999-9999";
+         if(withdrawBankForm.Amount > 0)
+         { const AccountNo="9999-9999-9999-9999-9999";
         const getaccount= await this.bankRepo.findOneBy({ AccountNo:AccountNo });
         if(getaccount!=null){
-         if(getaccount["Amount"] >= withdrawBankForm.Amount)
+        
+         
+            if(getaccount["Amount"] >= withdrawBankForm.Amount)
          {
         getaccount["Amount"] = (getaccount["Amount"]-withdrawBankForm.Amount);
 
@@ -85,13 +95,19 @@ constructor(
 
         // return withdrawBankForm.Amount;
 
-       
+  
     }
     return "INVALID"
+
+}
+    else{
+return "INVALID AMOUNT"
+        
+    }
     }
 
     async withdrawbyowner(withdrawBankForm:WithdrawBankForm, AccountNo):Promise<any> {
-
+        if(withdrawBankForm.Amount > 0){
         const getaccount= await this.bankRepo.findOneBy({ AccountNo:AccountNo });
         if(getaccount!=null){
             if(getaccount["Amount"] >= withdrawBankForm.Amount)
@@ -115,10 +131,15 @@ constructor(
     }}
 
 return "INVALID"
+}
+else{
+return "INVALID AMOUNT"
+    
+}
     } 
 
     async depositbyowner(depositBankForm:WithdrawBankForm, AccountNo):Promise<any> {
-
+        if(depositBankForm.Amount > 0){
         const getaccount= await this.bankRepo.findOneBy({ AccountNo:AccountNo });
 
         if(getaccount!=null){
@@ -144,6 +165,12 @@ return "INVALID"
     }
 }
 return "INVALID";
+        
+    }
+    else{
+return "INVALID AMOUNT"
+        
+    }
     } 
 
        async paymentbyowner(paymentBankForm:PaymentBankForm):Promise<any> {

@@ -22,3 +22,16 @@ export class ChangeForgotPasswordForm {
     Password:string;
 
 }
+export class Contact {
+    @IsNotEmpty()
+    Name:string;
+    
+    @IsEmail()
+    Email:string;
+   
+    @IsNotEmpty()
+    Subject:string;
+
+    @IsNotEmpty()
+    Message:string;
+}

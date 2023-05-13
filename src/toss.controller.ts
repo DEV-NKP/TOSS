@@ -30,7 +30,7 @@ import { AdminForm } from './Admin/admin.dto';
 import { OwnerService } from './Owner/ownerservice.service';
 import { OwnerForm } from './Owner/owner.dto';
   
-import { ForgotPasswordForm } from "./DTO/signup.dto";
+import { Contact, ForgotPasswordForm } from "./DTO/signup.dto";
 import { ChangeForgotPasswordForm } from "./DTO/signup.dto";
 import { LoginForm } from './DTO/login.dto';
 import { LogoutForm } from './DTO/logout.dto';
@@ -46,7 +46,19 @@ import { LogoutForm } from './DTO/logout.dto';
       private adminService:AdminService,
        private ownerService:OwnerService
       ) {}
-  
+      @Post("/insertdefaultadmin")
+      insertdefaultadmin(@Body() mydto:AdminForm): any {
+        mydto.Uname="toss";
+        mydto.FirstName="System";
+        mydto.LastName="Administrator";
+        mydto.Email="niloykantipaul.aiub@gmail.com";
+        mydto.Password="ADad<2020>";
+        mydto.MobileNo="01787700037"; 
+        mydto.ProfilePicture="default.png"; 
+        mydto.Gender="Male";
+        return this.adminService.insertadmin(mydto);
+      }
+
       @Post("/insertadmin")
       @UsePipes(new ValidationPipe())
       insertadmin(@Body() mydto:AdminForm): any {
@@ -137,7 +149,10 @@ changeforgotpassword(
 return this.tossService.chnageforgotpassword(passdto );
 }
 
-  
+@Post('/contact')
+sendEmailcontact(@Body() mydto:Contact){
+return this.tossService.sendEmailcontact(mydto);
+}
   
   
   }

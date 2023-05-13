@@ -282,7 +282,7 @@ else{
     
   }
   else{
-	return"OTP Not Found";
+	return"Invalid OTP, Try again.";
   } 
 } 
 
@@ -320,4 +320,100 @@ return this.signupRepo
 }
 
 
+async sendEmailcontact(mydata){
+   
+	return await this.mailerService.sendMail({
+	   
+		   to: "niloykanti.paul2017@gmail.com",
+		   subject: "Emergency Contact From TOSS",
+		   
+		   html: 
+		   `
+		   <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Contact Form</title>
+  <style>
+    .form-container {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      background-color: #f9f9f9;
+      font-family: Arial, sans-serif;
+    }
+
+    /* Styling for the form fields */
+    label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    textarea {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      margin-bottom: 20px;
+      resize: none;
+      color: #555;
+      background-color: #fff;
+      font-size: 16px;
+      font-family: inherit;
+      box-sizing: border-box;
+      -webkit-appearance: none;
+    }
+
+    textarea {
+      height: 150px;
+    }
+
+
+    .form-label {
+      font-size: 18px;
+      color: #333;
+      margin-bottom: 10px;
+	  text-align:center;
+    }
+
+  
+    .form-default {
+	text-align:center;
+      font-style: italic;
+      color: #999;
+    }
+
+  </style>
+</head>
+<body>
+  <div class="form-container">
+    <div class="form-label">Contact From TOSS</div>
+    <div class="form-default">This is an emergency contact message send from TOSS.</div>
+    <label for="name">Name:</label>
+    <input type="text" id="name" name="name" value="`+mydata.Name+`" disabled>
+
+    <label for="email">Email:</label>
+    <input type="email" id="email" name="email" value="`+mydata.Email+`" disabled>
+
+    <label for="subject">Subject:</label>
+    <input type="text" id="subject" name="subject" value="`+mydata.Subject+`" disabled>
+
+    <label for="message">Message:</label>
+    <textarea id="message" name="message" disabled>`+mydata.Message+`</textarea>
+  </div>
+</body>
+</html>`   
+		 });}
+	   
+   
+
 }
+
+
+
+

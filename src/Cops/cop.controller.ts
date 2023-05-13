@@ -127,17 +127,55 @@ return this.copsService.chnagepassword(passdto, Uname );
 viewallcops(): any {
 return this.copsService.ViewAll();
 }
-
+ //do this for searching 
+ @Get("/searchallcops/:search")
+ searchallcops(@Param("search") search:String): any {
+   if(search==="*")
+   {
+     return this.copsService.ViewAll();
+   }
+   else{
+     return this.copsService.searchallcops(search);
+   }
+ 
+ }
+  //do this for searching 
 @Get("/viewallowner")
 viewallowner(): any {
 return this.ownerService.ViewAll();
 }
+ //do this for searching 
+ @Get("/searchallowner/:search")
+ searchallowner(@Param("search") search:String): any {
+   if(search==="*")
+   {
+     return this.ownerService.ViewAll();
+   }
+   else{
+     return this.ownerService.searchallowner(search);
+   }
+ 
+ }
+  //do this for searching 
+
 
 @Get("/viewallofficer")
 viewallofficer(): any {
 return this.officerService.ViewAll();
 }
-
+ //do this for searching 
+ @Get("/searchallofficer/:search")
+ searchallofficer(@Param("search") search:String): any {
+   if(search==="*")
+   {
+     return this.officerService.ViewAll();
+   }
+   else{
+     return this.officerService.searchallofficer(search);
+   }
+ 
+ }
+  //do this for searching 
 @Get('/viewownerbyuname/:Uname')
 viewownerbyuname(@Param('Uname') Uname: string): any {
     return this.ownerService.viewownerbyuname(Uname);
@@ -196,13 +234,26 @@ viewCaseByAccused(
     return this.caseService.insertCase(caseDto,Uname);
     }
   
-    @Put("/editcase")
-    @UsePipes(new ValidationPipe())
+    // @Put("/editcase")
+    // @UsePipes(new ValidationPipe())
+    // editCase( 
+    //   @Body() editcaseDto: EditCaseForm,
+    // ): any {
+    // return this.caseService.editCase(editcaseDto, editcaseDto.CaseId);
+    // }
+
+    @Put("/editcase/:CaseId")
+    // @UsePipes(new ValidationPipe())
     editCase( 
       @Body() editcaseDto: EditCaseForm,
+      @Param("CaseId") CaseId:number
     ): any {
-    return this.caseService.editCase(editcaseDto, editcaseDto.CaseId);
+    return this.caseService.editCase(editcaseDto,CaseId);
     }
+    
+
+
+
 
     @Get("/viewcasebyid/:CaseId")
    viewCaseById(
@@ -215,7 +266,19 @@ viewCaseByAccused(
 viewallcase(): any {
 return this.caseService.ViewAll();
 }
-
+ //do this for searching 
+ @Get("/searchallcase/:search")
+ searchallcase(@Param("search") search:String): any {
+   if(search==="*")
+   {
+     return this.caseService.ViewAll();
+   }
+   else{
+     return this.caseService.searchallcase(search);
+   }
+ 
+ }
+  //do this for searching 
 @Delete("/deletecasebyid/:CaseId")
     deleteCasebyid( 
        @Param("CaseId", ParseIntPipe) CaseId:number
@@ -228,7 +291,19 @@ return this.caseService.ViewAll();
       viewallvli(): any {
       return this.vliService.ViewAll();
       }
-
+ //do this for searching 
+ @Get("/searchallvli/:search")
+ searchallvli(@Param("search") search:String): any {
+   if(search==="*")
+   {
+     return this.vliService.ViewAll();
+   }
+   else{
+     return this.vliService.searchallvli(search);
+   }
+ 
+ }
+  //do this for searching 
       
     @Get("/viewvlibyid/:VliId")
     viewVliById(
@@ -295,7 +370,19 @@ searchownerbyname(@Param('name') name: string): any {
 searchuserbyname(@Param('name') name: string): any {
   return this.tossService.searchuserbyname(name);
 }
+
+@Get('/viewloginbyloginid/:LogInId')
+viewloginbyloginid(@Param('LogInId') LogInId: number): any {
+  return this.loginService.searchAccount(LogInId);
 }
+@Get('/viewlogoutbylogoutid/:LogOutId')
+viewlogoutbylogoutid(@Param('LogOutId') LogOutId: number): any {
+  return this.logoutService.searchAccount(LogOutId);
+}
+
+}
+
+
 
 
 

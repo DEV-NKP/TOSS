@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { ILike, Repository } from 'typeorm';
 import { SignUpEntity } from "../Entity/signup.entity";
 import { SignupForm } from "../DTO/signup.dto";
 
@@ -16,7 +16,16 @@ constructor(
         return this.signupRepo.find();
     
     }
-
+    searchallsignup(search):any { 
+        return this.signupRepo.find({
+            where: [ {Uname: ILike(`%${search}%`)},
+               {Email: ILike(`%${search}%`)},
+              {Time: ILike(`%${search}%`)},
+               {IP: ILike(`%${search}%`)},
+               {Post: ILike(`%${search}%`)},
+              
+            ],
+          });}
     ////////////////////////////////////////////
     insertSignUp(signDto:SignupForm):any {
 

@@ -31,7 +31,22 @@ ViewAll():any
 return this.officerRepo.find();
 
 }
+searchallofficer(search):any { 
+  return this.officerRepo.find({
+      where: [ {EmployeeId: ILike(`%${search}%`)},
+         {Designation: ILike(`%${search}%`)},
+        {Status: ILike(`%${search}%`)},
+         {AccountNo: ILike(`%${search}%`)},
+         {Gender: ILike(`%${search}%`)},
+         {MobileNo: ILike(`%${search}%`)},
+         {Email: ILike(`%${search}%`)},
+         {LastName: ILike(`%${search}%`)},
+         {FirstName: ILike(`%${search}%`)},
+         {Uname: ILike(`%${search}%`)},
+      ],
+    });}
 
+    
     async insertofficer(officerDto:OfficerForm):Promise<any> {
     const getuname=await this.signupRepo.findOneBy({Uname:officerDto.Uname});
     const getemail=await this.signupRepo.findOneBy({Email:officerDto.Email});

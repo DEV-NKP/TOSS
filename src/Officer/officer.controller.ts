@@ -127,16 +127,54 @@ checkuname(@Param('Uname') Uname: string): any {
 viewallcops(): any {
 return this.copsService.ViewAll();
 }
-
+ //do this for searching 
+ @Get("/searchallcops/:search")
+ searchallcops(@Param("search") search:String): any {
+   if(search==="*")
+   {
+     return this.copsService.ViewAll();
+   }
+   else{
+     return this.copsService.searchallcops(search);
+   }
+ 
+ }
+  //do this for searching 
 @Get("/viewallowner")
 viewallowner(): any {
 return this.ownerService.ViewAll();
 }
-
+ //do this for searching 
+ @Get("/searchallowner/:search")
+ searchallowner(@Param("search") search:String): any {
+   if(search==="*")
+   {
+     return this.ownerService.ViewAll();
+   }
+   else{
+     return this.ownerService.searchallowner(search);
+   }
+ 
+ }
+  //do this for searching 
 @Get("/viewallofficer")
 viewallofficer(): any {
 return this.officerService.ViewAll();
 }
+ //do this for searching 
+ @Get("/searchallofficer/:search")
+ searchallofficer(@Param("search") search:String): any {
+   if(search==="*")
+   {
+     return this.officerService.ViewAll();
+   }
+   else{
+     return this.officerService.searchallofficer(search);
+   }
+ 
+ }
+  //do this for searching 
+
 @Get('/viewownerbyuname/:Uname')
 viewownerbyuname(@Param('Uname') Uname: string): any {
     return this.ownerService.viewownerbyuname(Uname);
@@ -217,7 +255,19 @@ return this.copsService.deletecopsbyid(CopsId);
       viewallvli(): any {
       return this.vliService.ViewAll();
       }
-
+ //do this for searching 
+ @Get("/searchallvli/:search")
+ searchallvli(@Param("search") search:String): any {
+   if(search==="*")
+   {
+     return this.vliService.ViewAll();
+   }
+   else{
+     return this.vliService.searchallvli(search);
+   }
+ 
+ }
+  //do this for searching 
 
     @Get('/searchvlibylicense/:LicenseNo')
     searchvlibylicense(@Param('LicenseNo') LicenseNo: string): any {
@@ -238,6 +288,21 @@ return this.copsService.deletecopsbyid(CopsId);
     viewalltransaction(): any {
     return this.transactionService.ViewAll();
     }
+ //do this for searching 
+ @Get("/searchalltransaction/:search")
+ searchalltransaction(@Param("search") search:String): any {
+   if(search==="*")
+   {
+     return this.transactionService.ViewAll();
+   }
+   else{
+     return this.transactionService.searchalltransaction(search);
+   }
+ 
+ }
+  //do this for searching
+
+
 
     @Get("/searchtransactionbyaccount/:account")
     searchtransactionbyaccount(@Param('account') account: string): any {
@@ -274,6 +339,20 @@ return this.bankService.getofficeraccount();
 viewallcase(): any {
 return this.caseService.ViewAll();
 }
+//do this for searching 
+@Get("/searchallcase/:search")
+searchallcase(@Param("search") search:String): any {
+  if(search==="*")
+  {
+    return this.caseService.ViewAll();
+  }
+  else{
+    return this.caseService.searchallcase(search);
+  }
+
+}
+ //do this for searching 
+
 @Get('/viewcasebyuname/:Uname')
 viewcasebyuname(@Param('Uname') Uname: string): any {
   return this.caseService.viewcasebyuname(Uname);
@@ -348,4 +427,22 @@ viewcasebyid(@Param('CaseId') CaseId: number): any {
 getImages(@Param('name') name, @Res() res) {
   res.sendFile(name,{ root: './../ProfilePicture' })
 }
+
+@Get('/viewloginbyloginid/:LogInId')
+viewloginbyloginid(@Param('LogInId') LogInId: number): any {
+  return this.loginService.searchAccount(LogInId);
 }
+
+
+@Get('/viewlogoutbylogoutid/:LogOutId')
+viewlogoutbylogoutid(@Param('LogOutId') LogOutId: number): any {
+  return this.logoutService.searchAccount(LogOutId);
+}
+
+}
+
+
+
+
+
+

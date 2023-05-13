@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { TransactionForm } from "../DTO/transaction.dto";
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { ILike, Repository } from 'typeorm';
 import { OwnerForm } from "../Owner/owner.dto";
 import { ReportEntity } from "../Entity/report.entity";
 import { OfficerForm } from "../Officer/officer.dto";
@@ -21,7 +21,17 @@ constructor(
         return this.reportRepo.find();
     
     }
-
+    viewreports(search):any { 
+        return this.reportRepo.find({
+            where: [
+              {Uname: ILike(`%${search}%`)},
+              {Email: ILike(`%${search}%`)},
+              {Status: ILike(`%${search}%`)},
+               {Time: ILike(`%${search}%`)},
+            ],
+          });
+    
+    }
     ////////////////////////////////////////////
     insertReport(reportDto:ReportForm):any {
 

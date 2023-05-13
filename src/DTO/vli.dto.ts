@@ -14,7 +14,6 @@ export class VLIForm {
     ChesisNo: string;
 
     @IsNotEmpty({message: "Please enter Engine Number"})
-    @Length(5,20,{message: 'Length must be between 5 and 20 characters'})
     @Matches(/^[A-Za-z0-9]+$/, {message: 'Please provide a valid vehicle engine number with uppercase characters and integers'})
     EngineNo: string;
 
@@ -22,13 +21,11 @@ export class VLIForm {
     Details: string;
 
     @IsNotEmpty({message: "Please enter Owner Name"})
-    @Length(3,50,{message: 'Length must be between 3 and 50 characters'})
     @Matches(/^[A-Za-z]+$/, {message: 'Please provide a valid vehicle owner name'})
     OwnerName: string;
 
     @IsNotEmpty({message: "Please enter Owner NID"})
-    @Length(13)
-    @Matches(/^[0-9]+$/, {message: 'Please provide a valid NID of 13 integers'})
+    @Matches(/^[0-9]{13}$/, {message: 'Please provide a valid NID of 13 integers'})
     OwnerNid: string;
 
    officer:OfficerEntity;
@@ -62,8 +59,7 @@ export class EditVLIForm {
 
 
     @IsNotEmpty({message: "Please enter Owner NID"})
-    @Length(13)
-    @Matches(/^[0-9]+$/, {message: 'Please provide a valid NID of 13 characters'})
+    @Matches(/^[0-9]{13}$/, {message: 'Please provide a valid NID of 13 characters'})
     OwnerNid: string;
 
 

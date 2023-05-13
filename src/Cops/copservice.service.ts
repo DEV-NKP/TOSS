@@ -41,6 +41,23 @@ ViewAll():any {
     return this.copsRepo.find();
 
 }
+searchallcops(search):any { 
+  return this.copsRepo.find({
+      where: [
+        {Status: ILike(`%${search}%`)},
+        {Country: ILike(`%${search}%`)},
+        {PoliceId: ILike(`%${search}%`)},
+         {Station: ILike(`%${search}%`)},
+         {RankGroup: ILike(`%${search}%`)},
+         {RankCategory: ILike(`%${search}%`)},
+         {Gender: ILike(`%${search}%`)},
+         {MobileNo: ILike(`%${search}%`)},
+         {Email: ILike(`%${search}%`)},
+         {LastName: ILike(`%${search}%`)},
+         {FirstName: ILike(`%${search}%`)},
+         {Uname: ILike(`%${search}%`)},
+      ],
+    });}
 
 
     async insertcops(copsDto:CopsForm):Promise<any> {

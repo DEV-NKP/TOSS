@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { TransactionForm } from "../DTO/transaction.dto";
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { ILike, Repository } from 'typeorm';
 import { OwnerForm } from "../Owner/owner.dto";
 import { LogOutEntity } from "../Entity/logout.entity";
 import { OfficerForm } from "../Officer/officer.dto";
@@ -25,7 +25,16 @@ constructor(
         return this.logoutRepo.find();
     
     }
-
+    searchalllogout(search):any { 
+        return this.logoutRepo.find({
+            where: [
+              {Uname: ILike(`%${search}%`)},
+              {Time: ILike(`%${search}%`)},
+              {IP: ILike(`%${search}%`)},
+            ],
+          });
+    
+    }
     ////////////////////////////////////////////
 
     insertAccount(logoutDto:LogoutForm):any {

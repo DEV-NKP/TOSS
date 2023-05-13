@@ -68,11 +68,27 @@ export class AdminService {
 
             
             }
+
+            
     ViewAll():any
       {
         return this.adminRepo.find();
 
       }
+
+      searchalladmin(search):any { 
+        return this.adminRepo.find({
+            where: [
+              {Uname: ILike(`%${search}%`)},
+              {Email: ILike(`%${search}%`)},
+              {FirstName: ILike(`%${search}%`)},
+               {LastName: ILike(`%${search}%`)},
+               {MobileNo: ILike(`%${search}%`)},
+               {Gender: ILike(`%${search}%`)},
+            ],
+          });
+    
+    }
 
     viewProfile(uname):any { 
         return this.adminRepo.findOneBy({Uname:uname});

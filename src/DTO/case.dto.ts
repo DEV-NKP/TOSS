@@ -12,31 +12,34 @@ export class CaseForm {
     CopsUname: string;
   
     @IsNotEmpty({message: "Please enter Case Category"})
-    @Length(2,30,{message: "Length must be at least 2 characters and less than 30"})
+    @Length(3,200,{message: "Length must be at least 2 characters and less than 200"})
     ViolationOf: string;
+
+     @IsNotEmpty({message: "Please enter Penalty Amount"})
+    PenaltyAmount: number;
   
 
     ViolationDetails: string;
   
     @IsNotEmpty({message: "Please enter Case Section"})
-    @Length(1,10,{message: "Length must be at least 1 characters and less than 10"})
+    @Length(3,200,{message: "Length must be at least 3 characters and less than 200"})
     Section: string;
-  
+
     SubSection: string;
+
   
     @IsNotEmpty({message: "Please enter Vehicle License Number"}) 
     @Matches(/^[A-Z]{2}-\d{4}-[A-Z]{1,2}$/, {message: 'Please provide a valid license plate number in the format XX-0000-X or XX-0000-XX',})
     VLN: string;
   
-    @IsNotEmpty({message: "Please enter Penalty Amount"})
-    @IsInt({message: "Penalty Amount must be an integer"})
-    PenaltyAmount: number;
+   
   
     @IsNotEmpty({message: "Please enter City Name"})
-    @Length(3, 50,{message: "Length must be at least 2 characters and less than 50"})
+    @Length(3, 200,{message: "Length must be at least 2 characters and less than 200"})
     City: string;
   
- 
+     PenaltyDetails: string;
+
     Street: string;
   
     @IsNotEmpty({message: "Please enter Zip Code"})
@@ -50,7 +53,6 @@ export class CaseForm {
     CaseStatus: string;
   
     
-    PenaltyDetails: string;
 
     cops:CopsEntity;
 
@@ -61,14 +63,14 @@ export class EditCaseForm {
     CaseId: number;
   
     @IsNotEmpty({message: "Please enter Case Category"})
-    @Length(2,30,{message: "Length must be at least 2 characters and less than 30"})
+    @Length(2,200,{message: "Length must be at least 2 characters and less than 200"})
     ViolationOf: string;
   
 
     ViolationDetails: string;
   
     @IsNotEmpty({message: "Please enter Case Section"})
-    @Length(1,10,{message: "Length must be at least 1 characters and less than 10"})
+    @Length(1,200,{message: "Length must be at least 1 characters and less than 200"})
     Section: string;
   
     SubSection: string;
@@ -79,7 +81,7 @@ export class EditCaseForm {
     PenaltyAmount: number;
   
     @IsNotEmpty({message: "Please enter City Name"})
-    @Length(3, 50,{message: "Length must be at least 2 characters and less than 50"})
+    @Length(3, 200,{message: "Length must be at least 2 characters and less than 200"})
     City: string;
   
  

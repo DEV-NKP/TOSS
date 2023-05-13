@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { TransactionForm } from "../DTO/transaction.dto";
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { ILike, Repository } from 'typeorm';
 import { OwnerForm } from "../Owner/owner.dto";
 import { CaseEntity } from "../Entity/case.entity";
 import { OfficerForm } from "../Officer/officer.dto";
@@ -23,6 +23,24 @@ constructor(
 
     ViewAll():any { 
         return this.caseRepo.find();
+    
+    }
+
+    searchallcase(search):any { 
+        return this.caseRepo.find({
+            where: [
+              {CaseStatus: ILike(`%${search}%`)},
+              {Time: ILike(`%${search}%`)},
+              {ZIPCode: ILike(`%${search}%`)},
+               {Street: ILike(`%${search}%`)},
+               {City: ILike(`%${search}%`)},
+               {VLN: ILike(`%${search}%`)},
+               {Section: ILike(`%${search}%`)},
+               {ViolationOf: ILike(`%${search}%`)},
+               {CopsUname: ILike(`%${search}%`)},
+               {AccusedUname: ILike(`%${search}%`)},
+            ],
+          });
     
     }
 
@@ -150,4 +168,22 @@ AccusedUname: Uname ,
             } 
 
  
+
+            // editCase(editcaseDto:EditCaseForm,CaseId):any {
+
+            //     return this.caseRepo.update({CaseId:CaseId},
+            //         {ViolationOf:editcaseDto.ViolationOf,
+            //             ViolationDetails:editcaseDto.ViolationDetails,
+            //             Section:editcaseDto.Section,
+            //             SubSection:editcaseDto.SubSection,
+            //             PenaltyAmount:editcaseDto.PenaltyAmount,
+            //             City:editcaseDto.City,
+            //             Street:editcaseDto.Street,
+            //             ZIPCode:editcaseDto.ZIPCode,
+            //             PenaltyDetails:editcaseDto.PenaltyDetails
+            //             });
+            //        }
+        
+
+
 }

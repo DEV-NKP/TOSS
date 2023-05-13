@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { VLIForm, ApplyVLIForm, EditVLIForm } from '../DTO/vli.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { ILike, Repository } from 'typeorm';
 import { OwnerForm } from "../Owner/owner.dto";
 import { VLIEntity } from "../Entity/vli.entity";
 import { OfficerForm } from "../Officer/officer.dto";
@@ -26,7 +26,16 @@ private caseRepo: Repository<CaseEntity>,
         return this.vliRepo.find();
     
     }
-
+    searchallvli(search):any { 
+        return this.vliRepo.find({
+            where: [ {OwnerNid: ILike(`%${search}%`)},
+               {OwnerName: ILike(`%${search}%`)},
+              {EngineNo: ILike(`%${search}%`)},
+               {ChesisNo: ILike(`%${search}%`)},
+               {LicenseNo: ILike(`%${search}%`)},
+              
+            ],
+          });}
     ////////////////////////////////////////////
 
     async insertLicense(vliDto:VLIForm):Promise<any> {
@@ -113,10 +122,10 @@ this.ownerRepo.update({VLN:applyVli.LicenseNo},{VLN:""});
 this.vliRepo.update({LicenseNo:applyVli.LicenseNo},{OwnerName:Uname});
 this.ownerRepo.update({Uname:Uname},{VLN:applyVli.LicenseNo});
 this.caseRepo.update({VLN:applyVli.LicenseNo},{AccusedUname:Uname});
-     return "Accepted";   
+     return "Your request is Accepted";   
      } 
      else{
-        return "Informations you are given doesn't find in our system";
+        return "The information you have given hasn't been found in our system.";
      }
 } 
 

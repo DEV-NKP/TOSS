@@ -127,16 +127,53 @@ return this.ownerService.chnagepassword(passdto, Uname );
 viewallcops(): any {
 return this.copsService.ViewAll();
 }
-
+ //do this for searching 
+ @Get("/searchallcops/:search")
+ searchallcops(@Param("search") search:String): any {
+   if(search==="*")
+   {
+     return this.copsService.ViewAll();
+   }
+   else{
+     return this.copsService.searchallcops(search);
+   }
+ 
+ }
+  //do this for searching 
 @Get("/viewallowner")
 viewallowner(): any {
 return this.ownerService.ViewAll();
 }
-
+ //do this for searching 
+ @Get("/searchallowner/:search")
+ searchallowner(@Param("search") search:String): any {
+   if(search==="*")
+   {
+     return this.ownerService.ViewAll();
+   }
+   else{
+     return this.ownerService.searchallowner(search);
+   }
+ 
+ }
+  //do this for searching 
 @Get("/viewallofficer")
 viewallofficer(): any {
 return this.officerService.ViewAll();
 }
+ //do this for searching 
+ @Get("/searchallofficer/:search")
+ searchallofficer(@Param("search") search:String): any {
+   if(search==="*")
+   {
+     return this.officerService.ViewAll();
+   }
+   else{
+     return this.officerService.searchallofficer(search);
+   }
+ 
+ }
+  //do this for searching 
 @Get('/viewownerbyuname/:Uname')
 viewownerbyuname(@Param('Uname') Uname: string): any {
 return this.ownerService.viewownerbyuname(Uname);
@@ -157,6 +194,10 @@ withdraw( @Session() session,@Param('Accno') Accno,
   @Body() withdrawBankForm: WithdrawBankForm): any {
 return this.bankService.withdrawbyowner(withdrawBankForm,Accno);
 }
+
+
+
+
 
 @Put("/deposit/:Accno")
 @UsePipes(new ValidationPipe())
@@ -186,7 +227,7 @@ viewbank(@Session() session,@Param('Accno') Accno): any {
 return this.bankService.searchByAccountNo(Accno);
 }
 
-@Get('/applyforvli/:Uname')
+@Put('/applyforvli/:Uname')
 @UsePipes(new ValidationPipe())
 applyForVli(
   @Session() session,@Param('Uname') Uname,
@@ -212,6 +253,15 @@ return this.transactionService.searchtransactionbyaccount(Accno);
    ): any {
     return this.caseService.searchPendingCase(Uname);
    }
+
+
+   @Get('/viewcasebyid/:CaseId')
+   viewcasebyid(@Param('CaseId') CaseId: number): any {
+     return this.caseService.searchCase(CaseId);
+   }
+
+   
+
 
    @Post("/report/:Uname")
    @UsePipes(new ValidationPipe())
@@ -265,5 +315,29 @@ searchownerbyname(@Param('name') name: string): any {
 searchuserbyname(@Param('name') name: string): any {
   return this.tossService.searchuserbyname(name);
 }
+
+
+@Get('/viewloginbyloginid/:LogInId')
+viewloginbyloginid(@Param('LogInId') LogInId: number): any {
+  return this.loginService.searchAccount(LogInId);
+}
+
+
+@Get('/viewlogoutbylogoutid/:LogOutId')
+viewlogoutbylogoutid(@Param('LogOutId') LogOutId: number): any {
+  return this.logoutService.searchAccount(LogOutId);
+}
+
+@Get('/viewtransactionbyid/:TransactionId')
+viewtransactionbyid(@Param('TransactionId') TransactionId: number): any {
+  return this.transactionService.searchByTransId(TransactionId);
+}
+
+@Get("/searchByLicenseNo/:LicenseNo")
+searchByLicenseNo(@Param('LicenseNo') LicenseNo: string): any {
+  return this.vliService.searchByLicenseNo(LicenseNo);
+}
+
+
 
 }

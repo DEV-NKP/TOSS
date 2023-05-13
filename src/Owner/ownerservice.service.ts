@@ -30,6 +30,21 @@ private bankRepo: Repository<BankEntity>,
 {
  return this.ownerRepo.find();
 }
+searchallowner(search):any { 
+  return this.ownerRepo.find({
+      where: [
+        {Status: ILike(`%${search}%`)},
+        {DLN: ILike(`%${search}%`)},
+        {VLN: ILike(`%${search}%`)},
+         {AccountNo: ILike(`%${search}%`)},
+         {Gender: ILike(`%${search}%`)},
+         {MobileNo: ILike(`%${search}%`)},
+         {Email: ILike(`%${search}%`)},
+         {LastName: ILike(`%${search}%`)},
+         {FirstName: ILike(`%${search}%`)},
+         {Uname: ILike(`%${search}%`)},
+      ],
+    });}
 
 editProfile(editownerDto:EditOwnerForm,Uname):any {
  return this.ownerRepo.update({Uname:Uname},

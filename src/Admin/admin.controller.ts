@@ -202,6 +202,21 @@ viewreports(): any {
 return this.reportService.ViewAll();
 }
 
+ //do this for searching 
+ @Get("/searchreports/:search")
+ searchreports(@Param("search") search:String): any {
+   if(search==="*")
+   {
+     return this.reportService.ViewAll();
+   }
+   else{
+     return this.reportService.viewreports(search);
+   }
+ 
+ }
+  //do this for searching 
+ 
+
 @Get("/viewreportbyid/:ReportId")
 viewreportbyid(@Param('ReportId', ParseIntPipe) ReportId: Number): any {
   return this.reportService.searchReport(ReportId);
@@ -222,56 +237,206 @@ viewalladmin(): any {
 return this.adminService.ViewAll();
 }
 
+ //do this for searching 
+ @Get("/searchalladmin/:search")
+ searchalladmin(@Param("search") search:String): any {
+   if(search==="*")
+   {
+     return this.adminService.ViewAll();
+   }
+   else{
+     return this.adminService.searchalladmin(search);
+   }
+ 
+ }
+  //do this for searching 
+
 @Get("/viewallbank")
 viewallbank(): any {
 return this.bankService.ViewAll();
 }
+ //do this for searching 
+ @Get("/searchallbank/:search")
+ searchallbank(@Param("search") search:String): any {
+   if(search==="*")
+   {
+     return this.bankService.ViewAll();
+   }
+   else{
+     return this.bankService.searchallbank(search);
+   }
+ 
+ }
+  //do this for searching 
 
 @Get("/viewallcase")
 viewallcase(): any {
 return this.caseService.ViewAll();
 }
+ //do this for searching 
+ @Get("/searchallcase/:search")
+ searchallcase(@Param("search") search:String): any {
+   if(search==="*")
+   {
+     return this.caseService.ViewAll();
+   }
+   else{
+     return this.caseService.searchallcase(search);
+   }
+ 
+ }
+  //do this for searching 
 
 @Get("/viewalllogin")
 viewalllogin(): any {
 return this.loginService.ViewAll();
 }
 
+
+
+ //do this for searching 
+@Get("/searchalllogin/:search")
+searchalllogin(@Param("search") search:String): any {
+  if(search==="*")
+  {
+
+    return this.loginService.ViewAll();
+  }
+  else{
+ 
+    return this.loginService.searchalllogin(search);
+  }
+
+}
+ //do this for searching 
+
+
+
+
 @Get("/viewallcops")
 viewallcops(): any {
 return this.copsService.ViewAll();
 }
+ //do this for searching 
+ @Get("/searchallcops/:search")
+ searchallcops(@Param("search") search:String): any {
+   if(search==="*")
+   {
+     return this.copsService.ViewAll();
+   }
+   else{
+     return this.copsService.searchallcops(search);
+   }
+ 
+ }
+  //do this for searching 
+
 
 @Get("/viewallowner")
 viewallowner(): any {
 return this.ownerService.ViewAll();
 }
-
+ //do this for searching 
+ @Get("/searchallowner/:search")
+ searchallowner(@Param("search") search:String): any {
+   if(search==="*")
+   {
+     return this.ownerService.ViewAll();
+   }
+   else{
+     return this.ownerService.searchallowner(search);
+   }
+ 
+ }
+  //do this for searching 
 @Get("/viewallofficer")
 viewallofficer(): any {
 return this.officerService.ViewAll();
 }
-
+ //do this for searching 
+ @Get("/searchallofficer/:search")
+ searchallofficer(@Param("search") search:String): any {
+   if(search==="*")
+   {
+     return this.officerService.ViewAll();
+   }
+   else{
+     return this.officerService.searchallofficer(search);
+   }
+ 
+ }
+  //do this for searching 
 @Get("/viewalltransaction")
 viewalltransaction(): any {
 return this.transactionService.ViewAll();
 }
-
+ //do this for searching 
+ @Get("/searchalltransaction/:search")
+ searchalltransaction(@Param("search") search:String): any {
+   if(search==="*")
+   {
+     return this.transactionService.ViewAll();
+   }
+   else{
+     return this.transactionService.searchalltransaction(search);
+   }
+ 
+ }
+  //do this for searching 
 @Get("/viewallvli")
 viewallvli(): any {
 return this.vliService.ViewAll();
 }
-
+ //do this for searching 
+ @Get("/searchallvli/:search")
+ searchallvli(@Param("search") search:String): any {
+   if(search==="*")
+   {
+     return this.vliService.ViewAll();
+   }
+   else{
+     return this.vliService.searchallvli(search);
+   }
+ 
+ }
+  //do this for searching 
 @Get("/viewallsignup")
 viewallsignup(): any {
 return this.signupService.ViewAll();
 }
-
+ //do this for searching 
+ @Get("/searchallsignup/:search")
+ searchallsignup(@Param("search") search:String): any {
+   if(search==="*")
+   {
+     return this.signupService.ViewAll();
+   }
+   else{
+     return this.signupService.searchallsignup(search);
+   }
+ 
+ }
+  //do this for searching 
 @Get("/viewalllogout")
 viewalllogout(): any {
 return this.logoutService.ViewAll();
 }
 
+ //do this for searching 
+ @Get("/searchalllogout/:search")
+ searchalllogout(@Param("search") search:String): any {
+   if(search==="*")
+   {
+ 
+     return this.logoutService.ViewAll();
+   }
+   else{
+  
+     return this.logoutService.searchalllogout(search);
+   }
+ 
+ }
+  //do this for searching 
 @Delete("/deletecasebyid/:CaseId")
 deletecasebyid( 
 @Param("CaseId", ParseIntPipe) CaseId:number
