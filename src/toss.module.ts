@@ -38,11 +38,11 @@ import { join } from 'path';
 @Module({
   imports: [OfficerModule, OwnerModule, CopsModule, AdminModule , TypeOrmModule.forRoot(
     { type: 'postgres',
-     host: 'localhost',
+     url: 'postgres://smcwtqlu:plw0eRd8pKlWDQNLTEquewoFExGj8WpU@topsy.db.elephantsql.com/smcwtqlu',
      port: 5432,
-     username: 'postgres',
-     password: '1234',
-     database: 'TOSS',
+     username: 'smcwtqlu',
+     password: 'plw0eRd8pKlWDQNLTEquewoFExGj8WpU',
+     database: 'toss',
      autoLoadEntities: true,
      synchronize: true,
    }
