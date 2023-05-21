@@ -71,10 +71,10 @@ import { join } from 'path';
                },
               }
   }),  
-  ServeStaticModule.forRoot({
-    rootPath: join(__dirname, '..', '../public'), // added ../ to get one folder back
-    serveRoot: '/public/' //last slash was important
-  }),
+  // ServeStaticModule.forRoot({
+  //   rootPath: join(__dirname, '..', '../public'), // added ../ to get one folder back
+  //   serveRoot: '/public/' //last slash was important
+  // }),
   ],
  
   controllers: [TossController],
